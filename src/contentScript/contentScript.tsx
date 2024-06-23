@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import '../styles/content_script.scss'
 import '../styles/global.scss'
 import '../styles/tailwind.scss'
-import ReWriteBrowser from './components/ReWriteBrowser'
+import RewriteBrowser from './components/RewriteBrowser'
 
 document.addEventListener('selectionchange', () => {
   checkAndShowReWriteBtn()
@@ -30,7 +30,7 @@ function showReWriteBtn() {
   decorateReWriteBtn(reWriteBtn)
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
-  root.render(<ReWriteBrowser />)
+  root.render(<RewriteBrowser selected={getSelected()} />)
 }
 
 function getNotionMenu() {
@@ -41,6 +41,16 @@ function getNotionMenu() {
 
 function getSelectedText() {
   return window?.getSelection()?.toString() || ''
+}
+
+function getSelected() {
+  const range = window.getSelection()?.getRangeAt(0)
+  if (!range) return ''
+  const fragment = range.cloneContents()
+  const div = document.createElement('div')
+  div.appendChild(fragment)
+  const htmlString = div.innerHTML
+  return htmlString
 }
 
 function decorateReWriteBtn(reWriteBtn: HTMLElement) {

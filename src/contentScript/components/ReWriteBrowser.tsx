@@ -1,6 +1,15 @@
 import React from 'react'
-import ReWriteBtn from './ReWriteBtn'
+import { RewriteContext } from '../RewriteContext'
+import RewriteBtn from './RewriteBtn'
 
-export default function ReWriteBrowser() {
-  return <ReWriteBtn />
+type RewriteBrowserProps = {
+  selected?: string
+}
+
+export default function ReWriteBrowser(props: RewriteBrowserProps) {
+  return (
+    <RewriteContext.Provider value={{ selected: props.selected }}>
+      <RewriteBtn />
+    </RewriteContext.Provider>
+  )
 }
