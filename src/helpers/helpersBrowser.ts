@@ -1,4 +1,7 @@
-// helpers used only for the browser
+/*
+ * Helpers used only for the browser
+ */
+
 import browser from 'webextension-polyfill'
 
 export async function getName(): Promise<string> {

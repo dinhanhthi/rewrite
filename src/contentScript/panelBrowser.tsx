@@ -8,10 +8,9 @@ export default function PanelBrowser() {
   useEffect(() => {
     ;(async () => {
       const name = await getName()
-      /* ###Thi */ console.log('name: ', name)
       setName(name)
     })()
   }, [])
 
-  return <Panel className="fixed bottom-8 right-8" name={name} />
+  return <Panel className="fixed z-50 bottom-8 right-8" name={name} />
 }

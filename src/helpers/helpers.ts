@@ -1,4 +1,7 @@
-// JS helpers used for both browser and playground
+/**
+ * JS helpers used for both browser and playground
+ */
+
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
