@@ -1,5 +1,5 @@
 {
-  "name": "rewrite-it",
+  "name": "rewrite",
   "version": "0.0.1",
   "description": "Type your phrases and get back a better version.",
   "main": "index.js",
@@ -7,7 +7,7 @@
   "author": "Anh-Thi Dinh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dinhanhthi/rewrite-it"
+    "url": "https://github.com/dinhanhthi/rewrite"
   },
   "scripts": {
     "watch": "rm -rf dist/* && webpack --watch --progress --config webpack.config.js --mode=development",

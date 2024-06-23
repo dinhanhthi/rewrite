@@ -8,7 +8,9 @@ import '../styles/options.scss'
 import '../styles/playground.scss'
 import '../styles/popup.scss'
 import '../styles/tailwind.scss'
+import Logo from './components/Logo'
 import NotionMenuBar from './components/NotionMenuBar'
+import NotionPopoverMenu from './components/NotionPopoverMenu'
 import OptionsPlayground from './components/OptionsPlayground'
 import PopupPlayground from './components/PopupPlayground'
 
@@ -30,8 +32,7 @@ export default function App() {
           <Link
             key={menu.name}
             className={cn(
-              'rounded-[0.5em] text-[1em] px-[1em] py-[0.25em] hover:text-sky-800',
-              'flex items-center justify-center gap-[0.3em]',
+              'rounded-[0.5em] tracking-wide text-[1em] px-[1em] py-[0.25em] hover:text-sky-800 flex items-center justify-center gap-[0.3em]',
               {
                 'bg-sky-500 text-white pointer-events-none': location.pathname === menu.path,
                 'bg-white text-slate-800': location.pathname !== menu.path
@@ -70,9 +71,21 @@ const menus = [
     props: {}
   },
   {
+    name: 'logo',
+    path: '/logo',
+    component: Logo,
+    props: {}
+  },
+  {
     name: 'menuBar',
     path: '/menuBar',
     component: NotionMenuBar,
+    props: {}
+  },
+  {
+    name: 'popoverMenu',
+    path: '/popoverMenu',
+    component: NotionPopoverMenu,
     props: {}
   },
   {
