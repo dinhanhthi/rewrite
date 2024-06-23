@@ -6,13 +6,21 @@ import '../styles/global.scss'
 import '../styles/tailwind.scss'
 import ReWriteBrowser from './components/ReWriteBrowser'
 
+document.addEventListener('selectionchange', () => {
+  checkAndShowReWriteBtn()
+})
+
 document.addEventListener('click', () => {
+  checkAndShowReWriteBtn()
+})
+
+function checkAndShowReWriteBtn() {
   if (getSelectedText().length > 0) {
     setTimeout(() => {
       showReWriteBtn()
-    }, 100) // wait for Notion's menu to be created
+    }, 300) // wait for Notion's menu to be created
   }
-})
+}
 
 function showReWriteBtn() {
   const notionMenu = getNotionMenu()

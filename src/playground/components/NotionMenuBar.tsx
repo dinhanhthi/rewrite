@@ -5,6 +5,7 @@
  */
 
 import React from 'react'
+import ReWriteBtn from '../../contentScript/components/ReWriteBtn'
 
 export default function NotionMenuBar() {
   return (
@@ -27,6 +28,7 @@ export default function NotionMenuBar() {
           'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"'
       }}
     >
+      <ReWriteBtn className="notion-ignore" />
       <div
         role="button"
         tabIndex={0}
@@ -116,7 +118,8 @@ export default function NotionMenuBar() {
           borderRadius: '6px',
           paddingLeft: '7px',
           paddingRight: '6px',
-          whiteSpace: 'nowrap'
+          whiteSpace: 'nowrap',
+          opacity: '0.6'
         }}
       >
         <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>

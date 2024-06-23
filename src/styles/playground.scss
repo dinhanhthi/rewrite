@@ -1,6 +1,6 @@
 .notion-playground {
-  & > *:not(.notion-group-text):hover,
+  & > *:not(.notion-group-text):not(.notion-ignore):hover,
   .notion-group-text > *:hover {
-    background-color: #eee;
+    background-color: #37352f14;
   }
 }
