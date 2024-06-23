@@ -6,20 +6,28 @@ import '../styles/global.scss'
 import '../styles/tailwind.scss'
 import RewriteBrowser from './components/RewriteBrowser'
 
-document.addEventListener('selectionchange', () => {
-  checkAndShowReWriteBtn()
-})
+listenToMenuChanges()
 
-document.addEventListener('click', () => {
-  checkAndShowReWriteBtn()
-})
-
-function checkAndShowReWriteBtn() {
-  if (getSelectedText().length > 0) {
-    setTimeout(() => {
-      showReWriteBtn()
-    }, 300) // wait for Notion's menu to be created
+function listenToMenuChanges() {
+  const notionOverlayContainer = document.querySelector('.notion-overlay-container')
+  const observer = new MutationObserver((mutationsList, _observer) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        if (getSelectedText().length > 0) {
+          setTimeout(() => {
+            showReWriteBtn()
+          }, 0)
+        }
+      }
+    }
+  })
+  if (!notionOverlayContainer) {
+    //The node we need does not exist yet. Wait 500ms and try again
+    window.setTimeout(listenToMenuChanges, 500)
+    return
   }
+  const config = { childList: true }
+  observer.observe(notionOverlayContainer, config)
 }
 
 function showReWriteBtn() {
@@ -35,7 +43,7 @@ function showReWriteBtn() {
 
 function getNotionMenu() {
   const notionTextActionMenu = document.querySelector('.notion-text-action-menu')
-  // Return the container of menu items
+  // The container of the menu
   return notionTextActionMenu?.children?.[1]?.children?.[0] as HTMLElement
 }
 
@@ -54,7 +62,7 @@ function getSelected() {
 }
 
 function decorateReWriteBtn(reWriteBtn: HTMLElement) {
-  reWriteBtn.classList.add('dinhanhthi') // used for tailwind css
+  reWriteBtn.classList.add('dinhanhthi') // used for "important" in tailwind css
   reWriteBtn.classList.add('re-write-btn')
 }
 
