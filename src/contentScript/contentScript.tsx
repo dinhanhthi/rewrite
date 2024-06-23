@@ -8,80 +8,38 @@ import ReWriteBrowser from './components/ReWriteBrowser'
 
 document.addEventListener('click', () => {
   if (getSelectedText().length > 0) {
-    showReWriteBtn()
+    setTimeout(() => {
+      showReWriteBtn()
+    }, 100) // wait for Notion's menu to be created
   }
 })
-
-document.addEventListener('selectionchange', () => {
-  if (getSelectedText().length === 0) {
-    removeReWriteBtn()
-    return
-  }
-})
-
-window.addEventListener(
-  'wheel', // because "scroll" is not working (https://bit.ly/45zn533)
-  () => {
-    if (isReWriteBtnAdded()) {
-      const reWriteBtn = getReWriteBtn()
-      if (reWriteBtn) {
-        const rect = getPosition()
-        setPosition(reWriteBtn, rect)
-      }
-    }
-  },
-  false
-)
 
 function showReWriteBtn() {
-  if (isReWriteBtnAdded()) return
-  const rect = getPosition()
-  const body = document.querySelector('body')
+  const notionMenu = getNotionMenu()
+  if (!notionMenu) return
+  if (isRewriteBtnAdded()) return
   const reWriteBtn = document.createElement('div')
-  decorateReWriteBtn(reWriteBtn, rect)
-  if (!reWriteBtn || !body) {
-    throw new Error('Could not create the ReWriteBtn')
-  }
-  body.appendChild(reWriteBtn)
+  decorateReWriteBtn(reWriteBtn)
+  notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
-  root.render(<ReWriteBrowser position={{ left: rect.left, top: rect.top }} />)
+  root.render(<ReWriteBrowser />)
 }
 
-function removeReWriteBtn() {
-  const reWriteBtn = getReWriteBtn()
-  if (reWriteBtn) {
-    reWriteBtn.remove()
-  }
+function getNotionMenu() {
+  const notionTextActionMenu = document.querySelector('.notion-text-action-menu')
+  // Return the container of menu items
+  return notionTextActionMenu?.children?.[1]?.children?.[0] as HTMLElement
 }
 
 function getSelectedText() {
   return window?.getSelection()?.toString() || ''
 }
 
-function getPosition(): DOMRect {
-  return window?.getSelection()?.getRangeAt(0).getBoundingClientRect() || new DOMRect()
-}
-
-function decorateReWriteBtn(reWriteBtn: HTMLElement, rect: DOMRect) {
+function decorateReWriteBtn(reWriteBtn: HTMLElement) {
   reWriteBtn.classList.add('dinhanhthi') // used for tailwind css
   reWriteBtn.classList.add('re-write-btn')
-  // reWriteBtn.classList.add('clearfix')
-  reWriteBtn.style.width = '20px'
-  reWriteBtn.style.height = '20px'
-  reWriteBtn.style.position = 'absolute'
-  reWriteBtn.style.zIndex = '9999'
-  setPosition(reWriteBtn, rect)
 }
 
-function setPosition(reWriteBtn: HTMLElement, rect: DOMRect) {
-  reWriteBtn.style.left = `${rect.left}px`
-  reWriteBtn.style.top = `${rect.top}px`
-}
-
-function isReWriteBtnAdded(): boolean {
-  return !!getReWriteBtn()
-}
-
-function getReWriteBtn(): HTMLElement | null {
+function isRewriteBtnAdded() {
   return document.querySelector('.re-write-btn')
 }

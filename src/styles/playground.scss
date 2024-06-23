@@ -1,0 +1,6 @@
+.notion-playground {
+  & > *:not(.notion-group-text):hover,
+  .notion-group-text > *:hover {
+    background-color: #eee;
+  }
+}
