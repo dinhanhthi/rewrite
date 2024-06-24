@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 
 import { House } from 'lucide-react'
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Button } from '../components/ui/button'
 import '../styles/global.scss'
 import '../styles/options.scss'
 import '../styles/playground.scss'
@@ -25,24 +26,24 @@ export default function App() {
     <div className="flex flex-col w-screen h-screen notion-font-family">
       <div
         className={cn(
-          'flex flex-row flex-wrap items-center justify-center gap-[1em] p-[1em] bg-slate-200'
+          'flex flex-row flex-wrap items-center justify-center gap-[1em] p-[1em] bg-sky-100'
         )}
       >
         {menus.map(menu => (
-          <Link
+          <Button
+            asChild
+            className={cn('cursor-pointer', {
+              'bg-sky-500 text-white pointer-events-none': location.pathname === menu.path,
+              'bg-white text-slate-800': location.pathname !== menu.path
+            })}
             key={menu.name}
-            className={cn(
-              'rounded-[0.5em] tracking-wide text-[1em] px-[1em] py-[0.25em] hover:text-sky-800 flex items-center justify-center gap-[0.3em]',
-              {
-                'bg-sky-500 text-white pointer-events-none': location.pathname === menu.path,
-                'bg-white text-slate-800': location.pathname !== menu.path
-              }
-            )}
-            to={menu.path}
+            variant="outline"
           >
-            {menu.name === 'home' && <House size={20} />}
-            {menu.name}
-          </Link>
+            <Link className={cn('tracking-wide text-[1em] gap-[0.3em]')} to={menu.path}>
+              {menu.name === 'home' && <House size={20} />}
+              {menu.name}
+            </Link>
+          </Button>
         ))}
       </div>
       <div className="flex flex-col items-center justify-center flex-auto gap-16">
