@@ -13,6 +13,7 @@ export default function RewriteBtn(props: ReWriteBtnProps) {
     console.log('ReWriteBtn clicked')
     /* ###Thi */ console.log(`👉👉👉 selected: `, ctx.selected)
   }
+
   return (
     <div className={cn(props.className, 'h-full pr-1 border-r border-slate-200 mr-1 group')}>
       <button

@@ -2,6 +2,7 @@
   & > *:not(.notion-group-text):not(.notion-ignore):hover,
   .notion-group-text > *:hover {
     background-color: #37352f14;
+    border-radius: 4px;
   }
 }
 
