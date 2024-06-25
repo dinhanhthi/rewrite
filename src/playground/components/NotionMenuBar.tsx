@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import RewriteBtn from '../../contentScript/components/RewriteBtn'
+import RewriteBtn from '../../contentScript/components/notion/RewriteBtn'
 
 export default function NotionMenuBar() {
   return (

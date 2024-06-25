@@ -3,7 +3,7 @@
  */
 
 import React, { useContext } from 'react'
-import { RewriteContext } from '../RewriteContext'
+import { RewriteContext } from '../../RewriteContext'
 
 export default function RewritePopoverOption() {
   const ctx = useContext(RewriteContext)

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { cn } from '../../helpers/helpers'
-import { RewriteContext } from '../RewriteContext'
+import { cn } from '../../../helpers/helpers'
+import { RewriteContext } from '../../RewriteContext'
 
 type ReWriteBtnProps = {
   className?: string
