@@ -5,7 +5,7 @@
 import React, { useContext } from 'react'
 import { RewriteContext } from '../../RewriteContext'
 
-export default function RewritePopoverOption() {
+export default function RewritePopover() {
   const ctx = useContext(RewriteContext)
 
   function reWriteBtnClicked() {

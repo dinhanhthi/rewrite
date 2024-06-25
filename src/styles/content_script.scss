@@ -19,3 +19,10 @@ html[xmlns] .clearfix {
 * html .clearfix {
   height: 1%;
 }
+
+.notion-popover-item-hover {
+  background-color: transparent !important;
+  &:hover {
+    background-color: #37352f14 !important;
+  }
+}

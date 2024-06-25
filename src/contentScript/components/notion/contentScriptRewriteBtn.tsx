@@ -1,5 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { getSelectedHtml, getSelectedText } from '../../contentScript'
 import RewriteBtnBrowser from './RewriteBtnBrowser'
 
 export function listenToMenuChanges() {
@@ -32,27 +33,13 @@ function showReWriteBtn() {
   decorateReWriteBtn(reWriteBtn)
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
-  root.render(<RewriteBtnBrowser selected={getSelected()} />)
+  root.render(<RewriteBtnBrowser selected={getSelectedHtml()} />)
 }
 
 function getNotionMenu() {
   const notionTextActionMenu = document.querySelector('.notion-text-action-menu')
   // The container of the menu
   return notionTextActionMenu?.children?.[1]?.children?.[0] as HTMLElement
-}
-
-function getSelectedText() {
-  return window?.getSelection()?.toString() || ''
-}
-
-function getSelected() {
-  const range = window.getSelection()?.getRangeAt(0)
-  if (!range) return ''
-  const fragment = range.cloneContents()
-  const div = document.createElement('div')
-  div.appendChild(fragment)
-  const htmlString = div.innerHTML
-  return htmlString
 }
 
 function decorateReWriteBtn(reWriteBtn: HTMLElement) {

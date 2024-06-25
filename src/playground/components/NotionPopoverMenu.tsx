@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import RewritePopoverOption from '../../contentScript/components/notion/RewritePopoverOption'
+import RewritePopover from '../../contentScript/components/notion/RewritePopover'
 
 export default function NotionPopoverMenu() {
   return (
@@ -88,7 +88,7 @@ export default function NotionPopoverMenu() {
         </div>
       </div>
 
-      <RewritePopoverOption />
+      <RewritePopover />
 
       {/* Comment */}
       <div className="notion-playground" style={{ paddingTop: '6px', paddingBottom: '6px' }}>
