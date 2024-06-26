@@ -63,7 +63,10 @@ const commonConfig = {
     ...getHtmlPlugins(['popup', 'options'])
   ],
   resolve: {
-    extensions: ['.tsx', '.js', '.ts']
+    extensions: ['.tsx', '.js', '.ts'],
+    alias: {
+      '@': path.resolve(__dirname)
+    }
   },
   optimization: {
     splitChunks: {
