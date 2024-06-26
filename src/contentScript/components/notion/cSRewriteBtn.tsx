@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { getSelectedHtml, getSelectedText } from '../../contentScript'
 import RewriteBtnBrowser from './RewriteBtnBrowser'
 
-export function listenToMenuChanges() {
+export function watchAndCreateRewriteBtn() {
   const notionOverlayContainer = document.querySelector('.notion-overlay-container')
   const observer = new MutationObserver((mutationsList, _observer) => {
     for (const mutation of mutationsList) {
@@ -17,7 +17,7 @@ export function listenToMenuChanges() {
     }
   })
   if (!notionOverlayContainer) {
-    window.setTimeout(listenToMenuChanges, 500)
+    window.setTimeout(watchAndCreateRewriteBtn, 500)
     return
   }
   const config = { childList: true }
@@ -43,9 +43,9 @@ function getNotionMenu() {
 
 function decorateReWriteBtn(reWriteBtn: HTMLElement) {
   reWriteBtn.classList.add('dinhanhthi') // used for "important" in tailwind css
-  reWriteBtn.classList.add('re-write-btn')
+  reWriteBtn.classList.add('rewrite-btn')
 }
 
 function isRewriteBtnAdded() {
-  return document.querySelector('.re-write-btn')
+  return document.querySelector('.rewrite-btn')
 }

@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import RewriteBtn from '../../contentScript/components/notion/RewriteBtn'
+import RewriteBtnWrapper from '../../contentScript/components/notion/RewriteBtnWrapper'
 
 export default function NotionMenuBar() {
   return (
@@ -28,7 +28,10 @@ export default function NotionMenuBar() {
           'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"'
       }}
     >
-      <RewriteBtn className="notion-ignore" />
+      <div className="dinhanhthi rewrite-btn">
+        <RewriteBtnWrapper btnClassName="notion-ignore" />
+      </div>
+      <div className='dinhanhthi rewrite-overlay'></div>
       <div
         role="button"
         tabIndex={0}

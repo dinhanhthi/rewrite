@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import RewriteOptBrowser from './RewriteOptBrowser'
 
-export function listenToPopoverChanges() {
+export function watchAndCreateRewriteOpt() {
   const notionOverlayContainer = document.querySelector('.notion-overlay-container')
   const observer = new MutationObserver((mutationsList, _observer) => {
     for (const mutation of mutationsList) {
@@ -17,7 +17,7 @@ export function listenToPopoverChanges() {
     }
   })
   if (!notionOverlayContainer) {
-    window.setTimeout(listenToPopoverChanges, 500)
+    window.setTimeout(watchAndCreateRewriteOpt, 500)
     return
   }
   const config = { childList: true }
@@ -65,14 +65,16 @@ function autoSetBgColorToNoneToOtherItems(rewriteOpt: HTMLElement, divBelowSearc
 
 function decorateRewriteOpt(rewriteBtn: HTMLElement) {
   rewriteBtn.classList.add('dinhanhthi') // used for "important" in tailwind css
-  rewriteBtn.classList.add('re-write-opt')
+  rewriteBtn.classList.add('rewrite-opt')
 }
 
 function isRewriteOptAdded() {
-  return document.querySelector('.re-write-opt')
+  return document.querySelector('.rewrite-opt')
 }
 
 /**
+ * Notion uses it own selection method for selecting whole blocks.
+ *
  * TIP: Inspect element > choose div.notion-overlay-container > unselect z-index so that we can
  * inspect the below elements
  */
