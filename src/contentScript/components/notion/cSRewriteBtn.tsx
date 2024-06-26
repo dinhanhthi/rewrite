@@ -17,7 +17,6 @@ export function listenToMenuChanges() {
     }
   })
   if (!notionOverlayContainer) {
-    //The node we need does not exist yet. Wait 500ms and try again
     window.setTimeout(listenToMenuChanges, 500)
     return
   }

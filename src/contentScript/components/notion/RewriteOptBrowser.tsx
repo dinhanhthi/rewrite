@@ -1,15 +1,15 @@
 import React from 'react'
 import { RewriteCtx } from '../../RewriteCtx'
-import RewriteBtn from './RewriteBtn'
+import RewriteOpt from './RewriteOpt'
 
-type RewriteBrowserProps = {
+type RewriteOptBrowserProps = {
   selected?: string
 }
 
-export default function ReWriteBtnBrowser(props: RewriteBrowserProps) {
+export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
   return (
     <RewriteCtx.Provider value={{ selected: props.selected }}>
-      <RewriteBtn />
+      <RewriteOpt />
     </RewriteCtx.Provider>
   )
 }

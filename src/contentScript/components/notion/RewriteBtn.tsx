@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { cn } from '../../../helpers/helpers'
-import { RewriteContext } from '../../RewriteContext'
+import { RewriteCtx } from '../../RewriteCtx'
 
 type ReWriteBtnProps = {
   className?: string
 }
 
 export default function RewriteBtn(props: ReWriteBtnProps) {
-  const ctx = useContext(RewriteContext)
+  const ctx = useContext(RewriteCtx)
 
   function reWriteBtnClicked() {
     console.log('ReWriteBtn clicked')

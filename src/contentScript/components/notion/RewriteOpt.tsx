@@ -3,10 +3,10 @@
  */
 
 import React, { useContext } from 'react'
-import { RewriteContext } from '../../RewriteContext'
+import { RewriteCtx } from '../../RewriteCtx'
 
-export default function RewritePopover() {
-  const ctx = useContext(RewriteContext)
+export default function RewriteOpt() {
+  const ctx = useContext(RewriteCtx)
 
   function reWriteBtnClicked() {
     console.log('ReWriteBtn clicked')

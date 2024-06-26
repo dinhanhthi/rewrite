@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import RewritePopoverBrowser from './RewritePopoverBrowser'
+import RewriteOptBrowser from './RewriteOptBrowser'
 
 export function listenToPopoverChanges() {
   const notionOverlayContainer = document.querySelector('.notion-overlay-container')
@@ -10,14 +10,13 @@ export function listenToPopoverChanges() {
         const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
         if (selectedDecoBlocks.length > 0) {
           setTimeout(() => {
-            showRewritePopover(notionOverlayContainer)
+            showRewriteOpt(notionOverlayContainer)
           }, 0)
         }
       }
     }
   })
   if (!notionOverlayContainer) {
-    //The node we need does not exist yet. Wait 500ms and try again
     window.setTimeout(listenToPopoverChanges, 500)
     return
   }
@@ -25,7 +24,7 @@ export function listenToPopoverChanges() {
   observer.observe(notionOverlayContainer, config)
 }
 
-function showRewritePopover(notionOverlayContainer: Element | null) {
+function showRewriteOpt(notionOverlayContainer: Element | null) {
   if (!notionOverlayContainer) return
   const divBelowSearch = notionOverlayContainer.querySelector('.notion-scroller.vertical')
   if (!divBelowSearch) return
@@ -36,21 +35,18 @@ function showRewritePopover(notionOverlayContainer: Element | null) {
     return
 
   const secondChild = divBelowSearchParent?.children[1]
-  if (isRewritePopoverAdded()) return
+  if (isRewriteOptAdded()) return
 
-  const rewritePopover = document.createElement('div')
-  decorateRewritePopover(rewritePopover)
-  divBelowSearchParent.insertBefore(rewritePopover, secondChild)
-  const root = createRoot(rewritePopover)
-  autoSetBgColorToNoneToOtherItems(rewritePopover, divBelowSearch)
-  root.render(<RewritePopoverBrowser selected={getSelectedBlocksHtml()} />)
+  const rewriteOpt = document.createElement('div')
+  decorateRewriteOpt(rewriteOpt)
+  divBelowSearchParent.insertBefore(rewriteOpt, secondChild)
+  const root = createRoot(rewriteOpt)
+  autoSetBgColorToNoneToOtherItems(rewriteOpt, divBelowSearch)
+  root.render(<RewriteOptBrowser selected={getSelectedBlocksHtml()} />)
 }
 
-function autoSetBgColorToNoneToOtherItems(
-  rewritePopover: HTMLElement,
-  divBelowSearch: Element | null
-) {
-  rewritePopover.addEventListener('mouseenter', () => {
+function autoSetBgColorToNoneToOtherItems(rewriteOpt: HTMLElement, divBelowSearch: Element | null) {
+  rewriteOpt.addEventListener('mouseenter', () => {
     const commentDivOpt = divBelowSearch?.querySelectorAll('div[role="option"]')?.[0] as HTMLElement
     if (commentDivOpt) {
       // make sure when we leave the rewrite popover, the bg of this will be back to normal
@@ -67,15 +63,19 @@ function autoSetBgColorToNoneToOtherItems(
   })
 }
 
-function decorateRewritePopover(rewriteBtn: HTMLElement) {
+function decorateRewriteOpt(rewriteBtn: HTMLElement) {
   rewriteBtn.classList.add('dinhanhthi') // used for "important" in tailwind css
-  rewriteBtn.classList.add('re-write-popover')
+  rewriteBtn.classList.add('re-write-opt')
 }
 
-function isRewritePopoverAdded() {
-  return document.querySelector('.re-write-popover')
+function isRewriteOptAdded() {
+  return document.querySelector('.re-write-opt')
 }
 
+/**
+ * TIP: Inspect element > choose div.notion-overlay-container > unselect z-index so that we can
+ * inspect the below elements
+ */
 function getSelectedBlocksHtml() {
   const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
   let html = ''
