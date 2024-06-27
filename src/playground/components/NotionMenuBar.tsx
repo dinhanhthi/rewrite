@@ -28,8 +28,8 @@ export default function NotionMenuBar() {
           'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"'
       }}
     >
-      <div className="dinhanhthi rewrite-btn">
-        <RewriteBtnWrapper btnClassName="notion-ignore" />
+      <div className="mr-1 dinhanhthi rewrite-btn notion-ignore">
+        <RewriteBtnWrapper />
       </div>
       <div className='dinhanhthi rewrite-overlay'></div>
       <div

@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React from 'react'
-import { LoadingIcon } from '../icons/loadingIcon'
+import { LoadingIcon } from '../icons/LoadingIcon'
 
 type NameInputProps = {
   // eslint-disable-next-line no-unused-vars

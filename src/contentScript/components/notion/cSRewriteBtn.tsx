@@ -44,6 +44,7 @@ function getNotionMenu() {
 function decorateReWriteBtn(reWriteBtn: HTMLElement) {
   reWriteBtn.classList.add('dinhanhthi') // used for "important" in tailwind css
   reWriteBtn.classList.add('rewrite-btn')
+  reWriteBtn.style.marginRight = '4px'
 }
 
 function isRewriteBtnAdded() {
