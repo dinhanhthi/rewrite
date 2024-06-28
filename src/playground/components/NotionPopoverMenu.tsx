@@ -88,7 +88,7 @@ export default function NotionPopoverMenu() {
         </div>
       </div>
 
-      <div className="dinhanhthi rewrite-btn notion-ignore">
+      <div className="dinhanhthi rewrite-opt notion-ignore">
         <RewriteOptWrapper />
       </div>
       <div className='dinhanhthi rewrite-overlay'></div>

@@ -14,15 +14,21 @@ import SummerizeIcon from '../../icons/SummerizeIcon'
 type RewriteMenuProps = {
   className?: string
   forceMount?: boolean
+  setShowRewriteEditor: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function RewriteMenu(props: RewriteMenuProps) {
+  const handleItemClicked = () => {
+    props.setShowRewriteEditor(true)
+  }
+
   return (
     <div className="dinhanhthi">
       <MenubarContent
-        // forceMount={true}
         className={props.className}
         container={document.querySelector('.rewrite-overlay')}
+        // onPointerDownOutside={() => props.setShowMenu('')}
+        // onFocusOutside={() => props.setShowMenu('')}
       >
         {menus.map(menu => {
           if (menu.subs) {
@@ -31,12 +37,16 @@ export default function RewriteMenu(props: RewriteMenuProps) {
                 <MenubarSubTrigger className="w-full p-0">
                   <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                     <menu.icon className="w-4 h-4 text-green-700" />
-                    <div className="text-[14px] whitespace-nowrap">{menu.name}</div>
+                    <div className="text-[14px] whitespace-nowrap cursor-pointer">{menu.name}</div>
                   </div>
                 </MenubarSubTrigger>
                 <MenubarSubContent>
                   {menu.subs.map((sub: string) => (
-                    <MenubarItem className="text-[14px] whitespace-nowrap" key={sub}>
+                    <MenubarItem
+                      onClick={handleItemClicked}
+                      className="text-[14px] whitespace-nowrap cursor-pointer"
+                      key={sub}
+                    >
                       {sub}
                     </MenubarItem>
                   ))}
@@ -45,7 +55,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
             )
           } else {
             return (
-              <MenubarItem className="w-full p-0" key={menu.name}>
+              <MenubarItem onClick={handleItemClicked} className="w-full p-0" key={menu.name}>
                 <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                   <menu.icon className="w-4 h-4 text-green-700" />
                   <div className="text-[14px] whitespace-nowrap">{menu.name}</div>
