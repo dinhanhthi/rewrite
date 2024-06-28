@@ -2,6 +2,7 @@
  * This option is added to the popover when the user selects a block on Notion.
  */
 
+import { ChevronRight } from 'lucide-react'
 import React from 'react'
 import { LogoRewriteIcon } from '../../../icons/LogoRewriteIcon'
 
@@ -12,7 +13,8 @@ export default function RewriteOpt() {
         <LogoRewriteIcon className="w-5 h-5" />
         <div className="text-[14.5px] font-medium whitespace-nowrap">Rewrite</div>
       </div>
-      <div className="text-[rgba(55,53,47,0.5)] text-[12px]">{`⌘+]`}</div>
+      {/* <div className="text-[rgba(55,53,47,0.5)] text-[12px]">{`⌘+]`}</div> */}
+      <ChevronRight className="w-4 h-4 ml-auto text-gray-400" />
     </button>
   )
 }

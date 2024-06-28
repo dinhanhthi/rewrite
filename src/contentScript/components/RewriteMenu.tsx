@@ -13,12 +13,14 @@ import SummerizeIcon from '../../icons/SummerizeIcon'
 
 type RewriteMenuProps = {
   className?: string
+  forceMount?: boolean
 }
 
 export default function RewriteMenu(props: RewriteMenuProps) {
   return (
     <div className="dinhanhthi">
       <MenubarContent
+        // forceMount={true}
         className={props.className}
         container={document.querySelector('.rewrite-overlay')}
       >
@@ -29,12 +31,14 @@ export default function RewriteMenu(props: RewriteMenuProps) {
                 <MenubarSubTrigger className="w-full p-0">
                   <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                     <menu.icon className="w-4 h-4 text-green-700" />
-                    <div>{menu.name}</div>
+                    <div className="text-[14px] whitespace-nowrap">{menu.name}</div>
                   </div>
                 </MenubarSubTrigger>
                 <MenubarSubContent>
-                  {menu.subs.map(sub => (
-                    <MenubarItem key={sub}>{sub}</MenubarItem>
+                  {menu.subs.map((sub: string) => (
+                    <MenubarItem className="text-[14px] whitespace-nowrap" key={sub}>
+                      {sub}
+                    </MenubarItem>
                   ))}
                 </MenubarSubContent>
               </MenubarSub>
@@ -44,7 +48,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
               <MenubarItem className="w-full p-0" key={menu.name}>
                 <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                   <menu.icon className="w-4 h-4 text-green-700" />
-                  <div>{menu.name}</div>
+                  <div className="text-[14px] whitespace-nowrap">{menu.name}</div>
                 </div>
               </MenubarItem>
             )
@@ -69,7 +73,7 @@ const menus: { name: string; icon: any; subs?: string[] }[] = [
       'Russian',
       'Portuguese',
       'German',
-      'Italian',
+      'Italian'
     ]
   },
   {
