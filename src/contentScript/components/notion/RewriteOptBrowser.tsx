@@ -1,6 +1,6 @@
 import React from 'react'
 import { RewriteCtx } from '../../RewriteCtx'
-import RewriteOpt from './RewriteOpt'
+import RewriteOptWrapper from './RewriteOptWrapper'
 
 type RewriteOptBrowserProps = {
   selected?: string
@@ -9,7 +9,7 @@ type RewriteOptBrowserProps = {
 export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
   return (
     <RewriteCtx.Provider value={{ selected: props.selected }}>
-      <RewriteOpt />
+      <RewriteOptWrapper />
     </RewriteCtx.Provider>
   )
 }

@@ -11,10 +11,17 @@ import LongerIcon from '../../icons/LongerIcon'
 import ShorterIcon from '../../icons/ShorterIcon'
 import SummerizeIcon from '../../icons/SummerizeIcon'
 
-export default function RewriteMenu() {
+type RewriteMenuProps = {
+  className?: string
+}
+
+export default function RewriteMenu(props: RewriteMenuProps) {
   return (
     <div className="dinhanhthi">
-      <MenubarContent container={document.querySelector('.rewrite-overlay')}>
+      <MenubarContent
+        className={props.className}
+        container={document.querySelector('.rewrite-overlay')}
+      >
         {menus.map(menu => {
           if (menu.subs) {
             return (
@@ -55,7 +62,6 @@ const menus: { name: string; icon: any; subs?: string[] }[] = [
     subs: [
       'Vietnamese',
       'English',
-      'Korean',
       'Chinese',
       'Japanese',
       'Spanish',
@@ -64,9 +70,6 @@ const menus: { name: string; icon: any; subs?: string[] }[] = [
       'Portuguese',
       'German',
       'Italian',
-      'Dutch',
-      'Indonesia',
-      'Filipino'
     ]
   },
   {

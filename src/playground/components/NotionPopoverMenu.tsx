@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import RewriteOpt from '../../contentScript/components/notion/RewriteOpt'
+import RewriteOptWrapper from '../../contentScript/components/notion/RewriteOptWrapper'
 
 export default function NotionPopoverMenu() {
   return (
@@ -88,7 +88,10 @@ export default function NotionPopoverMenu() {
         </div>
       </div>
 
-      <RewriteOpt />
+      <div className="dinhanhthi rewrite-btn notion-ignore">
+        <RewriteOptWrapper />
+      </div>
+      <div className='dinhanhthi rewrite-overlay'></div>
 
       {/* Comment */}
       <div className="notion-playground" style={{ paddingTop: '6px', paddingBottom: '6px' }}>
