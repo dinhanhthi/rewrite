@@ -1,84 +1,101 @@
-import {
-  ChevronRight,
-  Languages,
-  ListFilter,
-  MessageCircleQuestion,
-  MicVocal,
-  Sparkles,
-  SpellCheck
-} from 'lucide-react'
+import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
 import React from 'react'
-import { cn } from '../../helpers/helpers'
+import {
+  MenubarContent,
+  MenubarItem,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger
+} from '../../components/ui/menubar'
 import LongerIcon from '../../icons/LongerIcon'
 import ShorterIcon from '../../icons/ShorterIcon'
+import SummerizeIcon from '../../icons/SummerizeIcon'
 
-type RewriteMenuProps = {
-  className?: string
-}
-export default function RewriteMenu(props: RewriteMenuProps) {
+export default function RewriteMenu() {
   return (
-    <div className={cn(props.className, 'flex flex-col p-1.5 text-sm')}>
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <Languages className="w-4 h-4 text-green-700" />
-          <div className="flex flex-row items-center justify-between flex-1 gap-3">
-            <div>Translate</div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-          </div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <Sparkles className="w-4 h-4 text-green-700" />
-          <div>Improve writing</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <ListFilter className="w-4 h-4 text-green-700" />
-          <div>Summerize</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <MessageCircleQuestion className="w-4 h-4 text-green-700" />
-          <div>Explain this</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <SpellCheck className="w-4 h-4 text-green-700" />
-          <div>Fix spelling & grammar</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <ShorterIcon className="w-4 h-4 text-green-700" />
-          <div>Make shorter</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <LongerIcon className="w-4 h-4 text-green-700" />
-          <div>Make longer</div>
-        </div>
-      </div>
-
-      <div className="group">
-        <div className="flex flex-row items-center gap-3 py-1.5 pl-2 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-          <MicVocal className="w-4 h-4 text-green-700" />
-          <div className="flex flex-row items-center justify-between flex-1 gap-3">
-            <div>Change tone</div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-          </div>
-        </div>
-      </div>
+    <div className="dinhanhthi">
+      <MenubarContent container={document.querySelector('.rewrite-overlay')}>
+        {menus.map(menu => {
+          if (menu.subs) {
+            return (
+              <MenubarSub key={menu.name}>
+                <MenubarSubTrigger className="w-full p-0">
+                  <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
+                    <menu.icon className="w-4 h-4 text-green-700" />
+                    <div>{menu.name}</div>
+                  </div>
+                </MenubarSubTrigger>
+                <MenubarSubContent>
+                  {menu.subs.map(sub => (
+                    <MenubarItem key={sub}>{sub}</MenubarItem>
+                  ))}
+                </MenubarSubContent>
+              </MenubarSub>
+            )
+          } else {
+            return (
+              <MenubarItem className="w-full p-0" key={menu.name}>
+                <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
+                  <menu.icon className="w-4 h-4 text-green-700" />
+                  <div>{menu.name}</div>
+                </div>
+              </MenubarItem>
+            )
+          }
+        })}
+      </MenubarContent>
     </div>
   )
 }
+
+const menus: { name: string; icon: any; subs?: string[] }[] = [
+  {
+    name: 'Translate',
+    icon: Languages,
+    subs: [
+      'Vietnamese',
+      'English',
+      'Korean',
+      'Chinese',
+      'Japanese',
+      'Spanish',
+      'French',
+      'Russian',
+      'Portuguese',
+      'German',
+      'Italian',
+      'Dutch',
+      'Indonesia',
+      'Filipino'
+    ]
+  },
+  {
+    name: 'Improve writing',
+    icon: Sparkles
+  },
+  {
+    name: 'Summerize',
+    icon: SummerizeIcon
+  },
+  {
+    name: 'Explain this',
+    icon: MessageCircleQuestion
+  },
+  {
+    name: 'Fix spelling & grammar',
+    icon: SpellCheck
+  },
+  {
+    name: 'Make shorter',
+    icon: ShorterIcon
+  },
+  {
+    name: 'Make longer',
+    icon: LongerIcon
+  },
+  {
+    name: 'Change tone',
+    icon: MicVocal,
+    subs: ['Professional', 'Casual', 'Straightforward', 'Confident', 'Friendly']
+  }
+]

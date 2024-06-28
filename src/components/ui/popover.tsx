@@ -10,7 +10,7 @@ const PopoverTrigger = PopoverPrimitive.Trigger
 
 interface PopoverContentProps
   extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> {
-  container: Element | null
+  container?: Element | null
 }
 
 const PopoverContent = React.forwardRef<
