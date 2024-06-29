@@ -45,5 +45,5 @@
   ],
 
   "host_permissions": ["*://*.notion.so/*"],
-  "permissions": ["storage"]
+  "permissions": ["storage", "clipboardRead", "clipboardWrite"]
 }

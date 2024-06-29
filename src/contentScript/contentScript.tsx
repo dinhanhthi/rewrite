@@ -4,7 +4,7 @@ import '../styles/tailwind.scss'
 import { watchAndCreateRewriteBtn } from './components/notion/cSRewriteBtn'
 import { watchAndCreateRewriteOpt } from './components/notion/cSRewriteOpt'
 
-// Overlay div for popover
+// Add overlay div, our popover elements will be appended to this div
 addRewriteOverlay()
 
 // When selecting words
