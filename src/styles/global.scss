@@ -17,3 +17,30 @@
 div[data-radix-popper-content-wrapper] {
   z-index: 9999 !important;
 }
+
+.dat-scrollbar {
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 10px;
+    &:hover {
+      background: #adb5bd;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &.dat-scrollbar-small {
+    &::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 7px;
+    }
+  }
+}
