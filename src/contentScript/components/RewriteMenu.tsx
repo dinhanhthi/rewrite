@@ -14,13 +14,14 @@ import SummerizeIcon from '../../icons/SummerizeIcon'
 type RewriteMenuProps = {
   className?: string
   forceMount?: boolean
-  setShowRewriteEditor: React.Dispatch<React.SetStateAction<boolean>>
+  setShowRewriteEditor?: React.Dispatch<React.SetStateAction<boolean>>
+  handleItemClicked?: () => void
 }
 
 export default function RewriteMenu(props: RewriteMenuProps) {
-  const handleItemClicked = () => {
-    props.setShowRewriteEditor(true)
-  }
+  // const handleItemClicked = () => {
+  //   props.setShowRewriteEditor(true)
+  // }
 
   return (
     <div className="dinhanhthi">
@@ -43,7 +44,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
                 <MenubarSubContent>
                   {menu.subs.map((sub: string) => (
                     <MenubarItem
-                      onClick={handleItemClicked}
+                      onClick={props.handleItemClicked}
                       className="text-[14px] whitespace-nowrap cursor-pointer"
                       key={sub}
                     >
@@ -55,7 +56,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
             )
           } else {
             return (
-              <MenubarItem onClick={handleItemClicked} className="w-full p-0" key={menu.name}>
+              <MenubarItem onClick={props.handleItemClicked} className="w-full p-0" key={menu.name}>
                 <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                   <menu.icon className="w-4 h-4 text-green-700" />
                   <div className="text-[14px] whitespace-nowrap">{menu.name}</div>

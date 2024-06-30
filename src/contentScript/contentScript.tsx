@@ -36,3 +36,17 @@ export function getSelectedHtml() {
   const htmlString = div.innerHTML
   return htmlString
 }
+
+/**
+ * Close editor when clicking outside
+ */
+document.addEventListener('click', function (event) {
+  /* ###Thi */ console.log(`👉👉👉 event click`);
+  const editor = document.getElementById('rewrite-editor')
+  if (editor && !editor.contains(event.target as Node)) {
+    // editor.remove()
+    /* ###Thi */ console.log(`👉👉👉 click outside`);
+  } else {
+    /* ###Thi */ console.log(`👉👉👉 click inside`);
+  }
+})

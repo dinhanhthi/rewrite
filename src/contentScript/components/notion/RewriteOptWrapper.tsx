@@ -1,12 +1,11 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
-import RewriteEditor from '../RewriteEditor'
 import RewriteMenu from '../RewriteMenu'
 import RewriteOpt from './RewriteOpt'
 
 export default function RewriteBtnWrapper() {
   const [showMenu, setShowMenu] = React.useState('')
-  const [showRewriteEditor, setShowRewriteEditor] = React.useState(false)
+  // const [showRewriteEditor, setShowRewriteEditor] = React.useState(false)
 
   return (
     <Menubar
@@ -22,14 +21,14 @@ export default function RewriteBtnWrapper() {
             <RewriteOpt />
           </div>
         </MenubarTrigger>
-        <RewriteEditor
+        {/* <RewriteEditor
           showRewriteEditor={showRewriteEditor}
           setShowRewriteEditor={setShowRewriteEditor}
           contentClassName="mt-5"
-        />
+        /> */}
         <RewriteMenu
           className="absolute left-[calc(var(--radix-menubar-trigger-width)-4px)] top-[calc(var(--radix-menubar-trigger-height)*(-1)-10px)]"
-          setShowRewriteEditor={setShowRewriteEditor}
+          // setShowRewriteEditor={setShowRewriteEditor}
         />
       </MenubarMenu>
     </Menubar>
