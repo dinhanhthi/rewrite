@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { getSelectedHtml, getSelectedText } from '../../contentScript'
 import RewriteBtnBrowser from './RewriteBtnBrowser'
 
+/**
+ * When selecting words
+ */
 export function watchAndCreateRewriteBtn() {
   const notionOverlayContainer = document.querySelector('.notion-overlay-container')
   const observer = new MutationObserver((mutationsList, _observer) => {
@@ -32,6 +35,7 @@ function showReWriteBtn() {
   decorateReWriteBtn(reWriteBtn)
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
+
   root.render(<RewriteBtnBrowser selected={getSelectedHtml()} />)
 }
 

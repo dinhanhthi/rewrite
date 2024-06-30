@@ -2,6 +2,9 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import RewriteOptBrowser from './RewriteOptBrowser'
 
+/**
+ * When selecting a block or clicking on "..." in the menu bar (after selecting words)
+ */
 export function watchAndCreateRewriteOpt() {
   const notionOverlayContainer = document.querySelector('.notion-overlay-container')
   const observer = new MutationObserver((mutationsList, _observer) => {

@@ -4,15 +4,15 @@ import '../styles/tailwind.scss'
 import { watchAndCreateRewriteBtn } from './components/notion/cSRewriteBtn'
 import { watchAndCreateRewriteOpt } from './components/notion/cSRewriteOpt'
 
-// Add overlay div, our popover elements will be appended to this div
 addRewriteOverlay()
 
-// When selecting words
 watchAndCreateRewriteBtn()
 
-// When selecting a block or clicking on "..." in the menu bar (after selecting words)
 watchAndCreateRewriteOpt()
 
+/**
+ * Add overlay div, our popover elements will be appended to this div
+ */
 function addRewriteOverlay() {
   const overlay = document.createElement('div')
   overlay.classList.add('dinhanhthi')

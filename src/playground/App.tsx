@@ -14,6 +14,7 @@ import NotionMenuBar from './components/NotionMenuBar'
 import NotionPopoverMenu from './components/NotionPopoverMenu'
 import OptionsPlayground from './components/OptionsPlayground'
 import PopupPlayground from './components/PopupPlayground'
+import RewriteEditorPlayground from './components/RewriteEditorPlayground'
 
 export default function App() {
   const location = useLocation()
@@ -39,7 +40,7 @@ export default function App() {
             key={menu.name}
             variant="outline"
           >
-            <Link className={cn('tracking-wide text-[1em] gap-[0.3em]')} to={menu.path}>
+            <Link className="tracking-wide text-[1em] gap-[0.3em] !py-1 !px-3 h-auto font-normal rounded-3xl" to={menu.path}>
               {menu.name === 'home' && <House size={20} />}
               {menu.name}
             </Link>
@@ -78,15 +79,21 @@ const menus = [
     props: {}
   },
   {
-    name: 'menuBar',
-    path: '/menuBar',
+    name: 'notionMenu',
+    path: '/notionMenu',
     component: NotionMenuBar,
     props: {}
   },
   {
-    name: 'popoverMenu',
-    path: '/popoverMenu',
+    name: 'notionPopover',
+    path: '/notionPopover',
     component: NotionPopoverMenu,
+    props: {}
+  },
+  {
+    name: 'RewriteEditor',
+    path: '/RewriteEditor',
+    component: RewriteEditorPlayground,
     props: {}
   },
   {
