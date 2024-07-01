@@ -1,5 +1,5 @@
 import React from 'react'
-import { LogoRewriteIcon } from '../../icons/LogoRewriteIcon'
+import LogoRewriteIcon from '../../icons/LogoRewriteIcon'
 
 export default function Logo() {
   return (

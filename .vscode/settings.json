@@ -2,9 +2,9 @@
   "editor.tabSize": 2,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   // "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit"
-  },
+  // "editor.codeActionsOnSave": {
+  //   "source.organizeImports": "explicit"
+  // },
   "css.validate": false, // used for @tailwindcss
   "scss.validate": false, // used for @tailwindcss,
   "typescript.preferences.quoteStyle": "single",
