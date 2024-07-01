@@ -1,6 +1,5 @@
 import React from 'react'
 import { cn } from '../../helpers/helpers'
-import { removeAllRewriteEditors } from '../../helpers/helpersBrowser'
 
 type RewriteEditorProps = {
   // showRewriteEditor: boolean
@@ -39,6 +38,11 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     /* ###Thi */ console.log(`👉👉👉 handleNothing clicked`)
   }
 
+  function removeAllRewriteEditors() {
+    const editors = document.querySelectorAll('#rewrite-editor')
+    editors.forEach(editor => editor.remove())
+  }
+
   return (
     <div
       onClick={e => e.stopPropagation()}
@@ -69,7 +73,10 @@ export default function RewriteEditor(props: RewriteEditorProps) {
           </div>
         </div>
 
-        <button onClick={handleNothing} className='absolute top-0 left-0 z-50 w-full h-full'></button>
+        <button
+          onClick={handleNothing}
+          className="absolute top-0 left-0 z-50 w-full h-full"
+        ></button>
 
         {/* Controls */}
         {/* -15px = (32 height - 2 border) / 2 */}

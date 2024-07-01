@@ -86,7 +86,7 @@ function getSelectedBlocksHtml() {
   let html = ''
   for (const block of selectedDecoBlocks) {
     const selectedBlock = block?.previousSibling?.firstChild?.firstChild as HTMLElement
-    html += selectedBlock.outerHTML
+    html += selectedBlock?.outerHTML
   }
   return html
 }

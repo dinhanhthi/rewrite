@@ -1,7 +1,6 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
-import { cn } from '../../../helpers/helpers'
-import { createRewriteEditor } from '../../../helpers/helpersBrowser'
+import { cn, createRewriteEditor } from '../../../helpers/helpers'
 import RewriteMenu from '../RewriteMenu'
 import RewriteBtn from './RewriteBtn'
 
