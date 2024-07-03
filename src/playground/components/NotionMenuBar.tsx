@@ -31,7 +31,6 @@ export default function NotionMenuBar() {
       <div className="mr-1 dinhanhthi rewrite-btn notion-ignore">
         <RewriteBtnWrapper />
       </div>
-      <div className='dinhanhthi rewrite-overlay'></div>
       <div
         role="button"
         tabIndex={0}

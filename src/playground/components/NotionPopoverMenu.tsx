@@ -91,7 +91,6 @@ export default function NotionPopoverMenu() {
       <div className="dinhanhthi rewrite-opt notion-ignore">
         <RewriteOptWrapper />
       </div>
-      <div className='dinhanhthi rewrite-overlay'></div>
 
       {/* Comment */}
       <div className="notion-playground" style={{ paddingTop: '6px', paddingBottom: '6px' }}>
