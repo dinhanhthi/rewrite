@@ -33,28 +33,28 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   // }
 
   const useThisContent = async () => {
-    const editableDiv = editorRef.current;
+    const editableDiv = editorRef.current
 
     try {
       // Get the HTML content of the contenteditable div
-      const htmlContent = editableDiv!.innerHTML;
+      const htmlContent = editableDiv!.innerHTML
 
       // Create a new ClipboardItem with HTML content
       const clipboardItem = new ClipboardItem({
         'text/html': new Blob([htmlContent], { type: 'text/html' }),
         'text/plain': new Blob([editableDiv!.innerText], { type: 'text/plain' })
-      });
+      })
 
       // Write the ClipboardItem to the clipboard
-      await navigator.clipboard.write([clipboardItem]);
-      console.log('Copy successful!');
+      await navigator.clipboard.write([clipboardItem])
+      console.log('Copy successful!')
     } catch (err) {
-      console.log('Oops, unable to copy', err);
+      console.log('Oops, unable to copy', err)
     }
 
     document.execCommand('paste') // enable later
     removeAllRewriteEditors()
-  };
+  }
 
   // const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   //   e.preventDefault()
@@ -110,11 +110,11 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                     // __html: 'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
                     // __html:
                     //   'w thu <span style="color:rgba(193, 76, 138, 1);fill:rgba(193, 76, 138, 1)">nge </span>to mobile use, try to thu tstrap'
-                    // __html:
-                    // '<span style="font-weight: 500;"></span>w thu to mobile use, try to thu tstrap'
-                    // __html: '<ul class="list-disc list-outside leading-3 -mt-2 tight" data-tight="true" data-pm-slice="3 3 []"><li class="leading-normal -mb-2"><p>dasdsa</p></li><li class="leading-normal -mb-2"><p>dasddasdas</p></li><li class="leading-normal -mb-2"><p>dsss</p></li></ul>' // not working
-                    // __html: '- adasdasd\n - dasdasdasdsa' // not working
-                    __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
+                    // __html: 'w thu to mobile use, try to thu tstrap'
+                    // __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
+                    // __html: `<p>thu nghiem xem the nao</p><p>The highlight is kept too? Maybe, text</p><p>w thu to The highlight is kept too? Maybe, text thu tstrap</p>`
+                    // __html: `<pre><code class="language-jsx">async function test() {// somthing}</code></pre>`
+
                   }}
                 ></div>
               </div>
@@ -153,7 +153,9 @@ export default function RewriteEditor(props: RewriteEditorProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => removeAllRewriteEditors()}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={() => removeAllRewriteEditors()}>
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
