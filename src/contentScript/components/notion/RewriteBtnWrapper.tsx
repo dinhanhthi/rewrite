@@ -1,18 +1,25 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
+import { toast } from '../../../components/ui/use-toast'
 import { cn, createRewriteEditor } from '../../../helpers/helpers'
+import { Mode } from '../../../type'
 import RewriteMenu from '../RewriteMenu'
 import RewriteBtn from './RewriteBtn'
 
 type RewriteBtnWrapperProps = {
+  mode?: Mode
   className?: string
   btnClassName?: string
 }
 
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
   const handleItemClicked = () => {
-    /* ###Thi */ console.log(`👉👉👉 handleItemClicked()`)
-    createRewriteEditor()
+    if (props.mode === 'browser') {
+      document.execCommand('paste') // enable later
+      createRewriteEditor()
+    } else {
+      toast({ description: `Menu item clicked` })
+    }
   }
 
   return (

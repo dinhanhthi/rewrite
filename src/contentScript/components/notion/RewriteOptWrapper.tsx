@@ -1,11 +1,25 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
+import { toast } from '../../../components/ui/use-toast'
+import { Mode } from '../../../type'
 import RewriteMenu from '../RewriteMenu'
 import RewriteOpt from './RewriteOpt'
 
-export default function RewriteBtnWrapper() {
+type RewriteOptWrapperProps = {
+  mode?: Mode
+}
+
+export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
   const [showMenu, setShowMenu] = React.useState('')
-  // const [showRewriteEditor, setShowRewriteEditor] = React.useState(false)
+
+  const handleItemClicked = () => {
+    if (props.mode === 'browser') {
+      document.execCommand('paste') // enable later
+      // createRewriteEditor()
+    } else {
+      toast({ description: `Menu item clicked` })
+    }
+  }
 
   return (
     <Menubar
@@ -21,14 +35,9 @@ export default function RewriteBtnWrapper() {
             <RewriteOpt />
           </div>
         </MenubarTrigger>
-        {/* <RewriteEditor
-          showRewriteEditor={showRewriteEditor}
-          setShowRewriteEditor={setShowRewriteEditor}
-          contentClassName="mt-5"
-        /> */}
         <RewriteMenu
           className="absolute left-[calc(var(--radix-menubar-trigger-width)-4px)] top-[calc(var(--radix-menubar-trigger-height)*(-1)-10px)]"
-          // setShowRewriteEditor={setShowRewriteEditor}
+          handleItemClicked={handleItemClicked}
         />
       </MenubarMenu>
     </Menubar>

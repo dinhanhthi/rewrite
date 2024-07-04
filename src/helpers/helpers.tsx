@@ -41,7 +41,7 @@ export function createRewriteEditor() {
       editor.style.zIndex = '1000'
       scroller.appendChild(editor)
       const root = createRoot(editor)
-      root.render(<RewriteEditor />)
+      root.render(<RewriteEditor mode="browser" />)
     }
   }
 }

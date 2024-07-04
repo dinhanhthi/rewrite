@@ -12,7 +12,7 @@ export default function CancelDialog(props: CancelDialogProps) {
   return (
     <div
       className={
-        'flex flex-col items-center justify-center gap-4 p-6 w-[300px] bg-white border rounded-md shadow-lg bg-background'
+        'flex text-base flex-col items-center justify-center gap-4 p-6 w-[300px] bg-white border rounded-md shadow-lg bg-background'
       }
     >
       <LogoRewriteIcon className="w-6 h-6 text-green-700" />

@@ -89,7 +89,7 @@ export default function NotionPopoverMenu() {
       </div>
 
       <div className="dinhanhthi rewrite-opt notion-ignore">
-        <RewriteOptWrapper />
+        <RewriteOptWrapper mode="playground" />
       </div>
 
       {/* Comment */}

@@ -9,7 +9,7 @@ type RewriteOptBrowserProps = {
 export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
   return (
     <RewriteCtx.Provider value={{ selected: props.selected }}>
-      <RewriteOptWrapper />
+      <RewriteOptWrapper mode='browser' />
     </RewriteCtx.Provider>
   )
 }

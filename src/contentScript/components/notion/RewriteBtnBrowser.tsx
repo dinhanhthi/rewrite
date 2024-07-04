@@ -9,7 +9,7 @@ type RewriteBrowserProps = {
 export default function ReWriteBtnBrowser(props: RewriteBrowserProps) {
   return (
     <RewriteCtx.Provider value={{ selected: props.selected }}>
-      <RewriteBtnWrapper />
+      <RewriteBtnWrapper mode='browser' />
     </RewriteCtx.Provider>
   )
 }

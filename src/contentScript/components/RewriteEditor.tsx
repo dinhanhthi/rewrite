@@ -8,12 +8,13 @@ import {
 } from '../../components/ui/alert-dialog'
 import { toast } from '../../components/ui/use-toast'
 import { cn } from '../../helpers/helpers'
+import { Mode } from '../../type'
 import CancelDialog from './CancelDialog'
 
 type RewriteEditorProps = {
   className?: string
   hideOverlay?: boolean // need it for the playground
-  mode?: 'browser' | 'playground'
+  mode?: Mode
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
@@ -46,11 +47,13 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   }
 
   const discardClicked = () => {
+    /* ###Thi */ console.log(`👉👉👉 discardClicked()`)
     if (props.mode === 'browser') {
+      /* ###Thi */ console.log(`👉👉👉 discard clicked browser`)
       removeAllRewriteEditors()
     } else {
       toast({
-        description: 'Edit canceled!'
+        description: 'Discard clicked!'
       })
     }
     setOpenDialog(false)
