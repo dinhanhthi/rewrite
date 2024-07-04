@@ -4,11 +4,13 @@ import React, { useEffect } from 'react'
 import { House } from 'lucide-react'
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Button } from '../components/ui/button'
+import { Toaster } from '../components/ui/toaster'
 import '../styles/global.scss'
 import '../styles/options.scss'
 import '../styles/playground.scss'
 import '../styles/popup.scss'
 import '../styles/tailwind.scss'
+import CancelDialogPlayground from './components/CancelDialogPlayground'
 import Logo from './components/Logo'
 import NotionMenuBar from './components/NotionMenuBar'
 import NotionPopoverMenu from './components/NotionPopoverMenu'
@@ -71,6 +73,7 @@ export default function App() {
         </div>
       </div>
       <div className="dinhanhthi rewrite-overlay"></div>
+      <Toaster />
     </>
   )
 }
@@ -104,6 +107,12 @@ const menus = [
     name: 'RewriteEditor',
     path: '/RewriteEditor',
     component: RewriteEditorPlayground,
+    props: {}
+  },
+  {
+    name: 'CancelDialog',
+    path: '/CancelDialog',
+    component: CancelDialogPlayground,
     props: {}
   },
   {

@@ -19,16 +19,15 @@ export function createRewriteEditor() {
   const selectedText = window.getSelection()
   if (selectedText && selectedText.rangeCount > 0) {
     const range = selectedText.getRangeAt(0)
-    let paragraph = range.commonAncestorContainer as HTMLElement
-    // Ensure the paragraph is a <p> or <div> element (could be a text node)
-    while (paragraph && paragraph.nodeType !== Node.ELEMENT_NODE) {
-      if (paragraph.parentNode) paragraph = paragraph.parentNode as HTMLElement
+    let endContainer = range.endContainer as HTMLElement
+    while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
+      if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
     }
-    const scroller = paragraph.closest('.notion-scroller.vertical')
+    const scroller = endContainer.closest('.notion-scroller.vertical')
     const pos = {
-      top: paragraph.offsetTop + paragraph.offsetHeight + 4,
-      left: paragraph.offsetLeft,
-      width: paragraph.offsetWidth
+      top: endContainer.offsetTop + endContainer.offsetHeight + 4,
+      left: endContainer.offsetLeft,
+      width: endContainer.offsetWidth
     }
     if (scroller) {
       const editor = document.createElement('div')

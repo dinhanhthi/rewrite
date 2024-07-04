@@ -1,66 +1,70 @@
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import React from 'react'
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
   AlertDialogTitle
 } from '../../components/ui/alert-dialog'
+import { toast } from '../../components/ui/use-toast'
 import { cn } from '../../helpers/helpers'
+import CancelDialog from './CancelDialog'
 
 type RewriteEditorProps = {
-  // showRewriteEditor: boolean
-  // setShowRewriteEditor: React.Dispatch<React.SetStateAction<boolean>>
   className?: string
   hideOverlay?: boolean // need it for the playground
+  mode?: 'browser' | 'playground'
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
   const editorRef = React.useRef<HTMLDivElement>(null)
   const [openDialog, setOpenDialog] = React.useState(false)
+  const useThisTextLabel = 'Use this text'
 
-  // const useThisContent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   e.preventDefault()
-  //   e.stopPropagation()
-  //   /* ###Thi */ console.log(`👉👉👉 useThisContent clicked`)
-
-  //   // await copyToClipboard()
-  //   document.execCommand('paste') // enable later
-  //   removeAllRewriteEditors()
-  // }
-
-  const useThisContent = async () => {
+  const useThisContent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
     const editableDiv = editorRef.current
-
     try {
-      // Get the HTML content of the contenteditable div
       const htmlContent = editableDiv!.innerHTML
-
-      // Create a new ClipboardItem with HTML content
       const clipboardItem = new ClipboardItem({
         'text/html': new Blob([htmlContent], { type: 'text/html' }),
         'text/plain': new Blob([editableDiv!.innerText], { type: 'text/plain' })
       })
-
-      // Write the ClipboardItem to the clipboard
       await navigator.clipboard.write([clipboardItem])
       console.log('Copy successful!')
     } catch (err) {
       console.log('Oops, unable to copy', err)
     }
 
-    document.execCommand('paste') // enable later
-    removeAllRewriteEditors()
+    if (props.mode === 'browser') {
+      document.execCommand('paste') // enable later
+      removeAllRewriteEditors()
+    } else {
+      toast({ description: `Button "${useThisTextLabel}" clicked!` })
+    }
   }
 
-  // const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   e.preventDefault()
-  //   e.stopPropagation()
-  //   /* ###Thi */ console.log(`👉👉👉 handleNothing clicked`)
-  // }
+  const discardClicked = () => {
+    if (props.mode === 'browser') {
+      removeAllRewriteEditors()
+    } else {
+      toast({
+        description: 'Edit canceled!'
+      })
+    }
+    setOpenDialog(false)
+  }
+
+  const cancelDialogClicked = () => {
+    setOpenDialog(false)
+  }
+
+  const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    /* ###Thi */ console.log(`👉👉👉 handleNothing clicked`)
+  }
 
   function removeAllRewriteEditors() {
     const editors = document.querySelectorAll('#rewrite-editor')
@@ -107,24 +111,24 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                   suppressContentEditableWarning={true}
                   className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{
-                    // __html: 'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
+                    __html:
+                      'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
                     // __html:
                     //   'w thu <span style="color:rgba(193, 76, 138, 1);fill:rgba(193, 76, 138, 1)">nge </span>to mobile use, try to thu tstrap'
                     // __html: 'w thu to mobile use, try to thu tstrap'
                     // __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
                     // __html: `<p>thu nghiem xem the nao</p><p>The highlight is kept too? Maybe, text</p><p>w thu to The highlight is kept too? Maybe, text thu tstrap</p>`
                     // __html: `<pre><code class="language-jsx">async function test() {// somthing}</code></pre>`
-
                   }}
                 ></div>
               </div>
             </div>
           </div>
 
-          {/* <button
+          <button
             onClick={handleNothing}
             className="absolute top-0 left-0 z-50 w-full h-full"
-          ></button> */}
+          ></button>
 
           {/* Controls */}
           {/* -15px = (32 height - 2 border) / 2 */}
@@ -134,7 +138,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                 onClick={useThisContent}
                 className="h-full px-5 text-white transition-all bg-green-700 w-fit hover:px-6 _bg-rainbow group"
               >
-                Use this text
+                {useThisTextLabel}
               </button>
             </div>
           </div>
@@ -143,20 +147,17 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
       {/* Dialog */}
       <AlertDialog defaultOpen={false} open={openDialog} onOpenChange={setOpenDialog}>
-        <AlertDialogContent container={document.querySelector('.rewrite-overlay')}>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your account and remove
-              your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => removeAllRewriteEditors()}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
+        <AlertDialogContent
+          className="p-0 bg-transparent border-none rounded-md w-fit"
+          container={document.querySelector('.rewrite-overlay')}
+        >
+          <VisuallyHidden.Root>
+            <AlertDialogTitle></AlertDialogTitle>
+          </VisuallyHidden.Root>
+          <CancelDialog cancel={cancelDialogClicked} discard={discardClicked} />
+          <VisuallyHidden.Root>
+            <AlertDialogDescription></AlertDialogDescription>
+          </VisuallyHidden.Root>
         </AlertDialogContent>
       </AlertDialog>
     </>
