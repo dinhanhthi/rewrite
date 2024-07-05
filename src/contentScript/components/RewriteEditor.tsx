@@ -108,7 +108,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         <div className="relative w-full h-full">
           {/* Main editor */}
           <div className="z-30 h-full">
-            <div className="h-full w-full rounded-[6px] bg-white p-[0.75em] pb-[1.25em] notion-box-shadow isolate">
+            <div className="h-full w-full rounded-[6px] bg-white p-[1.25em] notion-box-shadow isolate">
               <div className="overflow-y-auto dat-scrollbar dat-scrollbar-small">
                 <div
                   ref={editorRef}

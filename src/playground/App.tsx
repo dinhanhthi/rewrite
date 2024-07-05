@@ -30,7 +30,7 @@ export default function App() {
       <div className="flex flex-col w-screen h-screen notion-font-family">
         <div
           className={cn(
-            'flex flex-row flex-wrap items-center justify-center gap-[1em] p-[1em] bg-sky-100'
+            'flex flex-row flex-wrap items-center justify-center gap-[1em] py-[1em] px-8 bg-sky-100'
           )}
         >
           {menus.map(menu => (

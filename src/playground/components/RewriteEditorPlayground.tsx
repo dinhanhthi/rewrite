@@ -20,7 +20,7 @@ export default function RewriteEditorPlayground() {
           onCheckedChange={handleOnCheckedChange}
           id="hide-overlay"
         />
-        <label htmlFor="hide-overlay">Hide overlay</label>
+        <label htmlFor="hide-overlay">Disable cliking outside</label>
       </div>
     </>
   )
