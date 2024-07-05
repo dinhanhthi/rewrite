@@ -15,7 +15,6 @@ type RewriteBtnWrapperProps = {
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
   const handleItemClicked = () => {
     if (props.mode === 'browser') {
-      document.execCommand('paste') // enable later
       createRewriteEditor()
     } else {
       toast({ description: `Menu item clicked` })

@@ -41,7 +41,24 @@ export function createRewriteEditor() {
       editor.style.zIndex = '1000'
       scroller.appendChild(editor)
       const root = createRoot(editor)
-      root.render(<RewriteEditor mode="browser" />)
+      const editorHeight = 200
+      root.render(<RewriteEditor mode="browser" height={editorHeight} />)
+
+      /**
+       * We don't use `rect.bottom` because the editor isn't rendered yet, instead we use
+       * `rect.top + editorHeight`
+       */
+      const rect = editor.getBoundingClientRect()
+      const isEditorInViewport =
+        rect.top >= 0 &&
+        rect.top + editorHeight <= (window.innerHeight || document.documentElement.clientHeight)
+
+      if (!isEditorInViewport) {
+        scroller.scrollTo({
+          top: scroller.scrollTop + editorHeight,
+          behavior: 'smooth'
+        })
+      }
     }
   }
 }

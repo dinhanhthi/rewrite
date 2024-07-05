@@ -12,6 +12,7 @@ import { Mode } from '../../type'
 import CancelDialog from './CancelDialog'
 
 type RewriteEditorProps = {
+  height?: number
   className?: string
   hideOverlay?: boolean // need it for the playground
   mode?: Mode
@@ -97,9 +98,10 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         ></div>
       )}
       <div
+        style={{ height: `${props.height}px` || '200px' }}
         onClick={handleEditorClick}
         className={cn(
-          'h-[200px] w-full !p-0 border-none outline-none bg-transparent z-50 isolate relative',
+          'w-full !p-0 border-none outline-none bg-transparent z-50 isolate relative',
           props.className
         )}
       >
