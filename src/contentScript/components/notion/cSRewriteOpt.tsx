@@ -76,7 +76,8 @@ function isRewriteOptAdded() {
 }
 
 /**
- * Notion uses it own selection method for selecting whole blocks.
+ * Notion uses it own selection method (CSS) for selecting whole blocks. There is no native browser's
+ * selection!
  *
  * TIP: Inspect element > choose div.notion-overlay-container > unselect z-index so that we can
  * inspect the below elements

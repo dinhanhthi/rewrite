@@ -4,6 +4,7 @@ import { toast } from '../../../components/ui/use-toast'
 import { Mode } from '../../../type'
 import RewriteMenu from '../RewriteMenu'
 import RewriteOpt from './RewriteOpt'
+import { createRewriteEditor } from '../../../helpers/helpers'
 
 type RewriteOptWrapperProps = {
   mode?: Mode
@@ -13,9 +14,10 @@ export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
   const [showMenu, setShowMenu] = React.useState('')
 
   const handleItemClicked = () => {
+    /* ###Thi */ console.log(`👉👉👉 handleItemClicked()`);
     if (props.mode === 'browser') {
-      document.execCommand('paste') // enable later
-      // createRewriteEditor()
+      // document.execCommand('paste') // enable later
+      createRewriteEditor('opt')
     } else {
       toast({ description: `Menu item clicked` })
     }

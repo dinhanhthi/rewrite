@@ -8,27 +8,37 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../contentScript/components/RewriteEditor'
+import { EditorFrom } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createRewriteEditor() {
+export function createRewriteEditor(from: EditorFrom) {
   removeAllRewriteEditors()
 
-  const selectedText = window.getSelection()
-  if (selectedText && selectedText.rangeCount > 0) {
-    const range = selectedText.getRangeAt(0)
-    let endContainer = range.endContainer as HTMLElement
-    while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
-      if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+  let endContainer: HTMLElement | null = null
+  if (from === 'menu') {
+    const selectedText = window.getSelection()
+    if (selectedText && selectedText.rangeCount > 0) {
+      const range = selectedText.getRangeAt(0)
+      endContainer = range.endContainer as HTMLElement
+      while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
+        if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+      }
     }
-    const scroller = endContainer.closest('.notion-scroller.vertical')
+  } else if (from === 'opt') {
+    const notionHalos = document.querySelectorAll('.notion-selectable-halo')
+    endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
+  }
+
+  if (endContainer) {
     const pos = {
       top: endContainer.offsetTop + endContainer.offsetHeight + 4,
       left: endContainer.offsetLeft,
       width: endContainer.offsetWidth
     }
+    const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
       const editor = document.createElement('div')
       editor.classList.add('dinhanhthi')
@@ -55,7 +65,7 @@ export function createRewriteEditor() {
 
       if (!isEditorInViewport) {
         scroller.scrollTo({
-          top: scroller.scrollTop + editorHeight,
+          top: scroller.scrollTop + editorHeight + 10,
           behavior: 'smooth'
         })
       }
