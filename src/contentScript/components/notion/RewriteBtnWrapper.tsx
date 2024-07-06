@@ -5,6 +5,7 @@ import { cn, createRewriteEditor } from '../../../helpers/helpers'
 import { Mode } from '../../../type'
 import RewriteMenu from '../RewriteMenu'
 import RewriteBtn from './RewriteBtn'
+import { RewriteCtx } from '../../RewriteCtx'
 
 type RewriteBtnWrapperProps = {
   mode?: Mode
@@ -13,9 +14,11 @@ type RewriteBtnWrapperProps = {
 }
 
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
+  const ctx = React.useContext(RewriteCtx)
+
   const handleItemClicked = () => {
     if (props.mode === 'browser') {
-      createRewriteEditor('menu')
+      createRewriteEditor('menu', ctx.selected)
     } else {
       toast({ description: `Menu item clicked` })
     }

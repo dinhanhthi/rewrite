@@ -16,6 +16,7 @@ type RewriteEditorProps = {
   className?: string
   hideOverlay?: boolean // need it for the playground
   mode?: Mode
+  selected?: string
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
@@ -48,9 +49,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   }
 
   const discardClicked = () => {
-    /* ###Thi */ console.log(`👉👉👉 discardClicked()`)
     if (props.mode === 'browser') {
-      /* ###Thi */ console.log(`👉👉👉 discard clicked browser`)
       removeAllRewriteEditors()
     } else {
       toast({
@@ -67,7 +66,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
-    /* ###Thi */ console.log(`👉👉👉 handleNothing clicked`)
   }
 
   function removeAllRewriteEditors() {
@@ -78,15 +76,12 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
-    /* ###Thi */ console.log(`👉👉👉 handleOverlayClick clicked`)
-    // removeAllRewriteEditors()
     setOpenDialog(true)
   }
 
   const handleEditorClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
-    /* ###Thi */ console.log(`👉👉👉 handleEditorClick clicked`)
   }
 
   return (
@@ -94,7 +89,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
       {!props.hideOverlay && (
         <div
           onClick={handleOverlayClick}
-          className="fixed inset-0 z-10 block opacity-0 isolate"
+          className="fixed inset-0 z-10 block overflow-auto opacity-0 isolate dat-scrollbar"
         ></div>
       )}
       <div
@@ -116,14 +111,15 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                   suppressContentEditableWarning={true}
                   className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{
-                    __html:
-                      'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
+                    // __html:
+                    //   'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
                     // __html:
                     //   'w thu <span style="color:rgba(193, 76, 138, 1);fill:rgba(193, 76, 138, 1)">nge </span>to mobile use, try to thu tstrap'
                     // __html: 'w thu to mobile use, try to thu tstrap'
                     // __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
                     // __html: `<p>thu nghiem xem the nao</p><p>The highlight is kept too? Maybe, text</p><p>w thu to The highlight is kept too? Maybe, text thu tstrap</p>`
                     // __html: `<pre><code class="language-jsx">async function test() {// somthing}</code></pre>`
+                    __html: props.selected || 'No content selected!'
                   }}
                 ></div>
               </div>

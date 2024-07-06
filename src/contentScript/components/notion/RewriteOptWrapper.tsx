@@ -5,19 +5,19 @@ import { Mode } from '../../../type'
 import RewriteMenu from '../RewriteMenu'
 import RewriteOpt from './RewriteOpt'
 import { createRewriteEditor } from '../../../helpers/helpers'
+import { RewriteCtx } from '../../RewriteCtx'
 
 type RewriteOptWrapperProps = {
   mode?: Mode
 }
 
 export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
+  const ctx = React.useContext(RewriteCtx)
   const [showMenu, setShowMenu] = React.useState('')
 
   const handleItemClicked = () => {
-    /* ###Thi */ console.log(`👉👉👉 handleItemClicked()`);
     if (props.mode === 'browser') {
-      // document.execCommand('paste') // enable later
-      createRewriteEditor('opt')
+      createRewriteEditor('opt', ctx.selected)
     } else {
       toast({ description: `Menu item clicked` })
     }
