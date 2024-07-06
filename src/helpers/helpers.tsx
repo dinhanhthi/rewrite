@@ -84,22 +84,49 @@ export function removeAllRewriteEditors() {
  * Use FormatSelectedPlayground for playground mode.
  */
 export function formatSelectedText(text: string) {
-  return text
-    .trim()
-    .replace(
-      /<span style="font-weight:600" data-token-index="1" class="notion-enable-hover">(.*?)<\/span>/g,
-      '<b>$1</b>'
-    )
-    .replace(
-      /<span style="font-style:italic" data-token-index="3" class="notion-enable-hover">(.*?)<\/span>/g,
-      '<i>$1</i>'
-    )
-    .replace(
-      /<span style="color:inherit;border-bottom:0.05em solid;word-wrap:break-word" data-token-index="5" class="notion-enable-hover">(.*?)<\/span>/g,
-      '<u>$1</u>'
-    )
-    .replace(
-      /<span style="text-decoration:line-through" data-token-index="9" class="notion-enable-hover">(.*?)<\/span>/g,
-      '<s>$1</s>'
-    )
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(text, 'text/html')
+
+  function wrapTextWithTags(text: string, tags: string[]) {
+    tags.forEach(tag => {
+      text = `<${tag}>${text}</${tag}>`
+    })
+    return text
+  }
+
+  const spans = doc.querySelectorAll('span')
+
+  spans.forEach(span => {
+    const style = span.getAttribute('style')
+    if (style) {
+      let tags = []
+
+      if (style.includes('font-weight:600')) {
+        tags.push('b')
+      }
+      if (style.includes('font-style:italic')) {
+        tags.push('i')
+      }
+      if (style.includes('border-bottom:0.05em solid;word-wrap:break-word')) {
+        tags.push('u')
+      }
+      if (style.includes('text-decoration:line-through')) {
+        tags.push('s')
+      }
+      if (
+        style.includes('font-family') &&
+        (style.includes('Courier') || style.includes('monospace'))
+      ) {
+        tags.push('code')
+      }
+
+      if (tags.length > 0) {
+        const text = span.innerHTML
+        const wrappedText = wrapTextWithTags(text, tags)
+        span.outerHTML = wrappedText
+      }
+    }
+  })
+
+  return doc.body.innerHTML
 }
