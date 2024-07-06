@@ -20,3 +20,7 @@ export async function handleSaveName(name: string) {
 export function openOptionsPage() {
   browser.runtime.openOptionsPage()
 }
+
+export function formatSelectedText(text: string) {
+  return text.trim()
+}

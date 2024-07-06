@@ -35,7 +35,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         'text/plain': new Blob([editableDiv!.innerText], { type: 'text/plain' })
       })
       await navigator.clipboard.write([clipboardItem])
-      console.log('Copy successful!')
     } catch (err) {
       console.log('Oops, unable to copy', err)
     }

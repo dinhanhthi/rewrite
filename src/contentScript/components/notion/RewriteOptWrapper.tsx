@@ -1,22 +1,17 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
 import { toast } from '../../../components/ui/use-toast'
-import { Mode } from '../../../type'
-import RewriteMenu from '../RewriteMenu'
-import RewriteOpt from './RewriteOpt'
 import { createRewriteEditor } from '../../../helpers/helpers'
 import { RewriteCtx } from '../../RewriteCtx'
+import RewriteMenu from '../RewriteMenu'
+import RewriteOpt from './RewriteOpt'
 
-type RewriteOptWrapperProps = {
-  mode?: Mode
-}
-
-export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
+export default function RewriteOptWrapper() {
   const ctx = React.useContext(RewriteCtx)
   const [showMenu, setShowMenu] = React.useState('')
 
   const handleItemClicked = () => {
-    if (props.mode === 'browser') {
+    if (ctx.mode === 'browser') {
       createRewriteEditor('opt', ctx.selected)
     } else {
       toast({ description: `Menu item clicked` })

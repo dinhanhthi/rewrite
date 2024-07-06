@@ -29,7 +29,7 @@ export default function NotionMenuBar() {
       }}
     >
       <div className="mr-1 dinhanhthi rewrite-btn notion-ignore">
-        <RewriteBtnWrapper mode="playground" />
+        <RewriteBtnWrapper />
       </div>
       <div
         role="button"
