@@ -12,6 +12,7 @@ import '../styles/playground.scss'
 import '../styles/popup.scss'
 import '../styles/tailwind.scss'
 import CancelDialogPlayground from './components/CancelDialogPlayground'
+import FormatSelectedPlayground from './components/FormatSelectedPlayground'
 import Logo from './components/Logo'
 import NotionMenuBar from './components/NotionMenuBar'
 import NotionPopoverMenu from './components/NotionPopoverMenu'
@@ -36,6 +37,7 @@ export default function App() {
         >
           {menus.map(menu => (
             <TooltipProvider
+              key={menu.name}
               delayDuration={100}
               skipDelayDuration={10}
               disableHoverableContent={true}
@@ -45,7 +47,8 @@ export default function App() {
                   <Button
                     asChild
                     className={cn('cursor-pointer', {
-                      'bg-sky-500 text-white hover:bg-sky-500 hover:text-white': location.pathname === menu.path,
+                      'bg-sky-500 text-white hover:bg-sky-500 hover:text-white':
+                        location.pathname === menu.path,
                       'bg-white text-slate-800': location.pathname !== menu.path
                     })}
                     key={menu.name}
@@ -138,6 +141,13 @@ const menus: {
     path: '/CancelDialog',
     description: 'When we click outside the editor.',
     component: CancelDialogPlayground,
+    props: {}
+  },
+  {
+    name: 'formatSelected',
+    path: '/formatSelected',
+    description: 'Format selected html before sending to the LLM service.',
+    component: FormatSelectedPlayground,
     props: {}
   },
   {

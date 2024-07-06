@@ -7,6 +7,7 @@ type RewriteBrowserProps = {
 }
 
 export default function ReWriteBtnBrowser(props: RewriteBrowserProps) {
+  /* ###Thi */ console.log(`👉👉👉 selected: `, props.selected);
   return (
     <RewriteCtx.Provider value={{ selected: props.selected, mode: 'browser' }}>
       <RewriteBtnWrapper />

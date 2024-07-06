@@ -76,3 +76,30 @@ export function removeAllRewriteEditors() {
   const editors = document.querySelectorAll('#rewrite-editor')
   editors.forEach(editor => editor.remove())
 }
+
+/**
+ * Selected html is a string of raw html content, we need to format it before
+ * sending to the LLM services.
+ *
+ * Use FormatSelectedPlayground for playground mode.
+ */
+export function formatSelectedText(text: string) {
+  return text
+    .trim()
+    .replace(
+      /<span style="font-weight:600" data-token-index="1" class="notion-enable-hover">(.*?)<\/span>/g,
+      '<b>$1</b>'
+    )
+    .replace(
+      /<span style="font-style:italic" data-token-index="3" class="notion-enable-hover">(.*?)<\/span>/g,
+      '<i>$1</i>'
+    )
+    .replace(
+      /<span style="color:inherit;border-bottom:0.05em solid;word-wrap:break-word" data-token-index="5" class="notion-enable-hover">(.*?)<\/span>/g,
+      '<u>$1</u>'
+    )
+    .replace(
+      /<span style="text-decoration:line-through" data-token-index="9" class="notion-enable-hover">(.*?)<\/span>/g,
+      '<s>$1</s>'
+    )
+}

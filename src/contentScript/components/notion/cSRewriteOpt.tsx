@@ -86,7 +86,7 @@ function getSelectedBlocksHtml() {
   const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
   let html = ''
   for (const block of selectedDecoBlocks) {
-    const selectedBlock = block?.previousSibling?.firstChild?.firstChild as HTMLElement
+    const selectedBlock = block?.previousSibling as HTMLElement
     html += selectedBlock?.outerHTML
   }
   return html

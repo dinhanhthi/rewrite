@@ -6,6 +6,9 @@ import App from './App'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
+// used for "important" in tailwind css
+document.body.classList.add('dinhanhthi')
+
 root.render(
   <BrowserRouter>
     <App />
