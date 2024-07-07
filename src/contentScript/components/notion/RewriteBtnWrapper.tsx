@@ -2,7 +2,7 @@ import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
 import { toast } from '../../../components/ui/use-toast'
 // import { cn, createRewriteEditor } from '../../../helpers/helpers'
-import { cn } from '../../../helpers/helpers'
+import { cn, formatSelectedText } from '../../../helpers/helpers'
 import { RewriteCtx } from '../../RewriteCtx'
 import RewriteMenu from '../RewriteMenu'
 import RewriteBtn from './RewriteBtn'
@@ -22,7 +22,8 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
       const [clipboardItem] = await navigator.clipboard.read()
       const outputBlob = await clipboardItem.getType('text/html');
       const output = await outputBlob.text();
-      console.log(output)
+      const formatedText = formatSelectedText(output)
+      console.log(formatedText)
     } else {
       toast({ description: `Menu item clicked` })
     }

@@ -78,88 +78,20 @@ export function removeAllRewriteEditors() {
 }
 
 /**
- * Selected html is a string of raw html content, we need to format it before
- * sending to the LLM services.
- *
- * Use FormatSelectedPlayground for playground mode.
+ * We use execCommand('copy') to get the already-transformed HTML (by Notion). However, when user
+ * selects only text inside a paragraph, the HTML is not transformed. So we need to format it
  */
 export function formatSelectedText(text: string) {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(text, 'text/html')
-
-  const isInsideParagraph = !doc.body.querySelector('div')
-
-  if (isInsideParagraph) {
-    return textInsideParagraph(doc.body)
-  } else {
-    /**
-     * Because Notion splits all HTML elements into div blocks, even ul and ol. We need to "group"
-     * the div with the same of ul or ol or other kind of types before we can further process them.
-     */
-
-
-    const list = processList(doc.body)
-    if (list) {
-      return list.outerHTML
-    }
+  if (text.includes('<span style="')) {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(text, 'text/html')
+    const formattedText = textInsideParagraph(doc.body)
+    return formattedText
   }
 
-  return doc.body.innerHTML
-}
-
-/**
- * Process ul, ol
- */
-function processList(parentDiv: HTMLElement) {
-  let list: any
-  let typeClass: string = ''
-  const firstChild = parentDiv.querySelector(':scope > div[class$="_list-block"]')
-  if (!firstChild) return null
-
-  if (firstChild.classList.contains('notion-numbered_list-block')) {
-    list = document.createElement('ol')
-    typeClass = '.notion-numbered_list-block'
-  } else if (firstChild.classList.contains('notion-bulleted_list-block')) {
-    list = document.createElement('ul')
-    typeClass = '.notion-bulleted_list-block'
-  }
-
-  let blocks = parentDiv.querySelectorAll(`:scope > ${typeClass}`) as any
-  if (blocks?.length > 0) {
-    blocks = Array.from(blocks)?.filter(
-      (nB: any) => !!nB.querySelector('div.notranslate[contenteditable="true"]')
-    )
-  }
-
-  blocks.forEach((block: any) => {
-    const contentDiv = block?.querySelector('div.notranslate[contenteditable="true"]')
-    if (contentDiv) {
-      const li = document.createElement('li')
-      li.textContent = contentDiv.textContent // TODO: apply spans logics
-
-      const _block = block?.querySelector('div[class$="_list-block"]')
-      const _blockParent = _block?.parentElement
-      let nestedBlocks = _blockParent?.querySelectorAll(':scope > div[class$="_list-block"]')
-
-      // Make sure there is no ul, ol with empty children
-      if (nestedBlocks?.length > 0) {
-        nestedBlocks = Array.from(nestedBlocks)?.filter(
-          (nB: any) => !!nB.querySelector('div.notranslate[contenteditable="true"]')
-        )
-      }
-
-      if (nestedBlocks?.length > 0) {
-        const nestedList = processList(_blockParent)
-        if (nestedList) {
-          li.appendChild(nestedList)
-        }
-      }
-
-      list.appendChild(li)
-    }
-  })
-
-  return list
+  return text
+    .replace('<meta charset="utf-8">', '')
+    .replace(/<!--\s*notionvc:\s*[a-f0-9\-]+\s*-->/gi, '')
 }
 
 function textInsideParagraph(doc: HTMLElement) {
