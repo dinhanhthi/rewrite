@@ -1,7 +1,6 @@
 import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
 import { toast } from '../../../components/ui/use-toast'
-// import { cn, createRewriteEditor } from '../../../helpers/helpers'
 import { cn, formatSelectedText } from '../../../helpers/helpers'
 import { RewriteCtx } from '../../RewriteCtx'
 import RewriteMenu from '../RewriteMenu'
@@ -17,7 +16,6 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
 
   const handleItemClicked = async () => {
     if (ctx.mode === 'browser') {
-      // createRewriteEditor('menu', ctx.selected)
       document.execCommand('copy')
       const [clipboardItem] = await navigator.clipboard.read()
       const outputBlob = await clipboardItem.getType('text/html');

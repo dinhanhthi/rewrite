@@ -2,14 +2,9 @@ import React from 'react'
 import { RewriteCtx } from '../../RewriteCtx'
 import RewriteBtnWrapper from './RewriteBtnWrapper'
 
-type RewriteBrowserProps = {
-  selected?: string
-}
-
-export default function ReWriteBtnBrowser(props: RewriteBrowserProps) {
-  // /* ###Thi */ console.log(`👉👉👉 selected: `, props.selected);
+export default function ReWriteBtnBrowser() {
   return (
-    <RewriteCtx.Provider value={{ selected: props.selected, mode: 'browser' }}>
+    <RewriteCtx.Provider value={{ mode: 'browser' }}>
       <RewriteBtnWrapper />
     </RewriteCtx.Provider>
   )

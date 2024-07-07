@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { getSelectedHtml, getSelectedText } from '../../contentScript'
+import { getSelectedText } from '../../contentScript'
 import RewriteBtnBrowser from './RewriteBtnBrowser'
 
 /**
@@ -36,7 +36,7 @@ function showReWriteBtn() {
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
 
-  root.render(<RewriteBtnBrowser selected={getSelectedHtml()} />)
+  root.render(<RewriteBtnBrowser />)
 }
 
 function getNotionMenu() {
