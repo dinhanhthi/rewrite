@@ -14,7 +14,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createRewriteEditor(from: EditorFrom) {
+export function createRewriteEditor(from: EditorFrom, content?: string) {
   removeAllRewriteEditors()
 
   let endContainer: HTMLElement | null = null
@@ -52,7 +52,7 @@ export function createRewriteEditor(from: EditorFrom) {
       scroller.appendChild(editor)
       const root = createRoot(editor)
       const editorHeight = 200
-      root.render(<RewriteEditor mode="browser" height={editorHeight} />)
+      root.render(<RewriteEditor mode="browser" height={editorHeight} content={content} />)
 
       /**
        * We don't use `rect.bottom` because the editor isn't rendered yet, instead we use
@@ -90,8 +90,9 @@ export function formatSelectedText(text: string) {
   }
 
   return text
-    .replace('<meta charset="utf-8">', '')
-    .replace(/<!--\s*notionvc:\s*[a-f0-9\-]+\s*-->/gi, '')
+    .replace('<meta charset="utf-8">', '') // from notion
+    .replace(/<!--\s*notionvc:\s*[a-f0-9\-]+\s*-->/gi, '') // from notion
+    .replace(/(\r\n|\n|\r)/gm, "") // remove all new lines
 }
 
 function textInsideParagraph(doc: HTMLElement) {

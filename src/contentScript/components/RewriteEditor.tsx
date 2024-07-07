@@ -16,7 +16,7 @@ type RewriteEditorProps = {
   className?: string
   hideOverlay?: boolean // need it for the playground
   mode?: Mode
-  selected?: string
+  content?: string
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
@@ -62,11 +62,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     setOpenDialog(false)
   }
 
-  // const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   e.preventDefault()
-  //   e.stopPropagation()
-  // }
-
   function removeAllRewriteEditors() {
     const editors = document.querySelectorAll('#rewrite-editor')
     editors.forEach(editor => editor.remove())
@@ -108,28 +103,14 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                   ref={editorRef}
                   contentEditable={true}
                   suppressContentEditableWarning={true}
-                  className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap"
+                  className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap notion-editor-style"
                   dangerouslySetInnerHTML={{
-                    // __html:
-                    //   'Thu nghiem <code>null</code> xem <b>the nao</b> nhe <s>bi cat</s> con day la <mark>highlight</mark>!'
-                    // __html:
-                    //   'w thu <span style="color:rgba(193, 76, 138, 1);fill:rgba(193, 76, 138, 1)">nge </span>to mobile use, try to thu tstrap'
-                    // __html: 'w thu to mobile use, try to thu tstrap'
-                    // __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
-                    // __html: `<p>thu nghiem xem the nao</p><p>The highlight is kept too? Maybe, text</p><p>w thu to The highlight is kept too? Maybe, text thu tstrap</p>`
-                    // __html: `<pre><code class="language-jsx">async function test() {// somthing}</code></pre>`
-                    __html: props.selected || '<p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p>'
+                    __html: props.content || 'Start typing here...'
                   }}
                 ></div>
               </div>
             </div>
           </div>
-
-          {/* Temporary disable this in order to scroll when the content inside the editor is too long */}
-          {/* <button
-            onClick={handleNothing}
-            className="absolute top-0 left-0 z-50 w-full h-full"
-          ></button> */}
 
           {/* Controls */}
           {/* -15px = (32 height - 2 border) / 2 */}

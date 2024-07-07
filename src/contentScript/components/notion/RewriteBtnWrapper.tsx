@@ -22,7 +22,7 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
       const output = await outputBlob.text();
       const formatedText = formatSelectedText(output)
       console.log(formatedText)
-      createRewriteEditor('menu')
+      createRewriteEditor('menu', formatedText)
     } else {
       toast({ description: `Menu item clicked` })
     }

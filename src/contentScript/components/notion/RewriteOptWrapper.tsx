@@ -18,7 +18,7 @@ export default function RewriteOptWrapper() {
       const output = await outputBlob.text()
       const formatedText = formatSelectedText(output)
       console.log(formatedText)
-      createRewriteEditor('opt')
+      createRewriteEditor('opt', formatedText)
     } else {
       toast({ description: `Menu item clicked` })
     }

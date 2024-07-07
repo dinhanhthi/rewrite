@@ -1,4 +1,6 @@
 /* styles for all components (content script, popup, options, playground, etc.) */
+@tailwind base;
+
 .notion-font-family {
   font-family:
     ui-sans-serif,
@@ -15,7 +17,10 @@
 }
 
 .notion-box-shadow {
-  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  box-shadow:
+    rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
+    rgba(15, 15, 15, 0.1) 0px 3px 6px,
+    rgba(15, 15, 15, 0.2) 0px 9px 24px;
 }
 
 div[data-radix-popper-content-wrapper] {
@@ -45,6 +50,33 @@ div[data-radix-popper-content-wrapper] {
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 7px;
+    }
+  }
+}
+
+@layer base {
+  .notion-editor-style {
+    p {
+      @apply py-1.5;
+    }
+    ul {
+      @apply list-inside list-disc pl-4;
+    }
+    ol {
+      @apply list-inside list-decimal pl-4;
+    }
+    li {
+      @apply py-1.5;
+    }
+    code {
+      font-family: 'SFMono-Regular', Menlo, Consolas, 'PT Mono', 'Liberation Mono', Courier,
+        monospace;
+      line-height: normal;
+      background: rgba(135, 131, 120, 0.15);
+      color: #eb5757;
+      border-radius: 4px;
+      font-size: 85%;
+      padding: 0.2em 0.4em;
     }
   }
 }
