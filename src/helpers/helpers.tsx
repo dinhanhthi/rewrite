@@ -14,7 +14,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createRewriteEditor(from: EditorFrom, selected?: string) {
+export function createRewriteEditor(from: EditorFrom) {
   removeAllRewriteEditors()
 
   let endContainer: HTMLElement | null = null
@@ -52,7 +52,7 @@ export function createRewriteEditor(from: EditorFrom, selected?: string) {
       scroller.appendChild(editor)
       const root = createRoot(editor)
       const editorHeight = 200
-      root.render(<RewriteEditor mode="browser" height={editorHeight} selected={selected} />)
+      root.render(<RewriteEditor mode="browser" height={editorHeight} />)
 
       /**
        * We don't use `rect.bottom` because the editor isn't rendered yet, instead we use
