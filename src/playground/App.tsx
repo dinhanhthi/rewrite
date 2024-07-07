@@ -72,7 +72,7 @@ export default function App() {
             </TooltipProvider>
           ))}
         </div>
-        <div className="flex flex-col items-center justify-center flex-auto gap-16">
+        <div className="flex flex-col items-center justify-center flex-1 min-h-0 gap-16">
           {location.pathname === '/' && (
             <div className="flex items-start justify-center h-full gap-2 py-8 text-3xl">
               <div className="animate-bounce">☝ </div>

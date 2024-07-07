@@ -87,6 +87,82 @@ export function formatSelectedText(text: string) {
   const parser = new DOMParser()
   const doc = parser.parseFromString(text, 'text/html')
 
+  const isInsideParagraph = !doc.body.querySelector('div')
+
+  if (isInsideParagraph) {
+    return textInsideParagraph(doc.body)
+  } else {
+    /**
+     * Because Notion splits all HTML elements into div blocks, even ul and ol. We need to "group"
+     * the div with the same of ul or ol or other kind of types before we can further process them.
+     */
+
+
+    const list = processList(doc.body)
+    if (list) {
+      return list.outerHTML
+    }
+  }
+
+  return doc.body.innerHTML
+}
+
+/**
+ * Process ul, ol
+ */
+function processList(parentDiv: HTMLElement) {
+  let list: any
+  let typeClass: string = ''
+  const firstChild = parentDiv.querySelector(':scope > div[class$="_list-block"]')
+  if (!firstChild) return null
+
+  if (firstChild.classList.contains('notion-numbered_list-block')) {
+    list = document.createElement('ol')
+    typeClass = '.notion-numbered_list-block'
+  } else if (firstChild.classList.contains('notion-bulleted_list-block')) {
+    list = document.createElement('ul')
+    typeClass = '.notion-bulleted_list-block'
+  }
+
+  let blocks = parentDiv.querySelectorAll(`:scope > ${typeClass}`) as any
+  if (blocks?.length > 0) {
+    blocks = Array.from(blocks)?.filter(
+      (nB: any) => !!nB.querySelector('div.notranslate[contenteditable="true"]')
+    )
+  }
+
+  blocks.forEach((block: any) => {
+    const contentDiv = block?.querySelector('div.notranslate[contenteditable="true"]')
+    if (contentDiv) {
+      const li = document.createElement('li')
+      li.textContent = contentDiv.textContent // TODO: apply spans logics
+
+      const _block = block?.querySelector('div[class$="_list-block"]')
+      const _blockParent = _block?.parentElement
+      let nestedBlocks = _blockParent?.querySelectorAll(':scope > div[class$="_list-block"]')
+
+      // Make sure there is no ul, ol with empty children
+      if (nestedBlocks?.length > 0) {
+        nestedBlocks = Array.from(nestedBlocks)?.filter(
+          (nB: any) => !!nB.querySelector('div.notranslate[contenteditable="true"]')
+        )
+      }
+
+      if (nestedBlocks?.length > 0) {
+        const nestedList = processList(_blockParent)
+        if (nestedList) {
+          li.appendChild(nestedList)
+        }
+      }
+
+      list.appendChild(li)
+    }
+  })
+
+  return list
+}
+
+function textInsideParagraph(doc: HTMLElement) {
   function wrapTextWithTags(text: string, tags: string[]) {
     tags.forEach(tag => {
       text = `<${tag}>${text}</${tag}>`
@@ -123,10 +199,42 @@ export function formatSelectedText(text: string) {
       if (tags.length > 0) {
         const text = span.innerHTML
         const wrappedText = wrapTextWithTags(text, tags)
-        span.outerHTML = wrappedText
+        span.outerHTML = wrappedText // replace completely current <span> with the new wrapped text
       }
     }
   })
 
-  return doc.body.innerHTML
+  return doc.innerHTML
 }
+
+// TODO: remove or remove export only?
+export const notionBlockTypes = [
+  'notion-text-block',
+  'notion-header-block',
+  'notion-sub_header-block',
+  'notion-sub_sub_header-block',
+  'notion-bulleted_list-block',
+  'notion-numbered_list-block',
+  'notion-to_do-block',
+  'notion-toggle-block',
+  'notion-quote-block',
+  'notion-callout-block',
+  'notion-bookmark-block',
+  'notion-image-block',
+  'notion-video-block',
+  'notion-audio-block',
+  'notion-file-block',
+  'notion-pdf-block',
+  'notion-equation-block',
+  'notion-code-block',
+  'notion-embed-block',
+  'notion-collection_view-block',
+  'notion-table_of_contents-block',
+  'notion-child-page-block',
+  'notion-breadcrumb-block',
+  'notion-divider-block',
+  'notion-column-list-block',
+  'notion-column-block',
+  'notion-page-block',
+  'notion-unsupported-block'
+]
