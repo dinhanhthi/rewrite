@@ -62,10 +62,10 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     setOpenDialog(false)
   }
 
-  const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
+  // const handleNothing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  //   e.preventDefault()
+  //   e.stopPropagation()
+  // }
 
   function removeAllRewriteEditors() {
     const editors = document.querySelectorAll('#rewrite-editor')
@@ -118,17 +118,18 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                     // __html: '<ul><li>asdasdasdas</li><li>asdasdasd</li></ul>'
                     // __html: `<p>thu nghiem xem the nao</p><p>The highlight is kept too? Maybe, text</p><p>w thu to The highlight is kept too? Maybe, text thu tstrap</p>`
                     // __html: `<pre><code class="language-jsx">async function test() {// somthing}</code></pre>`
-                    __html: props.selected || 'No content selected!'
+                    __html: props.selected || '<p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p><p>I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different. I want to test the keeping format of Notion, for example, code should be kept. The highlight is kept too? Maybe, text color is different.I want to test the keeping focreateRewriteEditor</p>'
                   }}
                 ></div>
               </div>
             </div>
           </div>
 
-          <button
+          {/* Temporary disable this in order to scroll when the content inside the editor is too long */}
+          {/* <button
             onClick={handleNothing}
             className="absolute top-0 left-0 z-50 w-full h-full"
-          ></button>
+          ></button> */}
 
           {/* Controls */}
           {/* -15px = (32 height - 2 border) / 2 */}
