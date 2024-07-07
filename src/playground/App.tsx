@@ -12,7 +12,6 @@ import '../styles/playground.scss'
 import '../styles/popup.scss'
 import '../styles/tailwind.scss'
 import CancelDialogPlayground from './components/CancelDialogPlayground'
-import FormatSelectedPlayground from './components/FormatSelectedPlayground'
 import Logo from './components/Logo'
 import NotionMenuBar from './components/NotionMenuBar'
 import NotionPopoverMenu from './components/NotionPopoverMenu'
@@ -141,13 +140,6 @@ const menus: {
     path: '/CancelDialog',
     description: 'When we click outside the editor.',
     component: CancelDialogPlayground,
-    props: {}
-  },
-  {
-    name: 'formatSelected',
-    path: '/formatSelected',
-    description: 'Format selected html before sending to the LLM service.',
-    component: FormatSelectedPlayground,
     props: {}
   },
   {
