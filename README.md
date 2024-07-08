@@ -6,7 +6,7 @@ Type your phrases and get back a better version.
 
 - Extension: [React](https://reactjs.org/) + [ESLint](https://eslint.org/) + [Prettier](https://eslint.org/) + Webpack.
 - Playground: React and [Vite](https://vitejs.dev/).
-- Backend: [Next.js](https://nextjs.org/), [Vercel](https://vercel.com/).
+- Backend: [Check this repo](https://github.com/dinhanhthi/rewrite-server).
 - Icons: [Lucide](https://lucide.dev/), [Icônes](https://icones.js.org/).
 - AI Services: [OpenAI](https://openai.com/), [Claude](https://claude.ai/), [Mistral](https://mistral.ai/), [Google Gemini](https://gemini.google.com/).
 - Translation: [DeepL](https://deepl.com/).
