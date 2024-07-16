@@ -1,4 +1,4 @@
-# <img width="165" height="40" src="website/public/logo.png" width="425"/>
+# <img width="150" height="35" src="website/public/logo.png" width="425"/>
 
 Type your phrases and get back a better version.
 
