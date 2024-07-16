@@ -21,7 +21,7 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
       const outputBlob = await clipboardItem.getType('text/html');
       const output = await outputBlob.text();
       const formatedText = formatSelectedText(output)
-      console.log(formatedText)
+      // console.log(formatedText)
       createRewriteEditor('menu', formatedText)
     } else {
       toast({ description: `Menu item clicked` })
