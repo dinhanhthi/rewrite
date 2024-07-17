@@ -2,6 +2,9 @@
 
 Type your phrases and get back a better version.
 
+> [!NOTE]
+> For the initial versions, everything is done within the extension. The website or server is not utilized in these versions.
+
 ## Tech Stack
 
 - Extension: [React](https://reactjs.org/) + [ESLint](https://eslint.org/) + [Prettier](https://eslint.org/) + Webpack.
