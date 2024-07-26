@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import RewriteOptWrapper from '../../content-script/components/notion/rewrite-opt-wrapper'
+import RewriteOptWrapper from '../../content-script/notion/rewrite-opt-wrapper'
 
 export default function NotionPopoverMenu() {
   return (

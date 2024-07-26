@@ -1,8 +1,8 @@
+import { watchAndCreateRewriteBtn } from './notion/cs-rewrite-btn'
+import { watchAndCreateRewriteOpt } from './notion/cs-rewrite-opt'
 import '../styles/content_script.scss'
 import '../styles/global.scss'
 import '../styles/tailwind.scss'
-import { watchAndCreateRewriteBtn } from './components/notion/cs-rewrite-btn'
-import { watchAndCreateRewriteOpt } from './components/notion/cs-rewrite-opt'
 
 addRewriteOverlay()
 

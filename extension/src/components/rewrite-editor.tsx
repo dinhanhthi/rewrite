@@ -6,11 +6,11 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle
-} from '../../components/ui/alert-dialog'
-import { toast } from '../../components/ui/use-toast'
-import { cn } from '../../helpers/helpers'
-import LogoRewriteIcon from '../../icons/logo-rewrite-icon'
-import { Mode } from '../../type'
+} from './ui/alert-dialog'
+import { toast } from './ui/use-toast'
+import { cn } from '../helpers/helpers'
+import LogoRewriteIcon from '../icons/logo-rewrite-icon'
+import { Mode } from '../type'
 import CancelDialog from './cancel-dialog'
 import EditorRoundBtn from './editor-round-btn'
 
@@ -161,7 +161,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                 <div className="rounded-[1em] w-fit overflow-hidden h-[32px] text-[0.95em]">
                   <button
                     onClick={useThisContent}
-                    className="flex items-center h-full gap-2 px-3 text-white transition-all bg-green-700 w-fit hover:px-3.5 _bg-rainbow group whitespace-nowrap group"
+                    className="flex items-center h-full gap-2 px-3 text-white transition-all bg-green-700 w-fit hover:px-3.5 _bg-rainbow group whitespace-nowrap group drop-shadow-md"
                   >
                     <LogoRewriteIcon className="w-5 h-5 transition-transform group-active:scale-90" />{' '}
                     {useThisTextLabel}

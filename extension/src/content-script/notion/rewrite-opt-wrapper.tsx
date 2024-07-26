@@ -1,10 +1,10 @@
 import React from 'react'
-import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
-import { toast } from '../../../components/ui/use-toast'
-import { createRewriteEditor, formatSelectedText } from '../../../helpers/helpers'
-import { RewriteCtx } from '../../rewrite-ctx'
-import RewriteMenu from '../rewrite-menu'
 import RewriteOpt from './rewrite-opt'
+import RewriteMenu from '../../components/rewrite-menu'
+import { toast } from '../../components/ui/use-toast'
+import { formatSelectedText, createRewriteEditor } from '../../helpers/helpers'
+import { RewriteCtx } from '../rewrite-ctx'
+import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
 
 export default function RewriteOptWrapper() {
   const ctx = React.useContext(RewriteCtx)

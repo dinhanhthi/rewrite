@@ -6,10 +6,10 @@ import {
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger
-} from '../../components/ui/menubar'
-import LongerIcon from '../../icons/longer-icon'
-import ShorterIcon from '../../icons/shorter-icon'
-import SummerizeIcon from '../../icons/summerize-icon'
+} from './ui/menubar'
+import LongerIcon from '../icons/longer-icon'
+import ShorterIcon from '../icons/shorter-icon'
+import SummerizeIcon from '../icons/summerize-icon'
 
 type RewriteMenuProps = {
   className?: string

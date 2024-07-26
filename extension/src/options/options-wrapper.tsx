@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ErrorBoundary from '../components/errorBoundary'
+import ErrorBoundary from '../components/error-boundary'
 import { cn } from '../helpers/helpers'
 
 export type OptionsWrapperProps = {

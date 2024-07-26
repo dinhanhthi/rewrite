@@ -1,6 +1,6 @@
 import React from 'react'
-import { RewriteCtx } from '../../rewrite-ctx'
 import RewriteBtnWrapper from './rewrite-btn-wrapper'
+import { RewriteCtx } from '../rewrite-ctx'
 
 export default function ReWriteBtnBrowser() {
   return (

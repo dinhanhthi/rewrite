@@ -1,9 +1,9 @@
 import React from 'react'
-import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
-import { toast } from '../../../components/ui/use-toast'
-import { cn, createRewriteEditor, formatSelectedText } from '../../../helpers/helpers'
-import { RewriteCtx } from '../../rewrite-ctx'
-import RewriteMenu from '../rewrite-menu'
+import RewriteMenu from '../../components/rewrite-menu'
+import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
+import { toast } from '../../components/ui/use-toast'
+import { cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
+import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
 
 type RewriteBtnWrapperProps = {
@@ -18,8 +18,8 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
     if (ctx.mode === 'browser') {
       document.execCommand('copy')
       const [clipboardItem] = await navigator.clipboard.read()
-      const outputBlob = await clipboardItem.getType('text/html');
-      const output = await outputBlob.text();
+      const outputBlob = await clipboardItem.getType('text/html')
+      const output = await outputBlob.text()
       const formatedText = formatSelectedText(output)
       // console.log(formatedText)
       createRewriteEditor('menu', formatedText)

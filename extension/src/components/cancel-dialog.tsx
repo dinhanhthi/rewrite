@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from '../../components/ui/button'
-import LogoRewriteIcon from '../../icons/logo-rewrite-icon'
+import { Button } from './ui/button'
+import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 
 type CancelDialogProps = {
   className?: string
