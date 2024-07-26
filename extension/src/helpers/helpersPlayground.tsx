@@ -10,3 +10,8 @@ export async function handleSaveName(name: string) {
 export function openOptionsPage() {
   console.log('openOptionsPage in playground')
 }
+
+declare const __APP_VERSION__: string
+export const version = `v${__APP_VERSION__}`
+
+export const optionsUrl = 'chrome-extension://capceecppbdobbbpplenjecbplbocpmh/options.html'

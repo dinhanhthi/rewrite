@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
 
-  "name": "Rewrite it",
+  "name": "Rewrite",
   "description": "Type your phrases and get back a better version.",
   "version": "0.0.1",
 
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqlJtYnhQzsof3rhDgXLLkclwFF8CDa4tnnAvmUprMzXmATeh6RkHqsA8TvU1kewxWwZn/95fSTfzfGOi8JVb19Hpb7q0jsDuZM4CO3hHmhMg0957sBDzetG1uk+P6ktNzhfnzSPAK8q7sFw+bLzDTYOkglNoURCTL40wFKSIeR7h+rKqsC/gaU5pjIw/PuNxb+4HCXvoGFHWvOiva1I8MAsWrtpay+RBvLRRHYx27cUpTp9Sc9rldHsaNrKgNVfJR7/xf7CO0QPMsuFMexRbu7sYkj/4B6CF4ChGRCHtXg6FjhMNyP/fC8n1LjT6/OuZ6Tg6IiKDX4pFwRv7H86AVQIDAQAB",
+
   "action": {
-    "default_title": "Rewrite it",
+    "default_title": "Rewrite",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/icons/16.png",

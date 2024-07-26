@@ -27,3 +27,7 @@ website/.pnp.cjs
 website/.pnp.loader.mjs
 
 website/.next/
+
+extension/prod-packages/
+
+extension/vite.config.mts.timestamp-1722006159943-e702dcd3759.mjs

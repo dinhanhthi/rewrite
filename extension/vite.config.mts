@@ -9,5 +9,8 @@ export default defineConfig({
     alias: {
       '@/src': '/src'
     }
+  },
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version)
   }
 })

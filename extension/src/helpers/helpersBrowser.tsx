@@ -20,3 +20,8 @@ export async function handleSaveName(name: string) {
 export function openOptionsPage() {
   browser.runtime.openOptionsPage()
 }
+
+const manifest = browser.runtime.getManifest()
+export const version = `v${manifest.version}`
+
+export const optionsUrl = browser.runtime.getURL('options.html')
