@@ -13,6 +13,7 @@ export default function EditorRoundBtn(props: EditorRoundBtnProps) {
   return (
     <TooltipThi content={props.tooltipContent}>
       <button
+        onClick={props.onClick}
         className={cn(
           'flex items-center justify-center h-full w-full group px-2 hover:text-green-700 bg-white rounded-full drop-shadow-md text-slate-700',
           props.className

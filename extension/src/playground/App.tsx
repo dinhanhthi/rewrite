@@ -45,8 +45,8 @@ export default function App() {
                 <TooltipTrigger asChild>
                   <Button
                     asChild
-                    className={cn('cursor-pointer', {
-                      'bg-sky-500 text-white hover:bg-sky-500 hover:text-white':
+                    className={cn('cursor-pointer border-none', {
+                      'bg-green-700 text-white hover:bg-green-700 hover:text-white':
                         location.pathname === menu.path,
                       'bg-white text-slate-800': location.pathname !== menu.path
                     })}
