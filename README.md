@@ -10,5 +10,5 @@ Type your phrases and get back a better version.
 - Extension: [React](https://reactjs.org/) + [ESLint](https://eslint.org/) + [Prettier](https://eslint.org/) + Webpack.
 - Playground: React and [Vite](https://vitejs.dev/).
 - Backend: [Next.js](https://nextjs.org/).
-- Icons: [Lucide](https://lucide.dev/), [Icônes](https://icones.js.org/).
+- Icons: [Lucide](https://lucide.dev/), [Icônes](https://icones.js.org/), [Simple Icons](https://simpleicons.org/).
 - AI Services: [OpenAI](https://openai.com/), [Claude](https://claude.ai/), [Mistral](https://mistral.ai/), [Google Gemini](https://gemini.google.com/).
