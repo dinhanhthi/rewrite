@@ -12,7 +12,7 @@ const commonConfig = {
     popup: path.resolve('src/popup/index.tsx'),
     options: path.resolve('src/options/index.tsx'),
     background: path.resolve('src/background/background.ts'),
-    'content-script': path.resolve('src/content-script/content-script.tsx')
+    contentScript: path.resolve('src/content-script/content-script.tsx')
   },
   module: {
     rules: [
@@ -71,7 +71,7 @@ const commonConfig = {
   optimization: {
     splitChunks: {
       chunks(chunk) {
-        return !['content-script', 'background', 'options'].includes(chunk.name)
+        return !['contentScript', 'background', 'options'].includes(chunk.name)
       }
     }
   }
