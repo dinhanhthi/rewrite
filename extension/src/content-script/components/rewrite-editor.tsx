@@ -9,10 +9,10 @@ import {
 } from '../../components/ui/alert-dialog'
 import { toast } from '../../components/ui/use-toast'
 import { cn } from '../../helpers/helpers'
-import LogoRewriteIcon from '../../icons/LogoRewriteIcon'
+import LogoRewriteIcon from '../../icons/logo-rewrite-icon'
 import { Mode } from '../../type'
-import CancelDialog from './CancelDialog'
-import EditorRoundBtn from './EditorRoundBtn'
+import CancelDialog from './cancel-dialog'
+import EditorRoundBtn from './editor-round-btn'
 
 type RewriteEditorProps = {
   height?: number

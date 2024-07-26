@@ -1,7 +1,7 @@
 import React from 'react'
 import TooltipThi from '../../components/ui/tooltip-thi'
 import { cn } from '../../helpers/helpers'
-import LogoRewriteIcon from '../../icons/LogoRewriteIcon'
+import LogoRewriteIcon from '../../icons/logo-rewrite-icon'
 
 type EditorRoundBtnProps = {
   className?: string

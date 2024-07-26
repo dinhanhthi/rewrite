@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import RewriteOptBrowser from './RewriteOptBrowser'
+import RewriteOptBrowser from './rewrite-opt-browser'
 
 /**
  * When selecting a block or clicking on "..." in the menu bar (after selecting words)

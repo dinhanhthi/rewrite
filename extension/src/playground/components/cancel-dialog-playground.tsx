@@ -1,6 +1,6 @@
 import React from 'react'
 import { toast } from '../../components/ui/use-toast'
-import CancelDialog from '../../contentScript/components/CancelDialog'
+import CancelDialog from '../../content-script/components/cancel-dialog'
 
 export default function CancelDialogPlayground() {
   const actionClicked = (type: 'discard' | 'cancel') => {

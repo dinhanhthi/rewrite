@@ -1,6 +1,6 @@
 import React from 'react'
-import { RewriteCtx } from '../../RewriteCtx'
-import RewriteOptWrapper from './RewriteOptWrapper'
+import { RewriteCtx } from '../../rewrite-ctx'
+import RewriteOptWrapper from './rewrite-opt-wrapper'
 
 type RewriteOptBrowserProps = {
   selected?: string

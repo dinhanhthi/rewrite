@@ -2,7 +2,7 @@ import { Github, Globe, Settings2 } from 'lucide-react'
 import React from 'react'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { cn } from '../helpers/helpers'
-import LogoRewriteIcon from '../icons/LogoRewriteIcon'
+import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import { Badge } from '../components/ui/badge'
 
 export type PopupOptionsWrapperProps = {

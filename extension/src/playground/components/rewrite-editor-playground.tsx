@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Switch } from '../../components/ui/switch'
-import RewriteEditor from '../../contentScript/components/RewriteEditor'
+import RewriteEditor from '../../content-script/components/rewrite-editor'
 
 export default function RewriteEditorPlayground() {
   const defaultChecked = true

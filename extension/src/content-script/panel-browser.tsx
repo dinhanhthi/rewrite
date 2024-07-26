@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { getName } from '../helpers/helpersBrowser'
+import { getName } from '../helpers/helpers-browser'
 import Panel from './panel'
 
 export default function PanelBrowser() {

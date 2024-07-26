@@ -7,7 +7,7 @@ import { clsx, type ClassValue } from 'clsx'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
-import RewriteEditor from '../contentScript/components/RewriteEditor'
+import RewriteEditor from '../content-script/components/rewrite-editor'
 import { EditorFrom } from '../type'
 
 export function cn(...inputs: ClassValue[]) {

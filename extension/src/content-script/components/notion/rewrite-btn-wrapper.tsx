@@ -2,9 +2,9 @@ import React from 'react'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../../components/ui/menubar'
 import { toast } from '../../../components/ui/use-toast'
 import { cn, createRewriteEditor, formatSelectedText } from '../../../helpers/helpers'
-import { RewriteCtx } from '../../RewriteCtx'
-import RewriteMenu from '../RewriteMenu'
-import RewriteBtn from './RewriteBtn'
+import { RewriteCtx } from '../../rewrite-ctx'
+import RewriteMenu from '../rewrite-menu'
+import RewriteBtn from './rewrite-btn'
 
 type RewriteBtnWrapperProps = {
   className?: string

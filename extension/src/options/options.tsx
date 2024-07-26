@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { handleSaveName } from '../helpers/helpersBrowser'
-import OptionsWrapper from './optionsWrapper'
+import OptionsWrapper from './options-wrapper'
 
 export default function Options() {
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <OptionsWrapper handleSaveName={handleSaveName} />
+    <div className="flex flex-col w-screen h-screen">
+      <OptionsWrapper />
     </div>
   )
 }

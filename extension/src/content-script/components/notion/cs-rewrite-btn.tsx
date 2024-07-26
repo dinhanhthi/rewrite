@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { getSelectedText } from '../../contentScript'
-import RewriteBtnBrowser from './RewriteBtnBrowser'
+import { getSelectedText } from '../../content-script'
+import RewriteBtnBrowser from './rewrite-btn-browser'
 
 /**
  * When selecting words

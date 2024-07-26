@@ -1,6 +1,6 @@
 import React from 'react'
-import { optionsUrl, version } from '../../helpers/helpersPlayground'
-import PopupWrapper from '../../popup/popupWrapper'
+import { optionsUrl, version } from '../../helpers/helpers-playground'
+import PopupWrapper from '../../popup/popup-wrapper'
 
 export default function PopupPlayground() {
   return (

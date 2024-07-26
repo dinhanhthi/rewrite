@@ -34,7 +34,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.notion.so/*"],
-      "js": ["contentScript.js"],
+      "js": ["content-script.js"],
       "run_at": "document_idle"
     }
   ],
