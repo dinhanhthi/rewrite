@@ -9,7 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:tailwindcss/recommended',
     'plugin:react/recommended',
-    'plugin:unicorn/recommended',
+    // 'plugin:unicorn/recommended',
     'prettier' // make sure it's the last one,
   ],
   overrides: [],

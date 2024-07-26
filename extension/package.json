@@ -14,7 +14,7 @@
     "build": "sh ./scripts/build_prod.sh",
     "build:prod": "rm -rf dist-prod/* && webpack --progress --config webpack.config.js --mode=production",
     "prettier": "prettier --write \"src/**/*.{ts,js,tsx,html}\"",
-    "lint": "eslint --ext .ts,.tsx,.js,.jsx src",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext .ts,.tsx,.js,.jsx src",
     "playground": "vite",
     "update-version": "sh ./scripts/update_version.sh",
     "reinstall": "rm -rf node_modules && npm install"

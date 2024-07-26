@@ -1,4 +1,5 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
+import { Check, Copy, RotateCcw, X } from 'lucide-react'
 import React from 'react'
 import {
   AlertDialog,
@@ -8,8 +9,10 @@ import {
 } from '../../components/ui/alert-dialog'
 import { toast } from '../../components/ui/use-toast'
 import { cn } from '../../helpers/helpers'
+import LogoRewriteIcon from '../../icons/LogoRewriteIcon'
 import { Mode } from '../../type'
 import CancelDialog from './CancelDialog'
+import EditorRoundBtn from './EditorRoundBtn'
 
 type RewriteEditorProps = {
   height?: number
@@ -20,8 +23,9 @@ type RewriteEditorProps = {
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
+  const [copied, setCopied] = React.useState(false)
   const editorRef = React.useRef<HTMLDivElement>(null)
-  const [openDialog, setOpenDialog] = React.useState(false)
+  const [showDiscardWarning, setShowDiscardWarning] = React.useState(false)
   const useThisTextLabel = 'Use this text'
 
   const useThisContent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -47,7 +51,38 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     }
   }
 
-  const discardClicked = () => {
+  const reGenerateContent = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (props.mode === 'browser') {
+      toast({ description: 'Regenerate clicked!' })
+    } else {
+      toast({ description: 'Regenerate clicked!' })
+    }
+  }
+
+  const copyThisContent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setCopied(true)
+    const editableDiv = editorRef.current
+    try {
+      const htmlContent = editableDiv!.innerHTML
+      const clipboardItem = new ClipboardItem({
+        'text/html': new Blob([htmlContent], { type: 'text/html' }),
+        'text/plain': new Blob([editableDiv!.innerText], { type: 'text/plain' })
+      })
+      await navigator.clipboard.write([clipboardItem])
+    } catch (err) {
+      console.log('Oops, unable to copy', err)
+    } finally {
+      setTimeout(() => {
+        setCopied(false)
+      }, 500)
+    }
+  }
+
+  const discardBtnClicked = () => {
     if (props.mode === 'browser') {
       removeAllRewriteEditors()
     } else {
@@ -55,11 +90,11 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         description: 'Discard clicked!'
       })
     }
-    setOpenDialog(false)
+    setShowDiscardWarning(false)
   }
 
-  const cancelDialogClicked = () => {
-    setOpenDialog(false)
+  const cancelDialogBtnClicked = () => {
+    setShowDiscardWarning(false)
   }
 
   function removeAllRewriteEditors() {
@@ -70,12 +105,18 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
-    setOpenDialog(true)
+    setShowDiscardWarning(true)
   }
 
   const handleEditorClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
+  }
+
+  const closeRewriteEditor = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowDiscardWarning(true)
   }
 
   return (
@@ -97,7 +138,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         <div className="relative w-full h-full">
           {/* Main editor */}
           <div className="z-30 h-full">
-            <div className="h-full w-full rounded-[6px] bg-white p-[1.25em] notion-box-shadow isolate">
+            <div className="h-full w-full rounded-[6px] bg-white p-[1.25em] pb-8 notion-box-shadow isolate">
               <div className="h-full overflow-y-auto dat-scrollbar dat-scrollbar-small">
                 <div
                   ref={editorRef}
@@ -114,21 +155,46 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
           {/* Controls */}
           {/* -15px = (32 height - 2 border) / 2 */}
-          <div className="absolute bottom-[-15px] right-0 z-50 flex h-[32px] gap-4 pr-4">
-            <div className="rounded-[1em] w-fit bg-white overflow-hidden h-[32px] inline-flex items-center justify-center text-[0.95em] whitespace-nowrap">
-              <button
-                onClick={useThisContent}
-                className="h-full px-5 text-white transition-all bg-green-700 w-fit hover:px-6 _bg-rainbow group"
+          <div className="absolute bottom-[-15px] left-0 z-50 h-[32px] w-full gap-4 pr-4 justify-between flex items-center">
+            <div className="flex items-center gap-4 pl-4">
+              <div className='w-[140px]'>
+                <div className="rounded-[1em] w-fit overflow-hidden h-[32px] text-[0.95em]">
+                  <button
+                    onClick={useThisContent}
+                    className="flex items-center h-full gap-2 px-3 text-white transition-all bg-green-700 w-fit hover:px-3.5 _bg-rainbow group whitespace-nowrap group"
+                  >
+                    <LogoRewriteIcon className="w-5 h-5 transition-transform group-active:scale-90" />{' '}
+                    {useThisTextLabel}
+                  </button>
+                </div>
+              </div>
+
+              <EditorRoundBtn
+                onClick={reGenerateContent}
+                tooltipContent="Regenerate"
+                className="h-[32px] w-[32px]"
               >
-                {useThisTextLabel}
-              </button>
+                <RotateCcw className="w-5 h-5" />
+              </EditorRoundBtn>
+
+              <EditorRoundBtn
+                onClick={copyThisContent}
+                tooltipContent="Copy"
+                className="h-[32px] w-[32px]"
+              >
+                {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+              </EditorRoundBtn>
             </div>
+
+            <EditorRoundBtn onClick={closeRewriteEditor} tooltipContent="Close" className="h-[32px] w-[32px]">
+              <X className="w-5 h-5" />
+            </EditorRoundBtn>
           </div>
         </div>
       </div>
 
       {/* Dialog */}
-      <AlertDialog defaultOpen={false} open={openDialog} onOpenChange={setOpenDialog}>
+      <AlertDialog defaultOpen={false} open={showDiscardWarning} onOpenChange={setShowDiscardWarning}>
         <AlertDialogContent
           className="p-0 bg-transparent border-none rounded-md w-fit"
           container={document.querySelector('.rewrite-overlay')}
@@ -136,7 +202,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
           <VisuallyHidden.Root>
             <AlertDialogTitle></AlertDialogTitle>
           </VisuallyHidden.Root>
-          <CancelDialog cancel={cancelDialogClicked} discard={discardClicked} />
+          <CancelDialog cancel={cancelDialogBtnClicked} discard={discardBtnClicked} />
           <VisuallyHidden.Root>
             <AlertDialogDescription></AlertDialogDescription>
           </VisuallyHidden.Root>
