@@ -1,5 +1,6 @@
 import React from 'react'
+import OptionsWrapper from '../../options/options-wrapper'
 
 export default function OptionsPlayground() {
-  return <div>Placeholder. Wait for implementation.</div>
+  return <OptionsWrapper />
 }
