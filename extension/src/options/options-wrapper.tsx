@@ -1,11 +1,15 @@
 import React from 'react'
 
 import { Github, Globe, MessageSquare } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 import ErrorBoundary from '../components/error-boundary'
+import FormSingleChoice from '../components/form-single-choice'
 import { Badge } from '../components/ui/badge'
 import TooltipThi from '../components/ui/tooltip-thi'
+import { defaultSettings } from '../config'
 import { cn } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
+import { Settings } from '../type'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -13,6 +17,16 @@ export type OptionsWrapperProps = {
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
+  const {
+    handleSubmit,
+    control,
+    formState,
+    reset,
+    setValue,
+    getValues,
+    // watch // ###M
+  } = useForm<Settings>({ defaultValues: defaultSettings })
+
   return (
     <ErrorBoundary>
       <div className={cn('w-full h-full flex flex-col', props.className)}>
@@ -51,7 +65,16 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
         </div>
 
         {/* content */}
-        <div></div>
+        <div>
+          <div className="flex flex-row">
+            <FormSingleChoice
+              data={['openai', 'mistral', 'claude', 'gemini', 'llama']}
+              control={control}
+              labelText="AI Model"
+              formName="service"
+            />
+          </div>
+        </div>
       </div>
     </ErrorBoundary>
   )
