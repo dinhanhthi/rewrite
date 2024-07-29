@@ -173,15 +173,16 @@ export const notionBlockTypes = [
 ]
 
 export function generateAPIKeyPlaceholder(service: Service): string {
+  const prefix = 'Example: '
   switch (service) {
     case 'openai':
     default:
-      return 'sk-xxx...xxx'
+      return prefix + 'sk-xxx...xxx'
     case 'mistral':
-      return '1bx...w0'
+      return prefix + '1bx...w0'
     case 'claude':
-      return 'sk-ant-api-xxx...xxx'
+      return prefix + 'sk-ant-api-xxx...xxx'
     case 'gemini':
-      return 'AIza...xxx'
+      return prefix + 'AIza...xxx'
   }
 }

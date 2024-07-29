@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
+import React from 'react'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
@@ -11,6 +11,7 @@ import { Form } from '../components/ui/form'
 import { toast } from '../components/ui/use-toast'
 import { services } from '../config'
 import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
+import { Service } from '../type'
 import OptionsHeader from './options-header'
 
 export type OptionsWrapperProps = {
@@ -28,8 +29,6 @@ export const FormSettingsSchema = z.object({
 })
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
-  const [apiKeyPlaceHolder, setApiKeyPlaceHolder] = useState(generateAPIKeyPlaceholder('openai'))
-
   const form = useForm<z.infer<typeof FormSettingsSchema>>({
     defaultValues: {
       service: 'openai',
@@ -37,6 +36,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     },
     resolver: zodResolver(FormSettingsSchema)
   })
+
+  const service = useWatch({ control: form.control, name: 'service' }) as Service
 
   function onSubmit(data: z.infer<typeof FormSettingsSchema>) {
     toast({
@@ -48,8 +49,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
       )
     })
   }
-
-  /* ###Thi */ console.log(`👉👉👉 form.watch: `, form['watch'])
 
   /* ###Thi */ console.log(`👉👉👉 watch(): `, form.watch())
 
@@ -69,7 +68,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   type="password"
                   name="apiKey"
                   label="API Key"
-                  placeholder={apiKeyPlaceHolder}
+                  placeholder={generateAPIKeyPlaceholder(service)}
                 />
                 <Button type="submit">Submit</Button>
               </form>
