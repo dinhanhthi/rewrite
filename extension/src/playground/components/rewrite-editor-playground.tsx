@@ -14,6 +14,7 @@ export default function RewriteEditorPlayground() {
         {/* z-index of below switch container must be greater than the overlay div in RewriteEditor */}
         <div className="z-20 flex items-center gap-2">
           <Switch
+            size='smaller'
             className='bg-green-700'
             defaultChecked={defaultChecked}
             onCheckedChange={handleOnCheckedChange}

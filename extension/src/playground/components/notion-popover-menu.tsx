@@ -17,6 +17,7 @@ export default function NotionPopoverMenu() {
     <div className='flex flex-col gap-4'>
       <div className="z-20 flex items-center gap-2">
         <Switch
+          size='smaller'
           className="bg-green-700"
           defaultChecked={defaultShowMenu}
           onCheckedChange={handleOnCheckedChange}
