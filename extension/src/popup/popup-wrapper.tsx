@@ -15,7 +15,7 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
   return (
     <div
       className={cn(
-        'flex min-h-[100px] w-[300px] flex-col items-center justify-center bg-white p-6 gap-6',
+        'flex min-h-[100px] w-[300px] flex-col items-center justify-center bg-white px-4 py-6 gap-6',
         props.className
       )}
     >

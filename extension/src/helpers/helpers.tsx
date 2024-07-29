@@ -186,3 +186,7 @@ export function generateAPIKeyPlaceholder(service: Service): string {
       return prefix + 'AIza...xxx'
   }
 }
+
+export function generateTranslatePrompt(language: string) {
+  return 'Translate the given text into ' + language
+}
