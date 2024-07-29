@@ -169,7 +169,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                   >
                     <RotateCcw className="w-4 h-4" />
                   </EditorRoundBtn>
-
                   <EditorRoundBtn
                     onClick={copyThisContent}
                     tooltipContent="Copy"

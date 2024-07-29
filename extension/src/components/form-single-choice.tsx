@@ -1,38 +1,50 @@
 import React from 'react'
-import { Control, Controller } from 'react-hook-form'
-import { Settings, SettingsKeys } from '../type'
+import { UseFormReturn } from 'react-hook-form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 
+export interface SingleChoiceType {
+  name: string
+  value: string
+  available?: boolean
+}
+
 type FormSingleChoiceProps = {
-  data: any[]
-  labelText?: string
-  subLabelText?: string
-  formName: SettingsKeys
-  control: Control<Settings, any>
-  defaultValue?: any
+  form: UseFormReturn<any>
+  name: string
+  data: SingleChoiceType[]
+  label: string
 }
 
 export default function FormSingleChoice(props: FormSingleChoiceProps) {
+  const { form, name, data, label } = props
   return (
-    <Controller
-      control={props.control}
-      defaultValue={props.defaultValue}
-      name={props.formName}
+    <FormField
+      control={form.control}
+      name={name}
       render={({ field }) => (
-        <RadioGroup defaultValue="comfortable">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="default" id="r1" />
-            <label htmlFor="r1">Default</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="comfortable" id="r2" />
-            <label htmlFor="r2">Comfortable</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="compact" id="r3" />
-            <label htmlFor="r3">Compact</label>
-          </div>
-        </RadioGroup>
+        <FormItem className="flex flex-row items-center gap-4 space-y-0">
+          <FormLabel className="text-base">{label}</FormLabel>
+          <FormControl>
+            <RadioGroup
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              className="flex flex-row gap-6 m-0"
+            >
+              {data
+                .filter(e => e.available)
+                .map(e => (
+                  <FormItem key={e.value} className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={e.value} />
+                    </FormControl>
+                    <FormLabel className="!ml-2 font-normal">{e.name}</FormLabel>
+                  </FormItem>
+                ))}
+            </RadioGroup>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
       )}
     />
   )

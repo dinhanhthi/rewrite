@@ -8,7 +8,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../components/rewrite-editor'
-import { EditorFrom } from '../type'
+import { EditorFrom, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -92,7 +92,7 @@ export function formatSelectedText(text: string) {
   return text
     .replace('<meta charset="utf-8">', '') // from notion
     .replace(/<!--\s*notionvc:\s*[a-f0-9\-]+\s*-->/gi, '') // from notion
-    .replace(/(\r\n|\n|\r)/gm, "") // remove all new lines
+    .replace(/(\r\n|\n|\r)/gm, '') // remove all new lines
 }
 
 function textInsideParagraph(doc: HTMLElement) {
@@ -171,3 +171,17 @@ export const notionBlockTypes = [
   'notion-page-block',
   'notion-unsupported-block'
 ]
+
+export function generateAPIKeyPlaceholder(service: Service): string {
+  switch (service) {
+    case 'openai':
+    default:
+      return 'sk-xxx...xxx'
+    case 'mistral':
+      return '1bx...w0'
+    case 'claude':
+      return 'sk-ant-api-xxx...xxx'
+    case 'gemini':
+      return 'AIza...xxx'
+  }
+}

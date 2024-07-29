@@ -1,78 +1,79 @@
-import React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
 
-import { Github, Globe, MessageSquare } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import ErrorBoundary from '../components/error-boundary'
+import FormInput from '../components/form-input'
 import FormSingleChoice from '../components/form-single-choice'
-import { Badge } from '../components/ui/badge'
-import TooltipThi from '../components/ui/tooltip-thi'
-import { defaultSettings } from '../config'
-import { cn } from '../helpers/helpers'
-import LogoRewriteIcon from '../icons/logo-rewrite-icon'
-import { Settings } from '../type'
+import { Button } from '../components/ui/button'
+import { Form } from '../components/ui/form'
+import { toast } from '../components/ui/use-toast'
+import { services } from '../config'
+import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
+import OptionsHeader from './options-header'
 
 export type OptionsWrapperProps = {
   className?: string
   version?: string
 }
 
+const serviceIds = services.map(e => e.value) as [string, ...string[]]
+
+export const FormSettingsSchema = z.object({
+  service: z.enum(serviceIds, {
+    required_error: 'You need to select an AI service.'
+  }),
+  apiKey: z.string().min(1)
+})
+
 export default function OptionsWrapper(props: OptionsWrapperProps) {
-  const {
-    handleSubmit,
-    control,
-    formState,
-    reset,
-    setValue,
-    getValues,
-    // watch // ###M
-  } = useForm<Settings>({ defaultValues: defaultSettings })
+  const [apiKeyPlaceHolder, setApiKeyPlaceHolder] = useState(generateAPIKeyPlaceholder('openai'))
+
+  const form = useForm<z.infer<typeof FormSettingsSchema>>({
+    defaultValues: {
+      service: 'openai',
+      apiKey: ''
+    },
+    resolver: zodResolver(FormSettingsSchema)
+  })
+
+  function onSubmit(data: z.infer<typeof FormSettingsSchema>) {
+    toast({
+      title: 'You submitted the following values:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      )
+    })
+  }
+
+  /* ###Thi */ console.log(`👉👉👉 form.watch: `, form['watch'])
+
+  /* ###Thi */ console.log(`👉👉👉 watch(): `, form.watch())
 
   return (
     <ErrorBoundary>
       <div className={cn('w-full h-full flex flex-col', props.className)}>
-        {/* header */}
-        <div className="flex items-center justify-center w-full border-b border-slate-200">
-          <div className="container flex flex-row justify-between h-full p-4 lg:max-w-3xl">
-            {/* Logo */}
-            <div className="flex flex-row items-center gap-2">
-              <div className="flex items-center justify-center gap-2 text-green-700">
-                <LogoRewriteIcon className="w-5 h-5" />
-                <div className="text-xl font-medium whitespace-nowrap">Rewrite</div>
-              </div>
-              <Badge variant="secondary">{props.version || 'v0.0.0'}</Badge>
-            </div>
-
-            <div className="flex flex-row items-center gap-4 text-slate-500">
-              <TooltipThi content="Source code">
-                <a target="_blank" rel="noreferrer" href="https://github.com/dinhanhthi/rewrite">
-                  <Github className="w-5 h-5 hover:text-green-700" />
-                </a>
-              </TooltipThi>
-
-              <TooltipThi content="Home page">
-                <a target="_blank" rel="noreferrer" href="https://rewrite.dinhanhthi.com/">
-                  <Globe className="w-5 h-5 hover:text-green-700" />
-                </a>
-              </TooltipThi>
-
-              <TooltipThi content="Discussion">
-                <a target="_blank" href="https://github.com/dinhanhthi/rewrite/discussions">
-                  <MessageSquare className="w-5 h-5 hover:text-green-700" />
-                </a>
-              </TooltipThi>
-            </div>
-          </div>
-        </div>
+        <OptionsHeader version={props.version} />
 
         {/* content */}
-        <div>
+        <div className="container p-4 py-8 lg:max-w-3xl">
           <div className="flex flex-row">
-            <FormSingleChoice
-              data={['openai', 'mistral', 'claude', 'gemini', 'llama']}
-              control={control}
-              labelText="AI Model"
-              formName="service"
-            />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                <FormSingleChoice form={form} name="service" data={services} label={'AI service'} />
+                <FormInput
+                  form={form}
+                  type="password"
+                  name="apiKey"
+                  label="API Key"
+                  placeholder={apiKeyPlaceHolder}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
           </div>
         </div>
       </div>
