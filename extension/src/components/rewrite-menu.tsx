@@ -16,20 +16,22 @@ type RewriteMenuProps = {
   forceMount?: boolean
   setShowRewriteEditor?: React.Dispatch<React.SetStateAction<boolean>>
   handleItemClicked?: () => void
+  disableFocusOutside?: boolean
 }
 
 export default function RewriteMenu(props: RewriteMenuProps) {
-  // const handleItemClicked = () => {
-  //   props.setShowRewriteEditor(true)
-  // }
+  const handleInteractOutside = (e: Event) => {
+    if (props.disableFocusOutside) {
+      e.preventDefault()
+    }
+  }
 
   return (
     <div className="dinhanhthi">
       <MenubarContent
         className={props.className}
         container={document.querySelector('.rewrite-overlay')}
-        // onPointerDownOutside={() => props.setShowMenu('')}
-        // onFocusOutside={() => props.setShowMenu('')}
+        onInteractOutside={handleInteractOutside}
       >
         {menus.map(menu => {
           if (menu.subs) {

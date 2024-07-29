@@ -1,14 +1,22 @@
-import React from 'react'
-import RewriteOpt from './rewrite-opt'
+import React, { useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
-import { toast } from '../../components/ui/use-toast'
-import { formatSelectedText, createRewriteEditor } from '../../helpers/helpers'
-import { RewriteCtx } from '../rewrite-ctx'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
+import { toast } from '../../components/ui/use-toast'
+import { createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
+import { RewriteCtx } from '../rewrite-ctx'
+import RewriteOpt from './rewrite-opt'
 
-export default function RewriteOptWrapper() {
+type RewriteOptWrapperProps = {
+  alwaysShowMenu?: boolean
+}
+
+export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
   const ctx = React.useContext(RewriteCtx)
-  const [showMenu, setShowMenu] = React.useState('')
+  const [showMenu, setShowMenu] = React.useState(props.alwaysShowMenu ? 'rewrite-menu' : '')
+
+  useEffect(() => {
+    setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
+  }, [props.alwaysShowMenu])
 
   const handleItemClicked = async () => {
     if (ctx.mode === 'browser') {
@@ -24,11 +32,21 @@ export default function RewriteOptWrapper() {
     }
   }
 
+  const handleMouseEnter = () => {
+    setShowMenu('rewrite-menu')
+  }
+
+  const handleMouseLeave = () => {
+    if (!props.alwaysShowMenu) {
+      setShowMenu('')
+    }
+  }
+
   return (
     <Menubar
       value={showMenu}
-      onMouseEnter={() => setShowMenu('rewrite-menu')}
-      onMouseLeave={() => setShowMenu('')}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onValueChange={setShowMenu}
       className="relative flex-col w-full h-full p-0 bg-transparent border-none rounded-none"
     >
@@ -41,6 +59,7 @@ export default function RewriteOptWrapper() {
         <RewriteMenu
           className="absolute left-[calc(var(--radix-menubar-trigger-width)-4px)] top-[calc(var(--radix-menubar-trigger-height)*(-1)-10px)]"
           handleItemClicked={handleItemClicked}
+          disableFocusOutside={props.alwaysShowMenu}
         />
       </MenubarMenu>
     </Menubar>
