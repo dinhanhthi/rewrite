@@ -1,5 +1,6 @@
 import React from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { Control } from 'react-hook-form'
+import { cn } from '../helpers/helpers'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 
@@ -10,21 +11,22 @@ export interface SingleChoiceType {
 }
 
 type FormSingleChoiceProps = {
-  form: UseFormReturn<any>
+  control: Control<any, any>
   name: string
   data: SingleChoiceType[]
   label: string
+  labelClassName?: string
 }
 
 export default function FormSingleChoice(props: FormSingleChoiceProps) {
-  const { form, name, data, label } = props
+  const { control, name, data, label, labelClassName } = props
   return (
     <FormField
-      control={form.control}
+      control={control}
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-row items-center gap-4 space-y-0">
-          <FormLabel className="text-base">{label}</FormLabel>
+          <FormLabel className={cn('text-base', labelClassName)}>{label}</FormLabel>
           <FormControl>
             <RadioGroup
               onValueChange={field.onChange}

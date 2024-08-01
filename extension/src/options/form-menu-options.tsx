@@ -1,121 +1,401 @@
-import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { ChevronDown, ChevronUp, Plus, Trash } from 'lucide-react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import React from 'react'
-import { Controller, UseFormReturn } from 'react-hook-form'
+  Control,
+  useFieldArray,
+  UseFieldArrayMove,
+  UseFieldArrayRemove,
+  useWatch
+} from 'react-hook-form'
+import FormInput from '../components/form-input'
+import FormSwitch from '../components/form-switch'
+import FormTextarea from '../components/form-textarea'
+import { Button } from '../components/ui/button'
+import TooltipThi from '../components/ui/tooltip-thi'
+import { cn } from '../helpers/helpers'
+
+const FocusContext = createContext({
+  focusedIndex: null as number | null,
+  setFocusedIndex: (_index: number | null) => {}
+})
 
 export type FormMenuOptionsProps = {
-  items: any
-  form: UseFormReturn<any>
+  control: Control<any, any>
   name: string
-  // children: React.ReactNode
+  nestedName: string
 }
 
 export default function FormMenuOptions(props: FormMenuOptionsProps) {
-  const { form, items, name } = props
+  const { control, name, nestedName } = props
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
 
-  // const [isDropped, setIsDropped] = useState(false);
+  const {
+    fields: parentFields,
+    append: appendParent,
+    remove: removeParent,
+    move: moveParent
+  } = useFieldArray({ control, name })
 
-  // const {isOver, setNodeRef: setNodeDropRef} = useDroppable({
-  //   id: 'droppable',
-  // });
-  // const styleDrop = {
-  //   color: isOver ? 'green' : undefined,
-  // };
-
-  // const {attributes, listeners, setNodeRef: setNodeDragRef, transform} = useDraggable({
-  //   id: 'draggable',
-  // });
-  // const styleDrag = transform ? {
-  //   transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  // } : undefined;
-
-  // const handleDragEnd = (event: any) => {
-  //   if (event.over && event.over.id === 'droppable') {
-  //     setIsDropped(true);
-  //   }
-  // }
-
-  // const {
-  //   fields,
-  //   // append: appendSentiment,
-  //   // remove: removeSentiment,
-  //   move
-  // } = useFieldArray({
-  //   control: form.control,
-  //   name: 'menuOptions'
-  // })
-  // return (<DndContext onDragEnd={handleDragEnd}>
-  //   <button ref={setNodeDropRef} style={styleDrop} {...listeners} {...attributes}>
-  //     Drop here
-  //   </button>
-  //   <div ref={setNodeDragRef} style={styleDrag}>
-  //     Drag me
-  //   </div>
-  // </DndContext>)
-
-  const onDragEnd = (event: { active: any; over: any }) => {
-    const { active, over } = event
-
-    if (active.id !== over.id) {
-      const oldIndex = items.findIndex((item: any) => item.id === active.id)
-      const newIndex = items.findIndex((item: any) => item.id === over.id)
-
-      form.setValue('menuOptions', arrayMove(items, oldIndex, newIndex))
-    }
+  const handleAddItem = () => {
+    appendParent({ value: '', displayName: '', available: false, prompt: '' })
   }
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 10
-      }
-    })
-  )
+  const moveItem = (index: number, direction: MoveItemDirection) => {
+    /* ###Thi */ console.log(`👉👉👉 moveItem called: index ${index}`)
+    moveItemGeneral(index, direction, moveParent, parentFields)
+  }
+
+  // ###Thi
+  useEffect(() => {
+    if (focusedIndex !== null) {
+      console.log(`Focused index changed to: ${focusedIndex}`)
+    }
+  }, [focusedIndex])
 
   return (
-    <div className="flex flex-col gap-2">
-      <DndContext sensors={sensors} onDragEnd={onDragEnd}>
-        <SortableContext
-          items={items.map((item: any) => item.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {items.map((item: any, index: any) => (
-            <DraggableItem key={item.id} id={item.id} index={index} control={form.control} />
+    <FocusContext.Provider value={{ focusedIndex, setFocusedIndex }}>
+      <div className="relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl">
+        <div className="absolute px-4 py-1 text-base font-medium bg-white left-4 -top-4">
+          Menu options
+        </div>
+
+        <div className="flex flex-col gap-4">
+          {parentFields.map((item: any, index: number) => (
+            <Item
+              key={item.id}
+              name={name}
+              nestedName={nestedName}
+              index={index}
+              control={control}
+              remove={removeParent}
+              moveItem={moveItem}
+              isFirst={index === 0}
+              isLast={index === parentFields.length - 1}
+              isFocus={focusedIndex === index}
+            />
           ))}
-        </SortableContext>
-      </DndContext>
+        </div>
+
+        <AddMoreOptionButton onClick={handleAddItem} />
+      </div>
+    </FocusContext.Provider>
+  )
+}
+
+const Item = (props: {
+  index: number
+  control: Control<any, any>
+  name: string
+  nestedName: string
+  remove: UseFieldArrayRemove
+  moveItem: MoveItemFunc
+  isFirst: boolean
+  isLast: boolean
+  isFocus: boolean
+}) => {
+  const { index, control, name, nestedName, remove, moveItem, isFirst, isLast, isFocus } = props
+  const nameIndex = `${name}[${index}]`
+  const nestedForm = useWatch({ control, name: nameIndex })
+
+  const {
+    fields: nestedFields,
+    append: appendNested,
+    remove: removeNested,
+    move: moveNested
+  } = useFieldArray({
+    control,
+    name: `${nameIndex}.${nestedName}`
+  })
+
+  const handleAddNestedItem = () => {
+    appendNested({ value: '', displayName: '', available: false, prompt: '' })
+  }
+
+  const moveNestedItem = (_index: number, _direction: MoveItemDirection) => {
+    moveItemGeneral(_index, _direction, moveNested, nestedFields)
+  }
+
+  return (
+    <div className="px-4">
+      <div
+        className={cn('flex flex-col flex-1 border rounded-lg bg-gray-50', {
+          'border-green-600 shadow-sm shadow-green-100': isFocus,
+          'border-slate-200': !isFocus
+        })}
+      >
+        <ItemTemplate
+          index={index}
+          control={control}
+          nameIndex={nameIndex}
+          moveItem={moveItem}
+          remove={remove}
+          enableNestedOptions={nestedForm.enableNestedOptions}
+          isFirst={isFirst}
+          isLast={isLast}
+          parentIndex={index}
+        />
+        <div
+          className={cn('px-4 pb-4', {
+            hidden: !nestedForm.enableNestedOptions
+          })}
+        >
+          <div className="relative flex flex-col gap-4 pt-6 mt-4 border border-slate-300 rounded-xl">
+            <div className="absolute px-4 py-1 text-base font-medium bg-gray-50 left-4 -top-4">
+              Nested options of{' '}
+              <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
+                {index + 1}
+              </span>
+            </div>
+            <div className="flex flex-col gap-4 pb-4">
+              <div className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4">
+                {nestedFields.map((nestedItem, nestedIndex) => (
+                  <NestedItem
+                    index={nestedIndex}
+                    parentIndex={index}
+                    key={nestedItem.id}
+                    parentName={name}
+                    name={nestedName}
+                    control={control}
+                    remove={removeNested}
+                    moveItem={moveNestedItem}
+                    isFirst={nestedIndex === 0}
+                    isLast={nestedIndex === nestedFields.length - 1}
+                  />
+                ))}
+              </div>
+              <AddMoreOptionButton onClick={handleAddNestedItem} isNested />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
-const DraggableItem = ({ id, index, control }: any) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
+const NestedItem = (props: {
+  index: number
+  parentIndex: number
+  parentName: string
+  name: string
+  control: Control<any, any>
+  remove: UseFieldArrayRemove
+  moveItem: MoveItemFunc
+  isFirst: boolean
+  isLast: boolean
+}) => {
+  const { parentIndex, parentName, name, index, control, remove, moveItem, isFirst, isLast } = props
+  const nameIndex = `${parentName}[${parentIndex}].${name}[${index}]`
+  const nestedForm = useWatch({ control, name: nameIndex })
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    padding: '8px',
-    margin: '4px',
-    border: '1px solid gray',
-    backgroundColor: 'white',
-    cursor: 'grab'
+  return (
+    <div className="px-4">
+      <div className="flex flex-col gap-4 bg-gray-100 border rounded-lg border-slate-200">
+        <ItemTemplate
+          index={index}
+          parentIndex={parentIndex}
+          control={control}
+          nameIndex={nameIndex}
+          moveItem={moveItem}
+          remove={remove}
+          enableNestedOptions={nestedForm.enableNestedOptions}
+          isFirst={isFirst}
+          isLast={isLast}
+          isNested={true}
+        />
+      </div>
+    </div>
+  )
+}
+
+/**
+ * This template is used for both item and nested item
+ */
+const ItemTemplate = (props: {
+  index: number
+  parentIndex?: number
+  control: Control<any, any>
+  nameIndex: string
+  moveItem: MoveItemFunc
+  remove: UseFieldArrayRemove
+  enableNestedOptions: boolean
+  isFirst: boolean
+  isLast: boolean
+  isNested?: boolean
+}) => {
+  const {
+    index,
+    parentIndex,
+    control,
+    nameIndex,
+    moveItem,
+    remove,
+    enableNestedOptions,
+    isFirst,
+    isLast,
+    isNested
+  } = props
+  const { setFocusedIndex } = useContext(FocusContext)
+
+  const handleFocus = () => {
+    if (parentIndex !== undefined) {
+      setFocusedIndex(parentIndex)
+    }
+  }
+
+  const handleMoveItemClicked = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    direction: MoveItemDirection
+  ) => {
+    e.preventDefault()
+    e.stopPropagation()
+    moveItem(index, direction)
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Controller
-        name={`menuOptions[${index}].name`}
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-row items-center justify-between gap-6">
+        <div className="flex flex-row items-center gap-4">
+          {/* Index */}
+          <div className="flex items-center justify-center w-6 h-6 text-sm font-semibold text-white bg-gray-600 border rounded-full shadow-sm">
+            {isNested ? convertIndexToAlphabet(index) : index + 1}
+          </div>
+
+          {/* Enable / Disable option */}
+          <FormSwitch
+            control={control}
+            name={`${nameIndex}.available`}
+            labelClassName="text-sm"
+            size="smaller"
+            tooltip={
+              enableNestedOptions
+                ? `Disable this ${isNested ? 'nested' : ''} option`
+                : `Enable this ${isNested ? 'nested' : ''} option`
+            }
+            controlComesFirst={true}
+          />
+
+          <div className="flex flex-row items-center gap-2">
+            {/* Move up */}
+            <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option up`}>
+              <Button
+                disabled={isFirst}
+                className="w-6 h-6"
+                variant="ghost"
+                size="icon"
+                onClick={e => handleMoveItemClicked(e, 'up')}
+              >
+                <ChevronUp className="w-4 h-4" />
+              </Button>
+            </TooltipThi>
+
+            {/* Move down */}
+            <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option down`}>
+              <Button
+                disabled={isLast}
+                className="w-6 h-6"
+                variant="ghost"
+                size="icon"
+                onClick={e => handleMoveItemClicked(e, 'down')}
+              >
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </TooltipThi>
+          </div>
+        </div>
+
+        {/* Remove */}
+        <TooltipThi content={`Remove this ${isNested ? 'nested' : ''} option`}>
+          <button className="group" type="button" onClick={() => remove(index)}>
+            <Trash className="w-5 h-5 text-slate-500 group-hover:text-slate-700" />
+          </button>
+        </TooltipThi>
+      </div>
+
+      {/* Display name */}
+      <FormInput
         control={control}
-        render={({ field }) => (
-          <input onChange={field.onChange} value={field.value} placeholder={`Item ${id}`} />
-        )}
+        type="text"
+        name={`${nameIndex}.displayName`}
+        label="Disaply name"
+        labelClassName="text-sm"
+        placeholder="eg. Translate"
+        className="w-full"
+        wrap={true}
+        onFocus={handleFocus}
+      />
+
+      {/* Enable/Disable nested options */}
+      {!isNested && (
+        <FormSwitch
+          control={control}
+          name={`${nameIndex}.enableNestedOptions`}
+          label={
+            enableNestedOptions
+              ? "Nested options are enabled (parent's prompt is disabled)"
+              : "Nested options are disabled (parent's prompt is required)"
+          }
+          labelClassName="text-sm"
+          size="smaller"
+          controlComesFirst={true}
+        />
+      )}
+
+      {/* Prompt */}
+      <FormTextarea
+        disabled={enableNestedOptions}
+        control={control}
+        name={`${nameIndex}.prompt`}
+        label="Prompt"
+        labelClassName="text-sm"
+        placeholder="eg. Translate the given text to English."
+        className={cn('w-full', {
+          hidden: enableNestedOptions
+        })}
+        wrap={true}
+        rows={2}
+        onFocus={handleFocus}
       />
     </div>
+  )
+}
+
+type MoveItemFunc = (index: number, direction: MoveItemDirection) => void
+
+type MoveItemDirection = 'up' | 'down'
+
+function moveItemGeneral(
+  index: number,
+  direction: MoveItemDirection,
+  move: UseFieldArrayMove,
+  fields: Record<'id', string>[]
+) {
+  if (direction === 'up' && index > 0) {
+    move(index, index - 1)
+  } else if (direction === 'down' && index < fields.length - 1) {
+    move(index, index + 1)
+  }
+}
+
+function convertIndexToAlphabet(index: number) {
+  return String.fromCharCode(65 + index)
+}
+
+const AddMoreOptionButton = (props: { onClick: () => void; isNested?: boolean }) => {
+  return (
+    <button
+      className={cn(
+        'flex flex-row items-center gap-2 mx-auto flex-nowrap opacity-70 hover:opacity-100',
+        {
+          'scale-95': props.isNested
+        }
+      )}
+      type="button"
+      onClick={props.onClick}
+    >
+      <div className="flex items-center justify-center border-2 border-dotted rounded-md border-slate-500">
+        <Plus className="w-4 h-4" />
+      </div>{' '}
+      {`Add more ${props.isNested ? 'nested' : ''} option`}
+    </button>
   )
 }

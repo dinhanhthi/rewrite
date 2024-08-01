@@ -5,9 +5,11 @@ import * as React from 'react'
 
 import { cn } from '@/src/helpers/helpers'
 
+export type SwitchSize = 'default' | 'smaller'
+
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & { size?: 'default' | 'smaller' }
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & { size?: SwitchSize }
 >(({ className, size = 'default', ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(

@@ -22,7 +22,7 @@ export default function TooltipThi(props: TooltipThiProps) {
     disableHoverableContent = true,
     asChild = true
   } = props
-  return (
+  return !!content ? (
     <TooltipProvider
       delayDuration={delayDuration}
       skipDelayDuration={skipDelayDuration}
@@ -37,5 +37,7 @@ export default function TooltipThi(props: TooltipThiProps) {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  ) : (
+    children
   )
 }
