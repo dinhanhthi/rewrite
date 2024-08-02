@@ -31,15 +31,3 @@ async function reloadAllNotionTabs() {
       console.error(`An error occurred while reloading tabs: ${error.message}`)
     })
 }
-
-// ###Thi remove later
-try {
-  browser.runtime.onMessage.addListener(async message => {
-    if (message.type === 'saveName') {
-      await browser.storage.sync.set({ name: message.name })
-      return true
-    }
-  })
-} catch (e) {
-  console.error(e)
-}

@@ -38,7 +38,6 @@ export default function FormInput(props: FormInputProps) {
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => {
-        // /* ###Thi */ console.log(`👉👉👉 error of ${name}: `, error);
         return (
           <FormItem
             className={cn(
@@ -103,7 +102,6 @@ export default function FormInput(props: FormInputProps) {
                     onFocus={onFocus}
                   />
                 </FormControl>
-                {/* <FormMessage className="absolute -bottom-6" /> */}
               </div>
               {type === 'password' && (
                 <button

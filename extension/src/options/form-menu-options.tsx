@@ -49,9 +49,6 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  // const formState = useFormState({ control, name: `${nameIndex}.${nestedName}`, exact: true })
-  // const message = get(formState.errors, `${nameIndex}.${nestedName}.message`, '') as string
-
   const isEmpty = parentFields.length === 0
 
   return (
@@ -59,7 +56,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
       <div className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
         'border-destructive': isEmpty
       })}>
-        <div className="absolute px-4 py-1 text-base font-medium bg-white left-4 -top-4">
+        <div className="absolute py-1 pl-2 pr-4 text-base font-medium bg-white -left-2 -top-4">
           <div className='flex flex-row items-center gap-2'>
             Menu options
             {isEmpty && (
@@ -163,7 +160,7 @@ const Item = (props: {
               'border-destructive': isEmpty
             })}
           >
-            <div className="absolute flex items-center gap-2 px-4 py-1 text-base font-medium bg-gray-50 left-4 -top-4">
+            <div className="absolute flex items-center gap-2 py-1 pl-2 pr-4 text-base font-medium bg-gray-50 -left-2 -top-4">
               Nested options of{'  '}
               <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
                 {index + 1}

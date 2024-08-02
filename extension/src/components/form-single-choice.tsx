@@ -16,16 +16,22 @@ type FormSingleChoiceProps = {
   data: SingleChoiceType[]
   label: string
   labelClassName?: string
+  wrap?: boolean
 }
 
 export default function FormSingleChoice(props: FormSingleChoiceProps) {
-  const { control, name, data, label, labelClassName } = props
+  const { control, name, data, label, labelClassName, wrap } = props
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex flex-row items-center gap-4 space-y-0">
+        <FormItem
+          className={cn('flex gap-4 space-y-0', {
+            'flex-row': !wrap,
+            'flex-col': wrap
+          })}
+        >
           <FormLabel className={cn('text-base', labelClassName)}>{label}</FormLabel>
           <FormControl>
             <RadioGroup
