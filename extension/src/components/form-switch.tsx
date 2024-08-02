@@ -36,7 +36,7 @@ export default function FormSwitch(props: FormSwitchProps) {
       render={({ field }) => (
         <FormItem className={cn('flex flex-col gap-1', className)}>
           <TooltipThi content={tooltip}>
-            <div className={cn('flex items-center gap-2', {
+            <div className={cn('flex items-center gap-3', {
               'flex-row-reverse justify-end': controlComesFirst
             })}>
               {!!label && (

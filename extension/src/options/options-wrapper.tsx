@@ -13,6 +13,7 @@ import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { Service } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
+import FormSwitch from '../components/form-switch'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -24,8 +25,7 @@ const serviceIds = services.map(e => e.value) as [string, ...string[]]
 const MenuOptionSchema = z.object({
   icon: z.any().optional(),
   value: z.string().min(1),
-  // displayName: z.string().min(1, 'This field is required.'),
-  displayName: z.string().optional(),
+  displayName: z.string().max(35, 'Max 35 characters allowed!').optional(),
   available: z.boolean().optional(),
   tooltip: z.string().optional(),
   prompt: z.string().optional()
@@ -85,6 +85,7 @@ const FormSettingsSchema = z.object({
     required_error: 'You need to select an AI service.'
   }),
   apiKey: z.string().min(1, 'This field is required.'),
+  stream: z.boolean().optional().default(false),
   menuOptions: z.array(menuOptionsSchema).min(1, 'At least one option is required.')
 })
 
@@ -95,6 +96,7 @@ type FormSettings = z.infer<typeof FormSettingsSchema>
 const defaultSettings: FormSettings = {
   service: 'openai',
   apiKey: 'xxxx', // ###Thi empty it
+  stream: false,
   menuOptions: [
     // {
     //   // icon: Languages,
@@ -227,6 +229,14 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   label="API Key"
                   labelClassName="font-medium"
                   placeholder={generateAPIKeyPlaceholder(service)}
+                />
+                <FormSwitch
+                  control={form.control}
+                  name="stream"
+                  label='Streaming response'
+                  labelClassName="gap-4"
+                  size="smaller"
+                  controlComesFirst={false}
                 />
                 <FormMenuOptions
                   control={form.control}
