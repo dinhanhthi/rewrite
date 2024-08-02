@@ -53,6 +53,7 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
             </div>
           </MenubarTrigger>
           <RewriteMenu
+            className='w-0'
             handleItemClicked={handleItemClicked}
             disableFocusOutside={props.alwaysShowMenu}
           />

@@ -6,6 +6,7 @@ import { z } from 'zod'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
 import FormSingleChoice from '../components/form-single-choice'
+import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import { services } from '../config'
@@ -13,7 +14,6 @@ import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { Service } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
-import FormSwitch from '../components/form-switch'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -213,8 +213,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
       <div className={cn('w-full h-full flex flex-col', props.className)}>
         <OptionsHeader version={props.version} />
 
-        {/* content */}
-        <div className="container p-4 py-8 lg:max-w-3xl">
+        <div className="container flex-1 min-h-0 p-4 py-8 overflow-auto lg:max-w-3xl dat-scrollbar">
           <div className="flex flex-row">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full gap-6">
@@ -236,7 +235,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                 <FormSwitch
                   control={form.control}
                   name="stream"
-                  label='Streaming response'
+                  label="Streaming response"
                   labelClassName="gap-4"
                   size="smaller"
                   controlComesFirst={false}
@@ -248,12 +247,18 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   setValue={form.setValue}
                   getValue={form.getValues}
                 />
+
+                {/* ###Thi ###TODO to remove or modify */}
                 <Button className="mx-auto w-fit" type="submit">
                   Save
                 </Button>
               </form>
             </Form>
           </div>
+        </div>
+
+        <div className='w-full h-10 bg-black'>
+
         </div>
       </div>
     </ErrorBoundary>

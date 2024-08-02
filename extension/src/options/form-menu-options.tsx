@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Plus, Trash, TriangleAlert } from 'lucide-react'
+import { ChevronDown, ChevronUp, Info, Plus, Trash, TriangleAlert } from 'lucide-react'
 import React, { createContext, useContext, useState } from 'react'
 import {
   Control,
@@ -15,6 +15,7 @@ import FormSwitch from '../components/form-switch'
 import FormTextarea from '../components/form-textarea'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
+import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn } from '../helpers/helpers'
 import { FormSettings } from './options-wrapper'
 
@@ -69,6 +70,9 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
         <div className="absolute py-1 pl-2 pr-4 text-base font-medium bg-white -left-2 -top-4">
           <div className="flex flex-row items-center gap-2">
             Menu options
+            <TooltipThi content="To view the menu, click the button at the bottom left of the screen.">
+              <Info className="inline w-5 h-5 text-green-700" />
+            </TooltipThi>
             {isEmpty && (
               <TooltipThi content="At least one option is required!">
                 <TriangleAlert className="inline w-5 h-5 text-destructive" />
@@ -95,6 +99,10 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
         </div>
 
         <AddMoreOptionButton onClick={handleAddItem} />
+
+        <div className="fixed h-10 p-1.5 pr-0 border rounded-md bottom-4 left-4 rewrite-btn">
+          <RewriteBtnWrapper className='border-none' />
+        </div>
       </div>
     </FocusContext.Provider>
   )
@@ -287,18 +295,15 @@ const ItemTemplate = (props: {
   }
 
   const initialEmoji = getValue(`${nameIndex}.icon`) as string
-  /* ###Thi */ console.log(`👉👉👉 initialEmoji: `, initialEmoji)
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-row items-center gap-4">
-          {/* Index */}
           <div className="flex items-center justify-center w-6 h-6 text-sm font-semibold text-white bg-gray-600 border rounded-full shadow-sm">
             {isNested ? convertIndexToAlphabet(index) : index + 1}
           </div>
 
-          {/* Enable / Disable option */}
           <FormSwitch
             control={control}
             name={`${nameIndex}.available`}
@@ -313,7 +318,6 @@ const ItemTemplate = (props: {
           />
 
           <div className="flex flex-row items-center gap-2">
-            {/* Move up */}
             <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option up`}>
               <Button
                 disabled={isFirst}
@@ -326,7 +330,6 @@ const ItemTemplate = (props: {
               </Button>
             </TooltipThi>
 
-            {/* Move down */}
             <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option down`}>
               <Button
                 disabled={isLast}
@@ -341,7 +344,6 @@ const ItemTemplate = (props: {
           </div>
         </div>
 
-        {/* Remove */}
         <TooltipThi content={`Remove this ${isNested ? 'nested' : ''} option`}>
           <button className="group" type="button" onClick={() => remove(index)}>
             <Trash className="w-5 h-5 text-slate-500 group-hover:text-slate-700" />
@@ -349,8 +351,7 @@ const ItemTemplate = (props: {
         </TooltipThi>
       </div>
 
-      <div className='flex flex-col items-start gap-y-4 gap-x-6 md:flex-row md:items-center'>
-        {/* Emoji */}
+      <div className="flex flex-col items-start gap-y-4 gap-x-6 md:flex-row md:items-center">
         <FormEmoji
           control={control}
           name={`${nameIndex}.icon`}
@@ -358,7 +359,6 @@ const ItemTemplate = (props: {
           setValue={setValue}
         />
 
-        {/* Display name */}
         <FormInput
           control={control}
           type="text"
@@ -372,7 +372,6 @@ const ItemTemplate = (props: {
         />
       </div>
 
-      {/* Enable/Disable nested options */}
       {!isNested && (
         <FormSwitch
           control={control}
@@ -388,7 +387,6 @@ const ItemTemplate = (props: {
         />
       )}
 
-      {/* Prompt */}
       <FormTextarea
         disabled={enableNestedOptions}
         control={control}

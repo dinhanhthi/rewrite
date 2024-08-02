@@ -1,8 +1,10 @@
 import { Github, Globe, MessageSquare } from 'lucide-react'
 import React from 'react'
 import { Badge } from '../components/ui/badge'
+import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
+import OptionsHeaderSettings from './options-header-settings'
 
 type OptionsHeaderProps = {
   version?: string
@@ -21,23 +23,31 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
           <Badge variant="secondary">{props.version || 'v0.0.0'}</Badge>
         </div>
 
-        <div className="flex flex-row items-center gap-4 text-slate-500">
+        <div className="flex flex-row items-center gap-2 text-slate-500">
+          <OptionsHeaderSettings />
+
           <TooltipThi content="Source code">
-            <a target="_blank" rel="noreferrer" href="https://github.com/dinhanhthi/rewrite">
-              <Github className="w-5 h-5 hover:text-green-700" />
-            </a>
+            <Button variant="ghost" size="icon" asChild>
+              <a target="_blank" rel="noreferrer" href="https://github.com/dinhanhthi/rewrite">
+                <Github className="w-5 h-5" />
+              </a>
+            </Button>
           </TooltipThi>
 
           <TooltipThi content="Home page">
-            <a target="_blank" rel="noreferrer" href="https://rewrite.dinhanhthi.com/">
-              <Globe className="w-5 h-5 hover:text-green-700" />
-            </a>
+            <Button variant="ghost" size="icon" asChild>
+              <a target="_blank" rel="noreferrer" href="https://rewrite.dinhanhthi.com/">
+                <Globe className="w-5 h-5" />
+              </a>
+            </Button>
           </TooltipThi>
 
           <TooltipThi content="Discussion">
-            <a target="_blank" href="https://github.com/dinhanhthi/rewrite/discussions">
-              <MessageSquare className="w-5 h-5 hover:text-green-700" />
-            </a>
+            <Button variant="ghost" size="icon" asChild>
+              <a target="_blank" href="https://github.com/dinhanhthi/rewrite/discussions">
+                <MessageSquare className="w-5 h-5" />
+              </a>
+            </Button>
           </TooltipThi>
         </div>
       </div>
