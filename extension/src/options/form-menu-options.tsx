@@ -5,28 +5,36 @@ import {
   useFieldArray,
   UseFieldArrayMove,
   UseFieldArrayRemove,
+  UseFormGetValues,
+  UseFormSetValue,
   useWatch
 } from 'react-hook-form'
+import FormEmoji from '../components/form-emoji'
 import FormInput from '../components/form-input'
 import FormSwitch from '../components/form-switch'
 import FormTextarea from '../components/form-textarea'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { cn } from '../helpers/helpers'
+import { FormSettings } from './options-wrapper'
 
 const FocusContext = createContext({
   focusedIndex: null as number | null,
-  setFocusedIndex: (_index: number | null) => {}
+  setFocusedIndex: (_index: number | null) => {},
+  setValue: (_name: any, _value: any) => {},
+  getValue: (_name: any) => '' || {}
 })
 
 export type FormMenuOptionsProps = {
   control: Control<any, any>
   name: string
   nestedName: string
+  setValue: UseFormSetValue<FormSettings>
+  getValue: UseFormGetValues<FormSettings>
 }
 
 export default function FormMenuOptions(props: FormMenuOptionsProps) {
-  const { control, name, nestedName } = props
+  const { control, name, nestedName, setValue, getValue } = props
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
 
   const {
@@ -52,12 +60,14 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
   const isEmpty = parentFields.length === 0
 
   return (
-    <FocusContext.Provider value={{ focusedIndex, setFocusedIndex }}>
-      <div className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
-        'border-destructive': isEmpty
-      })}>
+    <FocusContext.Provider value={{ focusedIndex, setFocusedIndex, setValue, getValue }}>
+      <div
+        className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
+          'border-destructive': isEmpty
+        })}
+      >
         <div className="absolute py-1 pl-2 pr-4 text-base font-medium bg-white -left-2 -top-4">
-          <div className='flex flex-row items-center gap-2'>
+          <div className="flex flex-row items-center gap-2">
             Menu options
             {isEmpty && (
               <TooltipThi content="At least one option is required!">
@@ -259,7 +269,7 @@ const ItemTemplate = (props: {
     isLast,
     isNested
   } = props
-  const { setFocusedIndex } = useContext(FocusContext)
+  const { setFocusedIndex, setValue, getValue } = useContext(FocusContext)
 
   const handleFocus = () => {
     if (parentIndex !== undefined) {
@@ -275,6 +285,9 @@ const ItemTemplate = (props: {
     e.stopPropagation()
     moveItem(index, direction)
   }
+
+  const initialEmoji = getValue(`${nameIndex}.icon`) as string
+  /* ###Thi */ console.log(`👉👉👉 initialEmoji: `, initialEmoji)
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -336,18 +349,28 @@ const ItemTemplate = (props: {
         </TooltipThi>
       </div>
 
-      {/* Display name */}
-      <FormInput
-        control={control}
-        type="text"
-        name={`${nameIndex}.displayName`}
-        label="Disaply name"
-        labelClassName="text-sm"
-        placeholder="eg. Translate"
-        className="w-full"
-        wrap={true}
-        onFocus={handleFocus}
-      />
+      <div className='flex flex-col items-start gap-y-4 gap-x-6 md:flex-row md:items-center'>
+        {/* Emoji */}
+        <FormEmoji
+          control={control}
+          name={`${nameIndex}.icon`}
+          initialValue={initialEmoji}
+          setValue={setValue}
+        />
+
+        {/* Display name */}
+        <FormInput
+          control={control}
+          type="text"
+          name={`${nameIndex}.displayName`}
+          label="Disaply name"
+          labelClassName="text-sm"
+          placeholder="eg. Translate"
+          className="w-full"
+          wrap={false}
+          onFocus={handleFocus}
+        />
+      </div>
 
       {/* Enable/Disable nested options */}
       {!isNested && (

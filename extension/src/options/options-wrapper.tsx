@@ -91,7 +91,7 @@ const FormSettingsSchema = z.object({
 
 export type MenuOptionType = z.infer<typeof MenuOptionSchema>
 
-type FormSettings = z.infer<typeof FormSettingsSchema>
+export type FormSettings = z.infer<typeof FormSettingsSchema>
 
 const defaultSettings: FormSettings = {
   service: 'openai',
@@ -124,6 +124,7 @@ const defaultSettings: FormSettings = {
     // },
     {
       // icon: Sparkles,
+      icon: '😎',
       value: 'improve-writing',
       displayName: 'Improve writing',
       available: true,
@@ -189,6 +190,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     mode: 'onTouched'
   })
 
+  form.setValue
+
   /* ###Thi */ console.log(`👉👉👉 formState: `, form.formState.errors)
 
   const service = useWatch({ control: form.control, name: 'service' }) as Service
@@ -242,6 +245,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   control={form.control}
                   name="menuOptions"
                   nestedName="nestedOptions"
+                  setValue={form.setValue}
+                  getValue={form.getValues}
                 />
                 <Button className="mx-auto w-fit" type="submit">
                   Save
