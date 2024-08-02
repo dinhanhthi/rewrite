@@ -1,15 +1,10 @@
+import { Info, TriangleAlert } from 'lucide-react'
 import React from 'react'
 import { Control } from 'react-hook-form'
 import { cn } from '../helpers/helpers'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from './ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel } from './ui/form'
 import { Textarea } from './ui/textarea'
+import TooltipThi from './ui/tooltip-thi'
 
 type FormTextareaProps = {
   control: Control<any, any>
@@ -36,6 +31,7 @@ export default function FormTextarea(props: FormTextareaProps) {
     labelClassName,
     disabled,
     rows = 3,
+    wrap,
     onFocus
   } = props
 
@@ -43,38 +39,59 @@ export default function FormTextarea(props: FormTextareaProps) {
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <FormItem
           className={cn(
-            'flex items-center gap-x-4',
+            'flex gap-x-4 items-start',
             {
-              'flex-wrap gap-y-2': props.wrap,
+              'flex-wrap gap-y-2': wrap,
               'opacity-50': disabled
             },
             className
           )}
         >
           {(!!label || !!description) && (
-            <div className="flex flex-col gap-0.5">
+            <div
+              className={cn('flex', {
+                'flex-row gap-2 items-center': !wrap,
+                'flex-col gap-0.5': wrap
+              })}
+            >
               {!!label && (
-                <FormLabel className={cn('text-base whitespace-nowrap', labelClassName)}>
-                  {label}
-                </FormLabel>
+                <div className="flex flex-row items-center gap-2">
+                  <FormLabel className={cn('text-base whitespace-nowrap', labelClassName)}>
+                    {label}
+                  </FormLabel>
+                  {!!error?.message && (
+                    <TooltipThi content={error.message}>
+                      <TriangleAlert className="w-4 h-4 text-destructive" />
+                    </TooltipThi>
+                  )}
+                </div>
               )}
-              {!!description && <FormDescription>{description}</FormDescription>}
+              {!!description && (
+                <>
+                  <FormDescription className={!wrap ? 'hidden' : ''}>{description}</FormDescription>
+                  {!wrap && (
+                    <TooltipThi content={description}>
+                      <Info className="w-4 h-4 opacity-60 hover:opacity-100" />
+                    </TooltipThi>
+                  )}
+                </>
+              )}
             </div>
           )}
           <FormControl>
             <Textarea
+              {...field}
               placeholder={placeholder}
               disabled={disabled}
               className="resize-none"
               rows={rows}
               onFocus={onFocus}
-              {...field}
             />
           </FormControl>
-          <FormMessage />
+          {/* <FormMessage /> */}
         </FormItem>
       )}
     />

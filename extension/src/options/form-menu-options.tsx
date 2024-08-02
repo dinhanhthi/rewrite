@@ -1,5 +1,5 @@
-import { ChevronDown, ChevronUp, Plus, Trash } from 'lucide-react'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import { ChevronDown, ChevronUp, Plus, Trash, TriangleAlert } from 'lucide-react'
+import React, { createContext, useContext, useState } from 'react'
 import {
   Control,
   useFieldArray,
@@ -37,26 +37,37 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
   } = useFieldArray({ control, name })
 
   const handleAddItem = () => {
-    appendParent({ value: '', displayName: '', available: false, prompt: '' })
+    appendParent({
+      value: `option-${parentFields.length + 1}`,
+      displayName: '',
+      available: false,
+      prompt: ''
+    })
   }
 
   const moveItem = (index: number, direction: MoveItemDirection) => {
-    /* ###Thi */ console.log(`👉👉👉 moveItem called: index ${index}`)
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  // ###Thi
-  useEffect(() => {
-    if (focusedIndex !== null) {
-      console.log(`Focused index changed to: ${focusedIndex}`)
-    }
-  }, [focusedIndex])
+  // const formState = useFormState({ control, name: `${nameIndex}.${nestedName}`, exact: true })
+  // const message = get(formState.errors, `${nameIndex}.${nestedName}.message`, '') as string
+
+  const isEmpty = parentFields.length === 0
 
   return (
     <FocusContext.Provider value={{ focusedIndex, setFocusedIndex }}>
-      <div className="relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl">
+      <div className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
+        'border-destructive': isEmpty
+      })}>
         <div className="absolute px-4 py-1 text-base font-medium bg-white left-4 -top-4">
-          Menu options
+          <div className='flex flex-row items-center gap-2'>
+            Menu options
+            {isEmpty && (
+              <TooltipThi content="At least one option is required!">
+                <TriangleAlert className="inline w-5 h-5 text-destructive" />
+              </TooltipThi>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -108,12 +119,19 @@ const Item = (props: {
   })
 
   const handleAddNestedItem = () => {
-    appendNested({ value: '', displayName: '', available: false, prompt: '' })
+    appendNested({
+      value: `option-${index}-${nestedFields.length + 1}`,
+      displayName: '',
+      available: false,
+      prompt: ''
+    })
   }
 
   const moveNestedItem = (_index: number, _direction: MoveItemDirection) => {
     moveItemGeneral(_index, _direction, moveNested, nestedFields)
   }
+
+  const isEmpty = nestedFields.length === 0
 
   return (
     <div className="px-4">
@@ -139,12 +157,22 @@ const Item = (props: {
             hidden: !nestedForm.enableNestedOptions
           })}
         >
-          <div className="relative flex flex-col gap-4 pt-6 mt-4 border border-slate-300 rounded-xl">
-            <div className="absolute px-4 py-1 text-base font-medium bg-gray-50 left-4 -top-4">
-              Nested options of{' '}
+          <div
+            className={cn('relative flex flex-col gap-4 pt-6 mt-4 border rounded-xl', {
+              'border-slate-300': !isEmpty,
+              'border-destructive': isEmpty
+            })}
+          >
+            <div className="absolute flex items-center gap-2 px-4 py-1 text-base font-medium bg-gray-50 left-4 -top-4">
+              Nested options of{'  '}
               <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
                 {index + 1}
               </span>
+              {isEmpty && (
+                <TooltipThi content="At least one nested option is required!">
+                  <TriangleAlert className="inline w-5 h-5 text-destructive" />
+                </TooltipThi>
+              )}
             </div>
             <div className="flex flex-col gap-4 pb-4">
               <div className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4">

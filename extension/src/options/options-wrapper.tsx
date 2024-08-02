@@ -9,7 +9,7 @@ import FormSingleChoice from '../components/form-single-choice'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import { services } from '../config'
-import { cn, generateAPIKeyPlaceholder, generateTranslatePrompt } from '../helpers/helpers'
+import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { Service } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
@@ -22,67 +22,111 @@ export type OptionsWrapperProps = {
 const serviceIds = services.map(e => e.value) as [string, ...string[]]
 
 const MenuOptionSchema = z.object({
-  icon: z.optional(z.any()),
+  icon: z.any().optional(),
   value: z.string().min(1),
-  displayName: z.string().min(1),
-  available: z.optional(z.boolean()),
-  tooltip: z.optional(z.string()),
-  prompt: z.optional(z.string())
+  // displayName: z.string().min(1, 'This field is required.'),
+  displayName: z.string().optional(),
+  available: z.boolean().optional(),
+  tooltip: z.string().optional(),
+  prompt: z.string().optional()
 })
 
-export type MenuOptionType = z.infer<typeof MenuOptionSchema>
+const menuOptionsSchema = MenuOptionSchema.extend({
+  enableNestedOptions: z.boolean().optional(),
+  nestedOptions: z.array(MenuOptionSchema).optional()
+}).superRefine((data, ctx) => {
+  if (data.enableNestedOptions) {
+    if (!data.nestedOptions || data.nestedOptions.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'At least one nested option is required.',
+        path: ['nestedOptions']
+      })
+    } else {
+      data.nestedOptions.forEach((nestedOption, index) => {
+        if (!nestedOption.displayName || nestedOption.displayName.trim().length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'This field is required.',
+            path: ['nestedOptions', index, 'displayName']
+          })
+        }
 
-export const FormSettingsSchema = z.object({
+        if (!nestedOption.prompt || nestedOption.prompt.trim().length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'This field is required.',
+            path: ['nestedOptions', index, 'prompt']
+          })
+        }
+      })
+    }
+  } else {
+    if (!data.prompt || data.prompt.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'This field is required.',
+        path: ['prompt']
+      })
+    }
+  }
+
+  if (!data.displayName || data.displayName.trim().length === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'This field is required.',
+      path: ['displayName']
+    })
+  }
+})
+
+const FormSettingsSchema = z.object({
   service: z.enum(serviceIds, {
     required_error: 'You need to select an AI service.'
   }),
-  apiKey: z.string().min(1),
-  menuOptions: z.array(
-    z.object({
-      ...MenuOptionSchema.shape,
-      enableNestedOptions: z.optional(z.boolean()),
-      nestedOptions: z.optional(z.array(MenuOptionSchema))
-    })
-  )
+  apiKey: z.string().min(1, 'This field is required.'),
+  menuOptions: z.array(menuOptionsSchema).min(1, 'At least one option is required.')
 })
+
+export type MenuOptionType = z.infer<typeof MenuOptionSchema>
 
 type FormSettings = z.infer<typeof FormSettingsSchema>
 
 const defaultSettings: FormSettings = {
   service: 'openai',
-  apiKey: '',
+  apiKey: 'xxxx', // ###Thi empty it
   menuOptions: [
-    {
-      // icon: Languages,
-      value: 'translate',
-      displayName: 'Translate',
-      available: true,
-      enableNestedOptions: true,
-      nestedOptions: [
-        'Vietnamese',
-        'English',
-        'Chinese',
-        // 'Japanese',
-        // 'Spanish',
-        // 'French',
-        // 'Russian',
-        // 'Portuguese',
-        // 'German',
-        // 'Italian'
-      ].map(lang => ({
-        value: lang.toLowerCase(),
-        displayName: lang,
-        available: true,
-        prompt: generateTranslatePrompt(lang)
-      }))
-    },
+    // {
+    //   // icon: Languages,
+    //   value: 'translate',
+    //   displayName: 'Translate',
+    //   available: true,
+    //   enableNestedOptions: true,
+    //   nestedOptions: [
+    //     'Vietnamese',
+    //     'English',
+    //     'Chinese',
+    //     // 'Japanese',
+    //     // 'Spanish',
+    //     // 'French',
+    //     // 'Russian',
+    //     // 'Portuguese',
+    //     // 'German',
+    //     // 'Italian'
+    //   ].map(lang => ({
+    //     value: lang.toLowerCase(),
+    //     displayName: lang,
+    //     available: true,
+    //     prompt: generateTranslatePrompt(lang)
+    //   }))
+    // },
     {
       // icon: Sparkles,
       value: 'improve-writing',
       displayName: 'Improve writing',
       available: true,
       prompt: 'Improve the given text.'
-    },
+    }
     // {
     //   // icon: SummerizeIcon,
     //   value: 'summarize',
@@ -139,13 +183,15 @@ const defaultSettings: FormSettings = {
 export default function OptionsWrapper(props: OptionsWrapperProps) {
   const form = useForm<FormSettings>({
     defaultValues: defaultSettings,
-    resolver: zodResolver(FormSettingsSchema)
+    resolver: zodResolver(FormSettingsSchema),
+    mode: 'onTouched'
   })
+
+  /* ###Thi */ console.log(`👉👉👉 formState: `, form.formState.errors)
 
   const service = useWatch({ control: form.control, name: 'service' }) as Service
 
   function onSubmit(data: FormSettings) {
-    /* ###Thi */ console.log(`👉👉👉 onSubmit called`)
     // toast({
     //   title: 'You submitted the following values:',
     //   description: (
@@ -156,11 +202,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     // })
     /* ###Thi */ console.log(`👉👉👉 data: `, data)
   }
-
-  form.control
-
-  // /* ###Thi */ console.log(`👉👉👉 watch(): `, form.watch())
-  const items = form.watch('menuOptions')
 
   return (
     <ErrorBoundary>

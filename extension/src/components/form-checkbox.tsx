@@ -20,7 +20,7 @@ export default function FormCheckbox(props: FormCheckboxProps) {
       render={({ field }) => (
         <FormItem className="flex flex-row items-start">
           <FormControl>
-            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+            <Checkbox {...field} checked={field.value} onCheckedChange={field.onChange} />
           </FormControl>
           {(!!label || !!description) && (
             <div className="space-y-1 leading-none">

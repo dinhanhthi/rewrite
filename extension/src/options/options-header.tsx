@@ -15,7 +15,7 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
         {/* Logo */}
         <div className="flex flex-row items-center gap-2">
           <div className="flex items-center justify-center gap-2 text-green-700">
-            <LogoRewriteIcon className="w-5 h-5" />
+            <LogoRewriteIcon className="w-6 h-6" />
             <div className="text-xl font-medium whitespace-nowrap">Rewrite</div>
           </div>
           <Badge variant="secondary">{props.version || 'v0.0.0'}</Badge>

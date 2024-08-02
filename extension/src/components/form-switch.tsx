@@ -43,7 +43,7 @@ export default function FormSwitch(props: FormSwitchProps) {
                 <FormLabel className={cn('text-base', labelClassName)}>{label}</FormLabel>
               )}
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} size={size} />
+                <Switch {...field} checked={field.value} onCheckedChange={field.onChange} size={size} />
               </FormControl>
             </div>
           </TooltipThi>

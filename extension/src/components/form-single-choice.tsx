@@ -38,7 +38,7 @@ export default function FormSingleChoice(props: FormSingleChoiceProps) {
                 .map(e => (
                   <FormItem key={e.value} className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value={e.value} />
+                      <RadioGroupItem {...field} value={e.value} />
                     </FormControl>
                     <FormLabel className="!ml-2 font-normal">{e.name}</FormLabel>
                   </FormItem>
