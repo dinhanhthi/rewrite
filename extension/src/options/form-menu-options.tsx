@@ -1,6 +1,6 @@
 import data, { EmojiMartData } from '@emoji-mart/data'
 import { ChevronDown, ChevronUp, Info, Plus, Trash, TriangleAlert } from 'lucide-react'
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
   Control,
   useFieldArray,
@@ -53,6 +53,17 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     move: moveParent
   } = useFieldArray({ control, name })
 
+  const containerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [parentFields.length])
+
+
   const handleAddItem = () => {
     appendParent({
       system: false,
@@ -91,7 +102,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div ref={containerRef} className="flex flex-col gap-4 max-h-[600px] overflow-auto dat-scrollbar dat-scrollbar-small">
           {parentFields.map((item: any, index: number) => (
             <Item
               key={item.id}
@@ -142,6 +153,16 @@ const Item = (props: {
     control,
     name: `${nameIndex}.${nestedName}`
   })
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [nestedFields.length])
 
   const handleAddNestedItem = () => {
     appendNested({
@@ -197,7 +218,7 @@ const Item = (props: {
                 )}
               >
                 <div className="absolute flex items-center gap-2 py-1 pl-2 pr-4 text-base font-medium bg-gray-50 -left-4 -top-5">
-                  <AccordionTrigger className='h-4'></AccordionTrigger>
+                  <AccordionTrigger className="h-4"></AccordionTrigger>
                   <span>Nested options of{'  '}</span>
                   <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
                     {index + 1}
@@ -211,7 +232,10 @@ const Item = (props: {
 
                 <AccordionContent>
                   <div className="flex flex-col gap-4 pb-4">
-                    <div className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4">
+                    <div
+                      ref={containerRef}
+                      className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4"
+                    >
                       {nestedFields.map((nestedItem, nestedIndex) => (
                         <NestedItem
                           index={nestedIndex}
