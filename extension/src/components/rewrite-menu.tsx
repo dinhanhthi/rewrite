@@ -27,7 +27,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
   }
 
   return (
-    <div className="dinhanhthi">
+    // <div className="dinhanhthi">
       <MenubarContent
         className={props.className}
         container={document.querySelector('.rewrite-overlay')}
@@ -68,7 +68,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
           }
         })}
       </MenubarContent>
-    </div>
+    // </div>
   )
 }
 

@@ -13,8 +13,7 @@ type OptionsHeaderProps = {
 export default function OptionsHeader(props: OptionsHeaderProps) {
   return (
     <div className="flex items-center justify-center w-full border-b border-slate-200">
-      <div className="container flex flex-row justify-between h-full p-4 lg:max-w-3xl">
-        {/* Logo */}
+      <div className="container flex flex-row justify-between h-full px-4 py-2 lg:max-w-3xl">
         <div className="flex flex-row items-center gap-2">
           <div className="flex items-center justify-center gap-2 text-green-700">
             <LogoRewriteIcon className="w-6 h-6" />

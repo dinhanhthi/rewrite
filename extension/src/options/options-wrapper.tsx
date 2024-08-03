@@ -273,8 +273,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
             </div>
           </div>
         </div>
-
-        <div className="w-full h-10 bg-black"></div>
       </div>
     </ErrorBoundary>
   )

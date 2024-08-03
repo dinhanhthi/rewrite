@@ -1,5 +1,5 @@
 import data, { EmojiMartData } from '@emoji-mart/data'
-import { ChevronDown, ChevronUp, Info, Plus, Trash, TriangleAlert } from 'lucide-react'
+import { ChevronDown, ChevronUp, Plus, Trash, TriangleAlert } from 'lucide-react'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
   Control,
@@ -77,12 +77,14 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           'border-destructive': isEmpty
         })}
       >
+        <div className="absolute flex items-center h-8 py-1 pl-2 pr-0 text-sm text-gray-600 bg-white border rounded-md right-4 -top-4 bottom-4">
+          What it looks like 👉
+          <RewriteBtnWrapper className="pl-1 border-none" />
+        </div>
+
         <div className="absolute py-1 pl-2 pr-4 text-base font-medium bg-white -left-2 -top-4">
           <div className="flex flex-row items-center gap-2">
-            Menu options
-            <TooltipThi content="To view the menu, click the button at the bottom left of the screen.">
-              <Info className="inline w-5 h-5 text-green-700" />
-            </TooltipThi>
+            Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
             {isEmpty && (
               <TooltipThi content="At least one option is required!">
                 <TriangleAlert className="inline w-5 h-5 text-destructive" />
@@ -109,10 +111,6 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
         </div>
 
         <AddMoreOptionButton onClick={handleAddItem} />
-
-        <div className="fixed h-10 p-1.5 pr-0 border rounded-md bottom-4 left-4 rewrite-btn">
-          <RewriteBtnWrapper className="border-none" />
-        </div>
       </div>
     </FocusContext.Provider>
   )
@@ -216,6 +214,7 @@ const Item = (props: {
                   <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
                     {index + 1}
                   </span>
+                  <span className="text-sm opacity-80">({nestedFields.length} items)</span>
                   {isEmpty && (
                     <TooltipThi content="At least one nested option is required!">
                       <TriangleAlert className="inline w-5 h-5 text-destructive" />

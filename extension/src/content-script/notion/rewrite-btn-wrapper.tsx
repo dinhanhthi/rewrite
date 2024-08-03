@@ -35,30 +35,28 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
   }
 
   return (
-    <>
-      <Menubar
-        value={showMenu}
-        onValueChange={setShowMenu}
-        className="h-full p-0 bg-transparent border-none rounded-none"
-      >
-        <MenubarMenu value="rewrite-menu">
-          <MenubarTrigger asChild className="p-0 !bg-transparent">
-            <div
-              className={cn(
-                props.className,
-                'h-full w-full pr-1 border-r border-slate-200 group notion-ignore py-0 !rounded-none'
-              )}
-            >
-              <RewriteBtn className={props.btnClassName} />
-            </div>
-          </MenubarTrigger>
-          <RewriteMenu
-            className='w-0'
-            handleItemClicked={handleItemClicked}
-            disableFocusOutside={props.alwaysShowMenu}
-          />
-        </MenubarMenu>
-      </Menubar>
-    </>
+    <Menubar
+      value={showMenu}
+      onValueChange={setShowMenu}
+      className="h-full p-0 bg-transparent border-none rounded-none"
+    >
+      <MenubarMenu value="rewrite-menu">
+        <MenubarTrigger asChild className="p-0 !bg-transparent">
+          <div
+            className={cn(
+              props.className,
+              'h-full w-full pr-1 border-r border-slate-200 group notion-ignore py-0 !rounded-none'
+            )}
+          >
+            <RewriteBtn className={props.btnClassName} />
+          </div>
+        </MenubarTrigger>
+        <RewriteMenu
+          className="w-0"
+          handleItemClicked={handleItemClicked}
+          disableFocusOutside={props.alwaysShowMenu}
+        />
+      </MenubarMenu>
+    </Menubar>
   )
 }
