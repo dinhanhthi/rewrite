@@ -74,22 +74,25 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     <FocusContext.Provider value={{ focusedIndex, setFocusedIndex, setValue, getValue }}>
       <div
         className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
-          'border-destructive': isEmpty
+          'border-destructive': isEmpty,
+          'pb-8': parentFields.length === 0
         })}
       >
-        <div className="absolute flex items-center h-8 py-1 pl-2 pr-0 text-sm text-gray-600 bg-white border rounded-md right-4 -top-4 bottom-4">
-          What it looks like 👉
-          <RewriteBtnWrapper className="pl-1 border-none" />
-        </div>
+        <div className="absolute flex items-center justify-between w-full pr-4 -left-2 -top-4">
+          <div className="py-1 pl-2 pr-4 text-base font-medium bg-white">
+            <div className="flex flex-row items-center gap-2">
+              Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
+              {isEmpty && (
+                <TooltipThi content="At least one option is required!">
+                  <TriangleAlert className="inline w-5 h-5 text-destructive" />
+                </TooltipThi>
+              )}
+            </div>
+          </div>
 
-        <div className="absolute py-1 pl-2 pr-4 text-base font-medium bg-white -left-2 -top-4">
-          <div className="flex flex-row items-center gap-2">
-            Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
-            {isEmpty && (
-              <TooltipThi content="At least one option is required!">
-                <TriangleAlert className="inline w-5 h-5 text-destructive" />
-              </TooltipThi>
-            )}
+          <div className="flex items-center h-8 py-1 pl-2 pr-0 text-sm text-gray-600 bg-white border rounded-md">
+            What it looks like 👉
+            <RewriteBtnWrapper className="pl-1 border-none" />
           </div>
         </div>
 
@@ -223,7 +226,9 @@ const Item = (props: {
                 </div>
 
                 <AccordionContent>
-                  <div className="flex flex-col gap-4 pb-4">
+                  <div className={cn('flex flex-col gap-4', {
+                    'pb-4': nestedFields.length === 0
+                  })}>
                     <div
                       ref={containerRef}
                       className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4"
@@ -497,7 +502,7 @@ const AddMoreOptionButton = (props: { onClick: () => void; isNested?: boolean })
       <div className="flex items-center justify-center border-2 border-dotted rounded-md border-slate-500">
         <Plus className="w-4 h-4" />
       </div>{' '}
-      {`Add more ${props.isNested ? 'nested' : ''} option`}
+      {`Add ${props.isNested ? 'nested' : ''} option`}
     </button>
   )
 }

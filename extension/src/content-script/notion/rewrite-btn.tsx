@@ -11,6 +11,9 @@ export default function RewriteBtn(props: ReWriteBtnProps) {
   return (
     <TooltipThi content="Let AI help you rewrite your text">
       <button
+        onClick={e => {
+          e.preventDefault()
+        }}
         className={cn(
           props.className,
           'flex items-center justify-center h-full w-full px-2 rounded-md group-active:scale-95 select-none transition-transform group-hover:bg-[#37352f14] text-green-700 gap-1.5'
