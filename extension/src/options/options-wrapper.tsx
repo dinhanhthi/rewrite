@@ -10,6 +10,7 @@ import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import { defaultMenuOptions, services } from '../config'
+import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { Service } from '../type'
 import FormMenuOptions from './form-menu-options'
@@ -130,14 +131,17 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
   return (
     <ErrorBoundary>
-      <div className={cn('w-full h-full flex flex-col', props.className)}>
-        <OptionsHeader version={props.version} watchOptions={watchOptions} />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className={cn('w-full h-full flex flex-col', props.className)}
+        >
+          <OptionsHeader version={props.version} />
 
-        <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
-          <div className="container h-full p-4 py-8 lg:max-w-3xl ">
-            <div className="flex flex-row">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full gap-6">
+          <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
+            <div className="container h-full p-4 py-8 lg:max-w-3xl ">
+              <div className="flex flex-row">
+                <div className="flex flex-col w-full gap-6">
                   <FormSingleChoice
                     control={form.control}
                     name="service"
@@ -168,17 +172,36 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     setValue={form.setValue}
                     getValue={form.getValues}
                   />
-
-                  {/* ###Thi ###TODO to remove or modify */}
-                  <Button className="mx-auto w-fit" type="submit">
-                    Save
-                  </Button>
-                </form>
-              </Form>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+
+          <div className="w-full border-t border-slate-200">
+            <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
+              <div className="flex flex-row items-center h-8 gap-0 w-9">
+                <RewriteBtnWrapper
+                  options={watchOptions}
+                  preview={true}
+                  className="w-8 border-none"
+                  btnClassName="text-gray-500"
+                />
+                <span className="text-sm text-gray-600 whitespace-nowrap">
+                  👈 What it looks like
+                </span>
+              </div>
+
+              <Button
+                onClick={() => onSubmit(form.getValues())}
+                className="h-8 py-1 w-fit"
+                type="submit"
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </form>
+      </Form>
     </ErrorBoundary>
   )
 }

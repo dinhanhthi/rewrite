@@ -26,14 +26,16 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
         </div>
 
         <div className="flex flex-row items-center gap-1 text-slate-500">
-          <div className="h-full w-9">
-            <RewriteBtnWrapper
-              options={props.watchOptions}
-              preview={true}
-              className="w-8 border-none"
-              btnClassName="text-gray-500"
-            />
-          </div>
+          {props.watchOptions?.length && (
+            <div className="h-full w-9">
+              <RewriteBtnWrapper
+                options={props.watchOptions}
+                preview={true}
+                className="w-8 border-none"
+                btnClassName="text-gray-500"
+              />
+            </div>
+          )}
 
           <OptionsHeaderSettings />
 
