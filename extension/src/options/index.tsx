@@ -9,8 +9,8 @@ import Options from './options'
 
 function init() {
   const appContainer = document.createElement('div')
-  appContainer.classList.add('dinhanhthi')
   document.body.appendChild(appContainer)
+  document.body.classList.add('dinhanhthi')
   if (!appContainer) {
     throw new Error('Can not find AppContainer')
   }

@@ -17,6 +17,7 @@ type FormInputProps = {
   className?: string
   description?: string
   onFocus?: () => void
+  disabled?: boolean
 }
 
 export default function FormInput(props: FormInputProps) {
@@ -30,7 +31,8 @@ export default function FormInput(props: FormInputProps) {
     className,
     description,
     labelClassName,
-    onFocus
+    onFocus,
+    disabled
   } = props
   const [showPassword, setShowPassword] = useState(false)
   return (
@@ -100,6 +102,7 @@ export default function FormInput(props: FormInputProps) {
                     className="flex-1 min-w-0"
                     autoComplete={type === 'password' ? 'current-password' : undefined}
                     onFocus={onFocus}
+                    disabled={disabled}
                   />
                 </FormControl>
               </div>

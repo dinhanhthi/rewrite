@@ -31,7 +31,7 @@ export default function FormEmoji(props: FormEmojiProps) {
         return (
           <Popover>
             <div className='flex flex-row items-center gap-3'>
-              <div>Icon</div>
+              Icon
               <PopoverTrigger asChild>
                 <Button variant="outline" size="icon" className='w-8 h-8 p-0'>
                   {selectedEmoji}
