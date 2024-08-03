@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 
-import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import ErrorBoundary from '../components/error-boundary'
@@ -10,14 +9,11 @@ import FormSingleChoice from '../components/form-single-choice'
 import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
-import { services } from '../config'
-import { cn, generateAPIKeyPlaceholder, generateTranslatePrompt } from '../helpers/helpers'
+import { defaultMenuOptions, services } from '../config'
+import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { Service } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
-import LongerIcon from '../icons/longer-icon'
-import ShorterIcon from '../icons/shorter-icon'
-import SummerizeIcon from '../icons/summerize-icon'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -104,98 +100,7 @@ const defaultSettings: FormSettings = {
   service: 'openai',
   apiKey: 'xxxx', // ###Thi empty it
   stream: false,
-  menuOptions: [
-    {
-      system: true,
-      icon: Languages,
-      value: 'translate',
-      displayName: 'Translate',
-      available: true,
-      enableNestedOptions: true,
-      nestedOptions: [
-        'Vietnamese',
-        'English',
-        'Chinese',
-        'Japanese',
-        'Spanish',
-        'French',
-        'Russian',
-        'Portuguese',
-        'German',
-        'Italian'
-      ].map(lang => ({
-        system: true,
-        value: lang.toLowerCase(),
-        displayName: lang,
-        available: true,
-        prompt: generateTranslatePrompt(lang)
-      }))
-    },
-    {
-      system: true,
-      icon: Sparkles,
-      value: 'rw-improve-writing',
-      displayName: 'Improve writing',
-      available: true,
-      prompt: 'Improve the given text.'
-    },
-    {
-      system: true,
-      icon: SummerizeIcon,
-      value: 'summarize',
-      displayName: 'Summarize',
-      available: true,
-      prompt: 'Summarize the given text.'
-    },
-    {
-      system: true,
-      icon: MessageCircleQuestion,
-      value: 'explain-this',
-      displayName: 'Explain this',
-      available: true,
-      prompt: 'Explain the given text.'
-    },
-    {
-      system: true,
-      icon: SpellCheck,
-      value: 'fix-spelling-grammar',
-      displayName: 'Fix spelling & grammar',
-      available: true,
-      prompt: 'Fix the spelling & grammar of the given text.'
-    },
-    {
-      system: true,
-      icon: ShorterIcon,
-      value: 'make-shorter',
-      displayName: 'Make shorter',
-      available: true,
-      prompt: 'Make the given text shorter.'
-    },
-    {
-      system: true,
-      icon: LongerIcon,
-      value: 'make-longer',
-      displayName: 'Make longer',
-      available: true,
-      prompt: 'Make the given text longer.'
-    },
-    {
-      system: true,
-      icon: MicVocal,
-      value: 'change-tone',
-      displayName: 'Change tone',
-      available: true,
-      enableNestedOptions: true,
-      nestedOptions: ['Professional', 'Casual', 'Straightforward', 'Confident', 'Friendly'].map(
-        tone => ({
-          value: tone.toLowerCase(),
-          displayName: tone,
-          available: true,
-          prompt: `Change the tone of the given text to ${tone.toLowerCase()}.`
-        })
-      )
-    }
-  ]
+  menuOptions: defaultMenuOptions
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
@@ -205,7 +110,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     mode: 'onTouched'
   })
 
-  form.setValue
+  const watchOptions = useWatch({ control: form.control, name: 'menuOptions' }) as MenuOptionType[]
 
   /* ###Thi */ console.log(`👉👉👉 formState: `, form.formState.errors)
 
@@ -226,7 +131,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
   return (
     <ErrorBoundary>
       <div className={cn('w-full h-full flex flex-col', props.className)}>
-        <OptionsHeader version={props.version} />
+        <OptionsHeader version={props.version} watchOptions={watchOptions} />
 
         <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
           <div className="container h-full p-4 py-8 lg:max-w-3xl ">

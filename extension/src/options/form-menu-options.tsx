@@ -23,7 +23,6 @@ import {
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
-import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn } from '../helpers/helpers'
 import { FormSettings } from './options-wrapper'
 
@@ -82,7 +81,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           <div className="py-1 pl-2 pr-4 text-base font-medium bg-white">
             <div className="flex flex-row items-center gap-2">
               Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
-              <TooltipThi content='To see what it looks like, click the Preview button in the header'>
+              <TooltipThi content="To see what it looks like, click the Preview button in the header">
                 <Info className="w-5 h-5 text-slate-500" />
               </TooltipThi>
               {isEmpty && (
@@ -224,9 +223,11 @@ const Item = (props: {
                 </div>
 
                 <AccordionContent>
-                  <div className={cn('flex flex-col gap-4', {
-                    'pb-4': nestedFields.length === 0
-                  })}>
+                  <div
+                    className={cn('flex flex-col gap-4', {
+                      'pb-4': nestedFields.length === 0
+                    })}
+                  >
                     <div
                       ref={containerRef}
                       className="max-h-[400px] overflow-auto dat-scrollbar dat-scrollbar-small flex flex-col gap-4"

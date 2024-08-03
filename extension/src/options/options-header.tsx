@@ -6,9 +6,11 @@ import TooltipThi from '../components/ui/tooltip-thi'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import OptionsHeaderSettings from './options-header-settings'
+import { MenuOptionType } from './options-wrapper'
 
 type OptionsHeaderProps = {
   version?: string
+  watchOptions?: MenuOptionType[]
 }
 
 export default function OptionsHeader(props: OptionsHeaderProps) {
@@ -26,6 +28,7 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
         <div className="flex flex-row items-center gap-1 text-slate-500">
           <div className="h-full w-9">
             <RewriteBtnWrapper
+              options={props.watchOptions}
               preview={true}
               className="w-8 border-none"
               btnClassName="text-gray-500"

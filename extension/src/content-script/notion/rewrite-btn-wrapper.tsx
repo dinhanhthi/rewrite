@@ -5,12 +5,14 @@ import { toast } from '../../components/ui/use-toast'
 import { cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
+import { MenuOptionType } from '../../options/options-wrapper'
 
 type RewriteBtnWrapperProps = {
   className?: string
   btnClassName?: string
   alwaysShowMenu?: boolean
   preview?: boolean
+  options?: MenuOptionType[]
 }
 
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
@@ -28,7 +30,6 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
       const outputBlob = await clipboardItem.getType('text/html')
       const output = await outputBlob.text()
       const formatedText = formatSelectedText(output)
-      // console.log(formatedText)
       createRewriteEditor('menu', formatedText)
     } else {
       toast({ description: `Menu item clicked` })
@@ -57,6 +58,7 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
           </div>
         </MenubarTrigger>
         <RewriteMenu
+          options={props.options}
           className="w-0"
           handleItemClicked={handleItemClicked}
           disableFocusOutside={props.alwaysShowMenu}
