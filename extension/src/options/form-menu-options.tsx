@@ -53,17 +53,6 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     move: moveParent
   } = useFieldArray({ control, name })
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth'
-      })
-    }
-  }, [parentFields.length])
-
-
   const handleAddItem = () => {
     appendParent({
       system: false,
@@ -102,7 +91,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           </div>
         </div>
 
-        <div ref={containerRef} className="flex flex-col gap-4 max-h-[600px] overflow-auto dat-scrollbar dat-scrollbar-small">
+        <div className="flex flex-col gap-4">
           {parentFields.map((item: any, index: number) => (
             <Item
               key={item.id}
@@ -206,7 +195,11 @@ const Item = (props: {
             hidden: !watchValue.enableNestedOptions
           })}
         >
-          <Accordion type="single" collapsible>
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue={nestedFields.length === 0 ? 'item-1' : ''}
+          >
             <AccordionItem value="item-1" className="border-none">
               <div
                 className={cn(
