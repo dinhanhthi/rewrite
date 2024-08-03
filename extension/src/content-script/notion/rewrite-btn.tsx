@@ -5,22 +5,30 @@ import LogoRewriteIcon from '../../icons/logo-rewrite-icon'
 
 type ReWriteBtnProps = {
   className?: string
+  hideText?: boolean
+  tooltip?: string
 }
 
 export default function RewriteBtn(props: ReWriteBtnProps) {
   return (
-    <TooltipThi content="Let AI help you rewrite your text">
+    <TooltipThi content={props.tooltip ?? 'Let AI help you rewrite your text'}>
       <button
         onClick={e => {
           e.preventDefault()
         }}
         className={cn(
-          props.className,
-          'flex items-center justify-center h-full w-full px-2 rounded-md group-active:scale-95 select-none transition-transform group-hover:bg-[#37352f14] text-green-700 gap-1.5'
+          'flex items-center justify-center h-full w-full rounded-md group-active:scale-95 select-none transition-transform group-hover:bg-[#37352f14] text-green-700 gap-1.5',
+          {
+            'px-2': !props.hideText,
+            'px-1': props.hideText
+          },
+          props.className
         )}
       >
         <LogoRewriteIcon className="w-5 h-5" />
-        <div className="text-[14.5px] font-medium whitespace-nowrap">Rewrite</div>
+        {!props.hideText && (
+          <div className="text-[14.5px] font-medium whitespace-nowrap">Rewrite</div>
+        )}
       </button>
     </TooltipThi>
   )

@@ -1,5 +1,5 @@
 import data, { EmojiMartData } from '@emoji-mart/data'
-import { ChevronDown, ChevronUp, Plus, Trash, TriangleAlert } from 'lucide-react'
+import { ChevronDown, ChevronUp, Info, Plus, Trash, TriangleAlert } from 'lucide-react'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
   Control,
@@ -82,17 +82,15 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           <div className="py-1 pl-2 pr-4 text-base font-medium bg-white">
             <div className="flex flex-row items-center gap-2">
               Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
+              <TooltipThi content='To see what it looks like, click the Preview button in the header'>
+                <Info className="w-5 h-5 text-slate-500" />
+              </TooltipThi>
               {isEmpty && (
                 <TooltipThi content="At least one option is required!">
                   <TriangleAlert className="inline w-5 h-5 text-destructive" />
                 </TooltipThi>
               )}
             </div>
-          </div>
-
-          <div className="flex items-center h-8 py-1 pl-2 pr-0 text-sm text-gray-600 bg-white border rounded-md">
-            What it looks like 👉
-            <RewriteBtnWrapper className="pl-1 border-none" />
           </div>
         </div>
 

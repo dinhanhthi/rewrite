@@ -10,6 +10,7 @@ type RewriteBtnWrapperProps = {
   className?: string
   btnClassName?: string
   alwaysShowMenu?: boolean
+  preview?: boolean
 }
 
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
@@ -48,7 +49,11 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
               'h-full w-full pr-1 border-r border-slate-200 group notion-ignore py-0 !rounded-none'
             )}
           >
-            <RewriteBtn className={props.btnClassName} />
+            <RewriteBtn
+              className={props.btnClassName}
+              hideText={props.preview}
+              tooltip={props.preview ? 'Preview' : undefined}
+            />
           </div>
         </MenubarTrigger>
         <RewriteMenu

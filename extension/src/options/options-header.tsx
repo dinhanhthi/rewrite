@@ -3,6 +3,7 @@ import React from 'react'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
+import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import OptionsHeaderSettings from './options-header-settings'
 
@@ -22,7 +23,15 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
           <Badge variant="secondary">{props.version || 'v0.0.0'}</Badge>
         </div>
 
-        <div className="flex flex-row items-center gap-2 text-slate-500">
+        <div className="flex flex-row items-center gap-1 text-slate-500">
+          <div className="h-full w-9">
+            <RewriteBtnWrapper
+              preview={true}
+              className="w-8 border-none"
+              btnClassName="text-gray-500"
+            />
+          </div>
+
           <OptionsHeaderSettings />
 
           <TooltipThi content="Source code">
