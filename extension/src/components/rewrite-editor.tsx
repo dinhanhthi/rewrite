@@ -1,5 +1,5 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { Check, Copy, RotateCcw, X } from 'lucide-react'
+import { Check, Copy, RotateCcw, Settings2, X } from 'lucide-react'
 import React from 'react'
 import { cn } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
@@ -12,6 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle
 } from './ui/alert-dialog'
+import { Badge } from './ui/badge'
 import { toast } from './ui/use-toast'
 
 type RewriteEditorProps = {
@@ -119,6 +120,12 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     setShowDiscardWarning(true)
   }
 
+  const openOptions = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toast({ description: 'Open options clicked!' })
+  }
+
   return (
     <>
       {!props.hideOverlay && (
@@ -153,7 +160,22 @@ export default function RewriteEditor(props: RewriteEditorProps) {
               </div>
 
               {/* Controls */}
-              <div className="z-50 flex items-center justify-end w-full gap-4 p-2 bg-slate-100">
+              <div className="z-50 flex items-center justify-between w-full gap-4 p-2 bg-slate-100">
+                <div className="flex flex-row items-center gap-3">
+                  <Badge
+                    className="text-xs font-medium text-gray-600 border-gray-400 whitespace-nowrap"
+                    variant="outline"
+                  >
+                    GPT-4o Mini
+                  </Badge>
+                  <EditorRoundBtn
+                    onClick={openOptions}
+                    tooltipContent="Open Settings"
+                    className="w-6 h-6"
+                  >
+                    <Settings2 className="w-3.5 h-3.5" />
+                  </EditorRoundBtn>
+                </div>
                 <div className="flex items-center gap-4">
                   <EditorRoundBtn
                     onClick={closeRewriteEditor}
@@ -191,9 +213,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
               </div>
             </div>
           </div>
-
-          {/* Controls */}
-          {/* -15px = (32 height - 2 border) / 2 */}
         </div>
       </div>
 
