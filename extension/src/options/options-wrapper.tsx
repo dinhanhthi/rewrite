@@ -1,18 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import { useForm, useWatch } from 'react-hook-form'
-import { z } from 'zod'
+import { useForm } from 'react-hook-form'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
+import FormSelect from '../components/form-select'
 import FormSingleChoice from '../components/form-single-choice'
 import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
-import { defaultMenuOptions, services } from '../config'
+import { defaultSettings, FormSettingsSchema, services } from '../config'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
-import { Service } from '../type'
+import { FormSettings, Service } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
 
@@ -21,101 +21,22 @@ export type OptionsWrapperProps = {
   version?: string
 }
 
-const serviceIds = services.map(e => e.value) as [string, ...string[]]
-
-const MenuOptionSchema = z.object({
-  system: z.boolean().optional(),
-  icon: z.any().optional(),
-  value: z.string().min(1),
-  displayName: z.string().max(35, 'Max 35 characters allowed!').optional(),
-  available: z.boolean().optional(),
-  tooltip: z.string().optional(),
-  prompt: z.string().optional()
-})
-
-const menuOptionsSchema = MenuOptionSchema.extend({
-  enableNestedOptions: z.boolean().optional(),
-  nestedOptions: z.array(MenuOptionSchema).optional()
-}).superRefine((data, ctx) => {
-  if (data.enableNestedOptions) {
-    if (!data.nestedOptions || data.nestedOptions.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'At least one nested option is required.',
-        path: ['nestedOptions']
-      })
-    } else {
-      data.nestedOptions.forEach((nestedOption, index) => {
-        if (!nestedOption.displayName || nestedOption.displayName.trim().length === 0) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'This field is required.',
-            path: ['nestedOptions', index, 'displayName']
-          })
-        }
-
-        if (!nestedOption.prompt || nestedOption.prompt.trim().length === 0) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'This field is required.',
-            path: ['nestedOptions', index, 'prompt']
-          })
-        }
-      })
-    }
-  } else {
-    if (!data.prompt || data.prompt.trim() === '') {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'This field is required.',
-        path: ['prompt']
-      })
-    }
-  }
-
-  if (!data.displayName || data.displayName.trim().length === 0) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'This field is required.',
-      path: ['displayName']
-    })
-  }
-})
-
-const FormSettingsSchema = z.object({
-  service: z.enum(serviceIds, {
-    required_error: 'You need to select an AI service.'
-  }),
-  apiKey: z.string().min(1, 'This field is required.'),
-  stream: z.boolean().optional().default(false),
-  menuOptions: z.array(menuOptionsSchema).min(1, 'At least one option is required.')
-})
-
-export type MenuOptionType = z.infer<typeof menuOptionsSchema>
-
-export type MenuNestedOptionType = z.infer<typeof MenuOptionSchema>
-
-export type FormSettings = z.infer<typeof FormSettingsSchema>
-
-const defaultSettings: FormSettings = {
-  service: 'openai',
-  apiKey: 'xxxx', // ###Thi empty it
-  stream: false,
-  menuOptions: defaultMenuOptions
-}
-
 export default function OptionsWrapper(props: OptionsWrapperProps) {
+  // const [models, setModels] = useState<ServiceObject['models']>([])
+
   const form = useForm<FormSettings>({
     defaultValues: defaultSettings,
     resolver: zodResolver(FormSettingsSchema),
     mode: 'onTouched'
   })
 
-  const watchOptions = useWatch({ control: form.control, name: 'menuOptions' }) as MenuOptionType[]
+  const watchOptions = form.watch('menuOptions')
+  const watchService = form.watch('service') as Service
+  const models = services.find(e => e.value === watchService)!.models
 
-  /* ###Thi */ console.log(`👉👉👉 formState: `, form.formState.errors)
-
-  const service = useWatch({ control: form.control, name: 'service' }) as Service
+  useEffect(() => {
+    form.setValue('model', models[0].value)
+  }, [watchService, form.setValue])
 
   function onSubmit(data: FormSettings) {
     // toast({
@@ -145,9 +66,17 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   <FormSingleChoice
                     control={form.control}
                     name="service"
-                    data={services}
+                    data={services.filter(e => e.available)}
                     label={'AI service'}
                     labelClassName="font-medium"
+                  />
+                  <FormSelect
+                    control={form.control}
+                    name="model"
+                    data={models}
+                    label={'AI service'}
+                    labelClassName="font-medium"
+                    triggerClassName="w-fit px-4"
                   />
                   <FormInput
                     control={form.control}
@@ -155,7 +84,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     name="apiKey"
                     label="API Key"
                     labelClassName="font-medium"
-                    placeholder={generateAPIKeyPlaceholder(service)}
+                    placeholder={generateAPIKeyPlaceholder(watchService)}
                   />
                   <FormSwitch
                     control={form.control}

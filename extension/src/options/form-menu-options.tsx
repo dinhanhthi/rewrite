@@ -24,7 +24,7 @@ import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { cn } from '../helpers/helpers'
-import { FormSettings } from './options-wrapper'
+import { FormSettings } from '../type'
 
 const FocusContext = createContext({
   focusedIndex: null as number | null,
@@ -81,7 +81,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
           <div className="py-1 pl-2 pr-4 text-base font-medium bg-white">
             <div className="flex flex-row items-center gap-2">
               Menu options <span className="text-sm opacity-80">({parentFields.length} items)</span>
-              <TooltipThi content="To see what it looks like, click the Preview button in the header">
+              <TooltipThi content="To see what it looks like, click the Preview button in the footer">
                 <Info className="w-5 h-5 text-slate-500" />
               </TooltipThi>
               {isEmpty && (

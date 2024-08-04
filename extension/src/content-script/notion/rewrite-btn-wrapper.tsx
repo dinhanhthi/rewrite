@@ -5,7 +5,7 @@ import { toast } from '../../components/ui/use-toast'
 import { cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
-import { MenuOptionType } from '../../options/options-wrapper'
+import { MenuOptionType } from '../../type'
 
 type RewriteBtnWrapperProps = {
   className?: string

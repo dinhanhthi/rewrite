@@ -1,22 +1,56 @@
 import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
-import { SingleChoiceType } from './components/form-single-choice'
+import { z } from 'zod'
 import { generateTranslatePrompt } from './helpers/helpers'
 import LongerIcon from './icons/longer-icon'
 import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
-import { MenuOptionType } from './options/options-wrapper'
-import { Settings } from './type'
+import { FormSettings, MenuOptionType, ServiceObject } from './type'
 
-export const defaultSettings: Settings = {
-  service: 'openai'
-}
-
-export const services: SingleChoiceType[] = [
-  { name: 'OpenAI', value: 'openai', available: true },
-  { name: 'Mistral', value: 'mistral', available: true },
-  { name: 'Claude', value: 'claude', available: true },
-  { name: 'Gemini', value: 'gemini', available: true },
-  { name: 'Llama', value: 'llama', available: false }
+export const services: ServiceObject[] = [
+  {
+    name: 'OpenAI',
+    value: 'openai',
+    available: true,
+    models: [
+      { value: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo' },
+      { value: 'gpt-4o-mini', name: 'GPT-4o Mini' },
+      { value: 'gpt-4', name: 'GPT-4' },
+      { value: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
+      { value: 'gpt-4o', name: 'GPT-4o' }
+    ]
+  },
+  {
+    name: 'Mistral',
+    value: 'mistral',
+    available: true,
+    models: [
+      { value: 'mistral-tiny', name: 'Mistral Tiny' },
+      { value: 'mistral-small-latest', name: 'Mistral Small' },
+      { value: 'mistral-medium-latest', name: 'Mistral Medium' },
+      { value: 'mistral-large-latest', name: 'Mistral Large' }
+    ]
+  },
+  {
+    name: 'Claude',
+    value: 'claude',
+    available: true,
+    models: [
+      { value: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' },
+      { value: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' },
+      { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
+      { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
+    ]
+  },
+  {
+    name: 'Gemini',
+    value: 'gemini',
+    available: true,
+    models: [
+      { value: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+      { value: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro' }
+    ]
+  }
+  // { name: 'Llama', value: 'llama', available: false }
 ]
 
 export const defaultMenuOptions: MenuOptionType[] = [
@@ -112,3 +146,82 @@ export const defaultMenuOptions: MenuOptionType[] = [
     )
   }
 ]
+
+// Options form
+
+export const MenuOptionSchema = z.object({
+  system: z.boolean().optional(),
+  icon: z.any().optional(),
+  value: z.string().min(1),
+  displayName: z.string().max(35, 'Max 35 characters allowed!').optional(),
+  available: z.boolean().optional(),
+  tooltip: z.string().optional(),
+  prompt: z.string().optional()
+})
+
+export const menuOptionsSchema = MenuOptionSchema.extend({
+  enableNestedOptions: z.boolean().optional(),
+  nestedOptions: z.array(MenuOptionSchema).optional()
+}).superRefine((data, ctx) => {
+  if (data.enableNestedOptions) {
+    if (!data.nestedOptions || data.nestedOptions.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'At least one nested option is required.',
+        path: ['nestedOptions']
+      })
+    } else {
+      data.nestedOptions.forEach((nestedOption, index) => {
+        if (!nestedOption.displayName || nestedOption.displayName.trim().length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'This field is required.',
+            path: ['nestedOptions', index, 'displayName']
+          })
+        }
+
+        if (!nestedOption.prompt || nestedOption.prompt.trim().length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'This field is required.',
+            path: ['nestedOptions', index, 'prompt']
+          })
+        }
+      })
+    }
+  } else {
+    if (!data.prompt || data.prompt.trim() === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'This field is required.',
+        path: ['prompt']
+      })
+    }
+  }
+
+  if (!data.displayName || data.displayName.trim().length === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'This field is required.',
+      path: ['displayName']
+    })
+  }
+})
+
+export const FormSettingsSchema = z.object({
+  service: z.enum(services.map(e => e.value) as [string, ...string[]], {
+    required_error: 'You need to select an AI service.'
+  }),
+  model: z.string(),
+  apiKey: z.string().min(1, 'This field is required.'),
+  stream: z.boolean().optional().default(false),
+  menuOptions: z.array(menuOptionsSchema).min(1, 'At least one option is required.')
+})
+
+export const defaultSettings: FormSettings = {
+  service: 'openai',
+  model: 'gpt-4o-mini',
+  apiKey: 'xxxx', // ###Thi empty it
+  stream: false,
+  menuOptions: defaultMenuOptions
+}

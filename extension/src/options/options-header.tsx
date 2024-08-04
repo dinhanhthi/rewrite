@@ -6,7 +6,7 @@ import TooltipThi from '../components/ui/tooltip-thi'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import OptionsHeaderSettings from './options-header-settings'
-import { MenuOptionType } from './options-wrapper'
+import { MenuOptionType } from '../type'
 
 type OptionsHeaderProps = {
   version?: string

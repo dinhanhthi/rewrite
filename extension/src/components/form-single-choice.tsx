@@ -4,16 +4,10 @@ import { cn } from '../helpers/helpers'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 
-export interface SingleChoiceType {
-  name: string
-  value: string
-  available?: boolean
-}
-
 type FormSingleChoiceProps = {
   control: Control<any, any>
   name: string
-  data: SingleChoiceType[]
+  data: { value: string; name: string }[]
   label: string
   labelClassName?: string
   wrap?: boolean
@@ -35,20 +29,19 @@ export default function FormSingleChoice(props: FormSingleChoiceProps) {
           <FormLabel className={cn('text-base', labelClassName)}>{label}</FormLabel>
           <FormControl>
             <RadioGroup
+              {...field}
               onValueChange={field.onChange}
               defaultValue={field.value}
               className="flex flex-row gap-6 m-0"
             >
-              {data
-                .filter(e => e.available)
-                .map(e => (
-                  <FormItem key={e.value} className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem {...field} value={e.value} />
-                    </FormControl>
-                    <FormLabel className="!ml-2 font-normal">{e.name}</FormLabel>
-                  </FormItem>
-                ))}
+              {data.map(e => (
+                <FormItem key={e.value} className="flex items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <RadioGroupItem value={e.value} />
+                  </FormControl>
+                  <FormLabel className="!ml-2 font-normal">{e.name}</FormLabel>
+                </FormItem>
+              ))}
             </RadioGroup>
           </FormControl>
           <FormMessage />
