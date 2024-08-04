@@ -11,6 +11,7 @@ type FormSingleChoiceProps = {
   label: string
   labelClassName?: string
   wrap?: boolean
+  onChange?: (value: string) => void
 }
 
 export default function FormSingleChoice(props: FormSingleChoiceProps) {
@@ -30,7 +31,10 @@ export default function FormSingleChoice(props: FormSingleChoiceProps) {
           <FormControl>
             <RadioGroup
               {...field}
-              onValueChange={field.onChange}
+              onValueChange={e => {
+                field.onChange(e)
+                props.onChange?.(e)
+              }}
               defaultValue={field.value}
               className="flex flex-row gap-6 m-0"
             >

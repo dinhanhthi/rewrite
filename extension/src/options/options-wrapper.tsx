@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
+import { isEqual } from 'lodash'
 import { useForm } from 'react-hook-form'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
@@ -12,7 +13,7 @@ import { Form } from '../components/ui/form'
 import { defaultSettings, FormSettingsSchema, services } from '../config'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
-import { FormSettings, Service } from '../type'
+import { FormSettings, Service, ServiceObject } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
 
@@ -22,21 +23,26 @@ export type OptionsWrapperProps = {
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
-  // const [models, setModels] = useState<ServiceObject['models']>([])
+  const [models, setModels] = useState<ServiceObject['models']>(services[0].models)
+  const [isFormChanged, setIsFormChanged] = useState(false)
 
   const form = useForm<FormSettings>({
     defaultValues: defaultSettings,
     resolver: zodResolver(FormSettingsSchema),
     mode: 'onTouched'
+    // mode: 'onTouched' // ###Thi
+    // mode: 'all'
+    // mode: 'onBlur'
   })
 
-  const watchOptions = form.watch('menuOptions')
-  const watchService = form.watch('service') as Service
-  const models = services.find(e => e.value === watchService)!.models
-
+  const watch = form.watch()
   useEffect(() => {
-    form.setValue('model', models[0].value)
-  }, [watchService, form.setValue])
+    const isChanged = !isEqual(watch, defaultSettings)
+    setIsFormChanged(isChanged)
+  }, [watch])
+
+  const watchOptions = watch.menuOptions
+  const watchService = watch.service as Service
 
   function onSubmit(data: FormSettings) {
     // toast({
@@ -50,6 +56,18 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     /* ###Thi */ console.log(`👉👉👉 data: `, data)
   }
 
+  const verifyAPIKey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('👉👉👉 verifyAPIKey')
+  }
+
+  const onServiceChange = (e: string) => {
+    const mds = services.find(_e => _e.value === e)!.models
+    setModels(mds)
+    form.setValue('model', mds[0].value)
+  }
+
   return (
     <ErrorBoundary>
       <Form {...form}>
@@ -60,8 +78,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
           <OptionsHeader version={props.version} />
 
           <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
-            <div className="container h-full p-4 py-8 lg:max-w-3xl ">
-              <div className="flex flex-row">
+            <div className="container h-full p-4 lg:max-w-3xl ">
+              <div className="flex flex-row pt-4 pb-8">
                 <div className="flex flex-col w-full gap-6">
                   <FormSingleChoice
                     control={form.control}
@@ -69,6 +87,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     data={services.filter(e => e.available)}
                     label={'AI service'}
                     labelClassName="font-medium"
+                    onChange={onServiceChange}
                   />
                   <FormSelect
                     control={form.control}
@@ -78,14 +97,20 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     labelClassName="font-medium"
                     triggerClassName="w-fit px-4"
                   />
-                  <FormInput
-                    control={form.control}
-                    type="password"
-                    name="apiKey"
-                    label="API Key"
-                    labelClassName="font-medium"
-                    placeholder={generateAPIKeyPlaceholder(watchService)}
-                  />
+                  <div className="flex flex-row items-center w-full gap-4">
+                    <FormInput
+                      className="flex-1"
+                      control={form.control}
+                      type="password"
+                      name="apiKey"
+                      label="API Key"
+                      labelClassName="font-medium"
+                      placeholder={generateAPIKeyPlaceholder(watchService)}
+                    />
+                    <Button onClick={e => verifyAPIKey(e)} variant="default">
+                      Verify
+                    </Button>
+                  </div>
                   <FormSwitch
                     control={form.control}
                     name="stream"
@@ -121,6 +146,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
               </div>
 
               <Button
+                disabled={!isFormChanged}
                 onClick={() => onSubmit(form.getValues())}
                 className="h-8 py-1 w-fit"
                 type="submit"

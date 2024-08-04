@@ -86,7 +86,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'rw-improve-writing',
     displayName: 'Improve writing',
     available: true,
-    prompt: 'Improve the given text.'
+    prompt: 'Improve the given text.',
+    nestedOptions: []
   },
   {
     system: true,
@@ -94,7 +95,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'summarize',
     displayName: 'Summarize',
     available: true,
-    prompt: 'Summarize the given text.'
+    prompt: 'Summarize the given text.',
+    nestedOptions: []
   },
   {
     system: true,
@@ -102,7 +104,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'explain-this',
     displayName: 'Explain this',
     available: true,
-    prompt: 'Explain the given text.'
+    prompt: 'Explain the given text.',
+    nestedOptions: []
   },
   {
     system: true,
@@ -110,7 +113,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'fix-spelling-grammar',
     displayName: 'Fix spelling & grammar',
     available: true,
-    prompt: 'Fix the spelling & grammar of the given text.'
+    prompt: 'Fix the spelling & grammar of the given text.',
+    nestedOptions: []
   },
   {
     system: true,
@@ -118,7 +122,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'make-shorter',
     displayName: 'Make shorter',
     available: true,
-    prompt: 'Make the given text shorter.'
+    prompt: 'Make the given text shorter.',
+    nestedOptions: []
   },
   {
     system: true,
@@ -126,7 +131,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
     value: 'make-longer',
     displayName: 'Make longer',
     available: true,
-    prompt: 'Make the given text longer.'
+    prompt: 'Make the given text longer.',
+    nestedOptions: []
   },
   {
     system: true,
