@@ -53,10 +53,28 @@ export const services: ServiceObject[] = [
   // { name: 'Llama', value: 'llama', available: false }
 ]
 
+/**
+ * For system options, we cannot use directly the react component as the icon because we cannot
+ * save them locally.
+ */
+export const systemIcons: {value: string, icon: any}[] = [
+  { value: 'translate', icon: Languages },
+  { value: 'improve-writing', icon: Sparkles },
+  { value: 'summarize', icon: SummerizeIcon },
+  { value: 'explain-this', icon: MessageCircleQuestion },
+  { value: 'fix-spelling-grammar', icon: SpellCheck },
+  { value: 'make-shorter', icon: ShorterIcon },
+  { value: 'make-longer', icon: LongerIcon },
+  { value: 'change-tone', icon: MicVocal }
+]
+
+/**
+ * "icon" property of teh system options will be taken from the systemIcons array.
+ */
 export const defaultMenuOptions: MenuOptionType[] = [
   {
     system: true,
-    icon: Languages,
+    icon: '🔥',
     value: 'translate',
     displayName: 'Translate',
     available: true,
@@ -82,8 +100,8 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: Sparkles,
-    value: 'rw-improve-writing',
+    icon: '✨',
+    value: 'improve-writing',
     displayName: 'Improve writing',
     available: true,
     prompt: 'Improve the given text.',
@@ -91,7 +109,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: SummerizeIcon,
+    icon: '📝',
     value: 'summarize',
     displayName: 'Summarize',
     available: true,
@@ -100,7 +118,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: MessageCircleQuestion,
+    icon: '❓',
     value: 'explain-this',
     displayName: 'Explain this',
     available: true,
@@ -109,7 +127,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: SpellCheck,
+    icon: '🔤',
     value: 'fix-spelling-grammar',
     displayName: 'Fix spelling & grammar',
     available: true,
@@ -118,7 +136,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: ShorterIcon,
+    icon: '🔽',
     value: 'make-shorter',
     displayName: 'Make shorter',
     available: true,
@@ -127,7 +145,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: LongerIcon,
+    icon: '🔼',
     value: 'make-longer',
     displayName: 'Make longer',
     available: true,
@@ -136,7 +154,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
   },
   {
     system: true,
-    icon: MicVocal,
+    icon: '🎤',
     value: 'change-tone',
     displayName: 'Change tone',
     available: true,
@@ -227,7 +245,7 @@ export const FormSettingsSchema = z.object({
 export const defaultSettings: FormSettings = {
   service: 'openai',
   model: 'gpt-4o-mini',
-  apiKey: 'xxxx', // ###Thi empty it
+  apiKey: '',
   stream: false,
   menuOptions: defaultMenuOptions
 }

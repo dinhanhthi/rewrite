@@ -1,6 +1,6 @@
 import React from 'react'
-import { defaultMenuOptions } from '../config'
-import { MenuOptionType } from '../options/options-wrapper'
+import { defaultMenuOptions, systemIcons } from '../config'
+import { MenuOptionType } from '../type'
 import {
   MenubarContent,
   MenubarItem,
@@ -34,12 +34,13 @@ export default function RewriteMenu(props: RewriteMenuProps) {
       onInteractOutside={handleInteractOutside}
     >
       {menus.map(menu => {
+        const SysIcon = systemIcons.find(e => e.value === menu.value)?.icon
         if (menu.nestedOptions && menu.nestedOptions.length > 0) {
           return (
             <MenubarSub key={menu.value}>
               <MenubarSubTrigger className="w-full p-0">
                 <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-                  {menu.system && <menu.icon className="w-4 h-4 text-green-700" />}
+                  {menu.system && !!SysIcon && <SysIcon className="w-4 h-4 text-green-700" />}
                   {!menu.system && menu.icon}
                   <div className="text-[14px] whitespace-nowrap cursor-pointer">
                     {menu.displayName}
@@ -73,7 +74,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
           return (
             <MenubarItem onClick={props.handleItemClicked} className="w-full p-0" key={menu.value}>
               <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
-                {menu.system && <menu.icon className="w-4 h-4 text-green-700" />}
+                {menu.system && !!SysIcon && <SysIcon className="w-4 h-4 text-green-700" />}
                 {!menu.system && menu.icon}
                 <div className="text-[14px] whitespace-nowrap">{menu.displayName}</div>
               </div>

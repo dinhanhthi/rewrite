@@ -10,34 +10,49 @@ import FormSingleChoice from '../components/form-single-choice'
 import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
-import { defaultSettings, FormSettingsSchema, services } from '../config'
+import { FormSettingsSchema, services } from '../config'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { FormSettings, Service, ServiceObject } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
+import { LoaderCircle } from 'lucide-react'
 
 export type OptionsWrapperProps = {
   className?: string
   version?: string
+  settings: FormSettings
+  setSettings: (settings: FormSettings) => void
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
-  const [models, setModels] = useState<ServiceObject['models']>(services[0].models)
+  const [loaded, setLoaded] = useState(false)
+  const [models, setModels] = useState<ServiceObject['models']>(
+    services.find(e => e.value === props.settings.service)!.models
+  )
   const [isFormChanged, setIsFormChanged] = useState(false)
 
   const form = useForm<FormSettings>({
-    defaultValues: defaultSettings,
+    defaultValues: props.settings,
     resolver: zodResolver(FormSettingsSchema),
-    mode: 'onTouched'
-    // mode: 'onTouched' // ###Thi
-    // mode: 'all'
-    // mode: 'onBlur'
+    mode: 'onChange'
   })
+
+  useEffect(() => {
+    if (props.settings && !loaded) {
+      setModels(services.find(e => e.value === props.settings.service)!.models)
+      setTimeout(() => {
+        form.reset(props.settings)
+        setTimeout(() => {
+          setLoaded(true)
+        }, 200);
+      }, 100)
+    }
+  }, [props.settings, form.reset, loaded])
 
   const watch = form.watch()
   useEffect(() => {
-    const isChanged = !isEqual(watch, defaultSettings)
+    const isChanged = !isEqual(watch, props.settings)
     setIsFormChanged(isChanged)
   }, [watch])
 
@@ -45,15 +60,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
   const watchService = watch.service as Service
 
   function onSubmit(data: FormSettings) {
-    // toast({
-    //   title: 'You submitted the following values:',
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   )
-    // })
-    /* ###Thi */ console.log(`👉👉👉 data: `, data)
+    props.setSettings(data)
+    form.reset(data)
   }
 
   const verifyAPIKey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -77,84 +85,94 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
         >
           <OptionsHeader version={props.version} />
 
-          <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
-            <div className="container h-full p-4 lg:max-w-3xl ">
-              <div className="flex flex-row pt-4 pb-8">
-                <div className="flex flex-col w-full gap-6">
-                  <FormSingleChoice
-                    control={form.control}
-                    name="service"
-                    data={services.filter(e => e.available)}
-                    label={'AI service'}
-                    labelClassName="font-medium"
-                    onChange={onServiceChange}
-                  />
-                  <FormSelect
-                    control={form.control}
-                    name="model"
-                    data={models}
-                    label={'AI service'}
-                    labelClassName="font-medium"
-                    triggerClassName="w-fit px-4"
-                  />
-                  <div className="flex flex-row items-center w-full gap-4">
-                    <FormInput
-                      className="flex-1"
-                      control={form.control}
-                      type="password"
-                      name="apiKey"
-                      label="API Key"
-                      labelClassName="font-medium"
-                      placeholder={generateAPIKeyPlaceholder(watchService)}
-                    />
-                    <Button onClick={e => verifyAPIKey(e)} variant="default">
-                      Verify
-                    </Button>
+          {loaded && (
+            <>
+              <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
+                <div className="container h-full p-4 lg:max-w-3xl ">
+                  <div className="flex flex-row pt-4 pb-8">
+                    <div className="flex flex-col w-full gap-6">
+                      <FormSingleChoice
+                        control={form.control}
+                        name="service"
+                        data={services.filter(e => e.available)}
+                        label={'AI service'}
+                        labelClassName="font-medium"
+                        onChange={onServiceChange}
+                      />
+                      <FormSelect
+                        control={form.control}
+                        name="model"
+                        data={models}
+                        label={'AI model'}
+                        labelClassName="font-medium"
+                        triggerClassName="w-fit px-4"
+                      />
+                      <div className="flex flex-row items-center w-full gap-4">
+                        <FormInput
+                          className="flex-1"
+                          control={form.control}
+                          type="password"
+                          name="apiKey"
+                          label="API Key"
+                          labelClassName="font-medium"
+                          placeholder={generateAPIKeyPlaceholder(watchService)}
+                        />
+                        <Button onClick={e => verifyAPIKey(e)} variant="default">
+                          Verify key
+                        </Button>
+                      </div>
+                      <FormSwitch
+                        control={form.control}
+                        name="stream"
+                        label="Streaming response"
+                        labelClassName="gap-4"
+                        size="smaller"
+                        controlComesFirst={false}
+                      />
+                      <FormMenuOptions
+                        control={form.control}
+                        name="menuOptions"
+                        nestedName="nestedOptions"
+                        setValue={form.setValue}
+                        getValue={form.getValues}
+                      />
+                    </div>
                   </div>
-                  <FormSwitch
-                    control={form.control}
-                    name="stream"
-                    label="Streaming response"
-                    labelClassName="gap-4"
-                    size="smaller"
-                    controlComesFirst={false}
-                  />
-                  <FormMenuOptions
-                    control={form.control}
-                    name="menuOptions"
-                    nestedName="nestedOptions"
-                    setValue={form.setValue}
-                    getValue={form.getValues}
-                  />
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="w-full border-t border-slate-200">
-            <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
-              <div className="flex flex-row items-center h-8 gap-0 w-9">
-                <RewriteBtnWrapper
-                  options={watchOptions}
-                  preview={true}
-                  className="w-8 border-none"
-                  btnClassName="text-gray-500"
-                />
-                <span className="text-sm text-gray-600 whitespace-nowrap">
-                  👈 What it looks like
-                </span>
+              <div className="w-full border-t border-slate-200">
+                <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
+                  <div className="flex flex-row items-center h-8 gap-0 w-9">
+                    <RewriteBtnWrapper
+                      options={watchOptions}
+                      preview={true}
+                      className="w-8 border-none"
+                      btnClassName="text-gray-500"
+                    />
+                    <span className="text-sm text-gray-600 whitespace-nowrap">
+                      👈 What it looks like
+                    </span>
+                  </div>
+
+                  <Button
+                    disabled={!isFormChanged}
+                    onClick={() => onSubmit(form.getValues())}
+                    className="h-8 py-1 w-fit"
+                    type="submit"
+                  >
+                    Save settings
+                  </Button>
+                </div>
               </div>
+            </>
+          )}
 
-              <Button
-                disabled={!isFormChanged}
-                onClick={() => onSubmit(form.getValues())}
-                className="h-8 py-1 w-fit"
-                type="submit"
-              >
-                Save
-              </Button>
+          {!loaded && (
+            <div className='flex items-center justify-center flex-1 w-full min-h-0 animate-pulse'>
+              <LoaderCircle className='m-auto animate-spin text-slate-500' size={40} />
             </div>
-          </div>
+          )}
         </form>
       </Form>
     </ErrorBoundary>

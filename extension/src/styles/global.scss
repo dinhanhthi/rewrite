@@ -1,6 +1,13 @@
 /* styles for all components (content script, popup, options, playground, etc.) */
 @tailwind base;
 
+[data-state="closed"] {
+  .dat-border-accordion {
+    border: none !important;
+    padding-top: 0.5rem !important;
+  }
+}
+
 .notion-font-family {
   font-family:
     ui-sans-serif,

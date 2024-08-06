@@ -23,6 +23,7 @@ import {
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
+import { systemIcons } from '../config'
 import { cn } from '../helpers/helpers'
 import { FormSettings } from '../type'
 
@@ -171,7 +172,7 @@ const Item = (props: {
   return (
     <div className="px-4">
       <div
-        className={cn('flex flex-col flex-1 border rounded-lg bg-gray-50', {
+        className={cn('flex flex-col flex-1 border rounded-lg bg-gray-50 overflow-hidden', {
           'border-green-600 shadow-sm shadow-green-100': isFocus,
           'border-slate-200': !isFocus
         })}
@@ -201,7 +202,7 @@ const Item = (props: {
             <AccordionItem value="item-1" className="border-none">
               <div
                 className={cn(
-                  'relative flex flex-col gap-4 pt-6 mt-4 border bg-transparent rounded-xl [&[data-state=closed]>*]:border-none',
+                  'relative flex flex-col gap-4 pt-6 mt-4 border bg-transparent rounded-xl dat-border-accordion',
                   {
                     'border-slate-300': !isEmpty,
                     'border-destructive': isEmpty
@@ -339,6 +340,7 @@ const ItemTemplate = (props: {
   }
 
   const initialEmoji = getValue(`${nameIndex}.icon`) as string
+  const SysIcon = systemIcons.find(e => e.value === watchValue.value)?.icon
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -386,7 +388,7 @@ const ItemTemplate = (props: {
               </Button>
             </TooltipThi>
 
-            <Badge className="bg-gray-500 hover:bg-gray-500">built-in</Badge>
+            {watchValue.system && <Badge className="bg-gray-500 hover:bg-gray-500">built-in</Badge>}
           </div>
         </div>
 
@@ -407,11 +409,11 @@ const ItemTemplate = (props: {
           />
         )}
 
-        {watchValue.system && !!watchValue.icon && (
+        {watchValue.system && !!SysIcon && (
           <div className="flex flex-row items-center gap-3">
             Icon
             <div className="flex items-center justify-center w-8 h-8 bg-white border rounded-md">
-              <watchValue.icon className="w-4 h-4 text-green-700" />
+              <SysIcon className="w-4 h-4 text-green-700" />
             </div>
           </div>
         )}
