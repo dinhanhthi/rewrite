@@ -1,5 +1,14 @@
 import data, { EmojiMartData } from '@emoji-mart/data'
-import { ChevronDown, ChevronUp, Info, Plus, Trash, TriangleAlert } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronUp,
+  CircleCheck,
+  CircleX,
+  Info,
+  Plus,
+  Trash,
+  TriangleAlert
+} from 'lucide-react'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import {
   Control,
@@ -119,7 +128,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
 
         <AddMoreOptionButton
           disabled={error?.type === 'too_big'}
-          tooltip={error?.type === 'too_big' ? error?.message as string : ''}
+          tooltip={error?.type === 'too_big' ? (error?.message as string) : ''}
           onClick={handleAddItem}
         />
       </div>
@@ -342,6 +351,7 @@ const ItemTemplate = (props: {
     isNested
   } = props
   const { setFocusedIndex, setValue, getValue } = useContext(FocusContext)
+  const [confirmRemoveAtIndex, setConfirmRemoveAtIndex] = useState<number>(-1)
 
   const handleFocus = () => {
     if (parentIndex !== undefined) {
@@ -411,11 +421,34 @@ const ItemTemplate = (props: {
           </div>
         </div>
 
-        <TooltipThi content={`Remove this ${isNested ? 'nested' : ''} option`}>
-          <button className="group" type="button" onClick={() => remove(index)}>
-            <Trash className="w-5 h-5 text-slate-500 group-hover:text-slate-700" />
-          </button>
-        </TooltipThi>
+        {confirmRemoveAtIndex !== index && (
+          <TooltipThi content={`Remove this ${isNested ? 'nested' : ''} option`}>
+            <button className="group" type="button" onClick={() => setConfirmRemoveAtIndex(index)}>
+              <Trash className="w-5 h-5 text-slate-500 group-hover:text-slate-700" />
+            </button>
+          </TooltipThi>
+        )}
+
+        {confirmRemoveAtIndex === index && (
+          <div className="flex items-center justify-center gap-2">
+            <TooltipThi content="Confirm remove">
+              <button
+                className=""
+                onClick={() => {
+                  remove(index)
+                  setConfirmRemoveAtIndex(-1)
+                }}
+              >
+                <CircleCheck className="w-5 h-5 text-slate-700" />
+              </button>
+            </TooltipThi>
+            <TooltipThi content="Cancel remove">
+              <button className="" onClick={() => setConfirmRemoveAtIndex(-1)}>
+                <CircleX className="w-5 h-5 text-slate-700" />
+              </button>
+            </TooltipThi>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col items-start gap-y-4 gap-x-6 md:flex-row md:items-center">
