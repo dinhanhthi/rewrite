@@ -5,12 +5,14 @@ import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
+import { FormSettings, MenuOptionType } from '../type'
 import OptionsHeaderSettings from './options-header-settings'
-import { MenuOptionType } from '../type'
 
 type OptionsHeaderProps = {
   version?: string
   watchOptions?: MenuOptionType[]
+  settings: FormSettings
+  setSettings: (settings: FormSettings) => void
 }
 
 export default function OptionsHeader(props: OptionsHeaderProps) {
@@ -37,7 +39,7 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
             </div>
           )}
 
-          <OptionsHeaderSettings />
+          <OptionsHeaderSettings settings={props.settings} setSettings={props.setSettings} />
 
           <TooltipThi content="Source code">
             <Button variant="ghost" size="icon" asChild>

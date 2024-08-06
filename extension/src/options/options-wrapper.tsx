@@ -85,7 +85,11 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
           onSubmit={form.handleSubmit(onSubmit)}
           className={cn('w-full h-full flex flex-col', props.className)}
         >
-          <OptionsHeader version={props.version} />
+          <OptionsHeader
+            version={props.version}
+            settings={props.settings}
+            setSettings={props.setSettings}
+          />
 
           {loaded && (
             <>

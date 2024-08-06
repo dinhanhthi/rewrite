@@ -81,7 +81,6 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
 
   const formState = useFormState({ control, name })
   const error = formState.errors?.menuOptions
-  /* ###Thi */ console.log(`👉👉👉 error: `, error)
 
   return (
     <FocusContext.Provider value={{ focusedIndex, setFocusedIndex, setValue, getValue }}>
