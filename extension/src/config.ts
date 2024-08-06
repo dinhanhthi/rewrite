@@ -6,6 +6,8 @@ import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
 import { FormSettings, MenuOptionType, ServiceObject } from './type'
 
+export const MAX_OPTIONS = 10
+
 export const services: ServiceObject[] = [
   {
     name: 'OpenAI',
@@ -57,7 +59,7 @@ export const services: ServiceObject[] = [
  * For system options, we cannot use directly the react component as the icon because we cannot
  * save them locally.
  */
-export const systemIcons: {value: string, icon: any}[] = [
+export const systemIcons: { value: string; icon: any }[] = [
   { value: 'translate', icon: Languages },
   { value: 'improve-writing', icon: Sparkles },
   { value: 'summarize', icon: SummerizeIcon },
@@ -239,7 +241,20 @@ export const FormSettingsSchema = z.object({
   model: z.string(),
   apiKey: z.string().min(1, 'This field is required.'),
   stream: z.boolean().optional().default(false),
-  menuOptions: z.array(menuOptionsSchema).min(1, 'At least one option is required.')
+  menuOptions: z
+    .array(menuOptionsSchema)
+    .min(1, 'At least one option is required.')
+    .superRefine((val, ctx) => {
+      if (val.filter(e => e.available).length > MAX_OPTIONS) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
+          inclusive: true,
+          maximum: MAX_OPTIONS,
+          type: 'array'
+        })
+      }
+    })
 })
 
 export const defaultSettings: FormSettings = {

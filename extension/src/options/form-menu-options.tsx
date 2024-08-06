@@ -8,6 +8,7 @@ import {
   UseFieldArrayRemove,
   UseFormGetValues,
   UseFormSetValue,
+  useFormState,
   useWatch
 } from 'react-hook-form'
 import FormEmoji from '../components/form-emoji'
@@ -23,7 +24,7 @@ import {
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import TooltipThi from '../components/ui/tooltip-thi'
-import { systemIcons } from '../config'
+import { MAX_OPTIONS, systemIcons } from '../config'
 import { cn } from '../helpers/helpers'
 import { FormSettings } from '../type'
 
@@ -60,7 +61,8 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
       value: `option-${parentFields.length + 1}`,
       displayName: '',
       available: true,
-      prompt: ''
+      prompt: '',
+      enableNestedOptions: false
     })
   }
 
@@ -68,13 +70,15 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  const isEmpty = parentFields.length === 0
+  const formState = useFormState({ control, name })
+  const error = formState.errors?.menuOptions
+  /* ###Thi */ console.log(`👉👉👉 error: `, error)
 
   return (
     <FocusContext.Provider value={{ focusedIndex, setFocusedIndex, setValue, getValue }}>
       <div
         className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
-          'border-destructive': isEmpty,
+          'border-destructive': !!error,
           'pb-8': parentFields.length === 0
         })}
       >
@@ -85,8 +89,8 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
               <TooltipThi content="To see what it looks like, click the Preview button in the footer">
                 <Info className="w-5 h-5 text-slate-500" />
               </TooltipThi>
-              {isEmpty && (
-                <TooltipThi content="At least one option is required!">
+              {error && (
+                <TooltipThi content={(error.message as string) || "Some option isn't valid!"}>
                   <TriangleAlert className="inline w-5 h-5 text-destructive" />
                 </TooltipThi>
               )}
@@ -95,23 +99,29 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
         </div>
 
         <div className="flex flex-col gap-4">
-          {parentFields.map((item: any, index: number) => (
-            <Item
-              key={item.id}
-              name={name}
-              nestedName={nestedName}
-              index={index}
-              control={control}
-              remove={removeParent}
-              moveItem={moveItem}
-              isFirst={index === 0}
-              isLast={index === parentFields.length - 1}
-              isFocus={focusedIndex === index}
-            />
-          ))}
+          {parentFields.map((item: any, index: number) => {
+            return (
+              <Item
+                key={item.id}
+                name={name}
+                nestedName={nestedName}
+                index={index}
+                control={control}
+                remove={removeParent}
+                moveItem={moveItem}
+                isFirst={index === 0}
+                isLast={index === parentFields.length - 1}
+                isFocus={focusedIndex === index}
+              />
+            )
+          })}
         </div>
 
-        <AddMoreOptionButton onClick={handleAddItem} />
+        <AddMoreOptionButton
+          disabled={error?.type === 'too_big'}
+          tooltip={error?.type === 'too_big' ? error?.message as string : ''}
+          onClick={handleAddItem}
+        />
       </div>
     </FocusContext.Provider>
   )
@@ -248,7 +258,16 @@ const Item = (props: {
                         />
                       ))}
                     </div>
-                    <AddMoreOptionButton onClick={handleAddNestedItem} isNested />
+                    <AddMoreOptionButton
+                      disabled={nestedFields.length > MAX_OPTIONS}
+                      tooltip={
+                        nestedFields.length > MAX_OPTIONS
+                          ? 'Maximum number of nested active options reached!'
+                          : ''
+                      }
+                      onClick={handleAddNestedItem}
+                      isNested
+                    />
                   </div>
                 </AccordionContent>
               </div>
@@ -488,23 +507,31 @@ function convertIndexToAlphabet(index: number) {
   return String.fromCharCode(65 + index)
 }
 
-const AddMoreOptionButton = (props: { onClick: () => void; isNested?: boolean }) => {
+const AddMoreOptionButton = (props: {
+  onClick: () => void
+  isNested?: boolean
+  disabled?: boolean
+  tooltip?: string
+}) => {
   return (
-    <button
-      className={cn(
-        'flex flex-row items-center gap-2 mx-auto flex-nowrap opacity-70 hover:opacity-100',
-        {
-          'scale-95': props.isNested
-        }
-      )}
-      type="button"
-      onClick={props.onClick}
-    >
-      <div className="flex items-center justify-center border-2 border-dotted rounded-md border-slate-500">
-        <Plus className="w-4 h-4" />
-      </div>{' '}
-      {`Add ${props.isNested ? 'nested' : ''} option`}
-    </button>
+    <TooltipThi content={props.tooltip || ''}>
+      <button
+        disabled={props.disabled}
+        className={cn(
+          'flex flex-row items-center gap-2 mx-auto flex-nowrap opacity-70 hover:opacity-100',
+          {
+            'scale-95': props.isNested
+          }
+        )}
+        type="button"
+        onClick={props.onClick}
+      >
+        <div className="flex items-center justify-center border-2 border-dotted rounded-md border-slate-500">
+          <Plus className="w-4 h-4" />
+        </div>{' '}
+        {`Add ${props.isNested ? 'nested' : ''} option`}
+      </button>
+    </TooltipThi>
   )
 }
 

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useState } from 'react'
 
 import { isEqual } from 'lodash'
+import { LoaderCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
@@ -16,7 +17,6 @@ import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
 import { FormSettings, Service, ServiceObject } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
-import { LoaderCircle } from 'lucide-react'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -45,7 +45,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
         form.reset(props.settings)
         setTimeout(() => {
           setLoaded(true)
-        }, 200);
+        }, 200)
       }, 100)
     }
   }, [props.settings, form.reset, loaded])
@@ -60,8 +60,10 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
   const watchService = watch.service as Service
 
   function onSubmit(data: FormSettings) {
-    props.setSettings(data)
-    form.reset(data)
+    if (form.formState.isValid) {
+      props.setSettings(data)
+      form.reset(data)
+    }
   }
 
   const verifyAPIKey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -156,7 +158,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   </div>
 
                   <Button
-                    disabled={!isFormChanged}
+                    disabled={!isFormChanged || !form.formState.isValid}
                     onClick={() => onSubmit(form.getValues())}
                     className="h-8 py-1 w-fit"
                     type="submit"
@@ -169,8 +171,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
           )}
 
           {!loaded && (
-            <div className='flex items-center justify-center flex-1 w-full min-h-0 animate-pulse'>
-              <LoaderCircle className='m-auto animate-spin text-slate-500' size={40} />
+            <div className="flex items-center justify-center flex-1 w-full min-h-0 animate-pulse">
+              <LoaderCircle className="m-auto animate-spin text-slate-500" size={40} />
             </div>
           )}
         </form>
