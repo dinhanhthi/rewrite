@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useState } from 'react'
 
 import { isEqual } from 'lodash'
-import { LoaderCircle } from 'lucide-react'
+import { Check, LoaderCircle, Search, XCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import ErrorBoundary from '../components/error-boundary'
 import FormInput from '../components/form-input'
@@ -11,9 +11,10 @@ import FormSingleChoice from '../components/form-single-choice'
 import FormSwitch from '../components/form-switch'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
+import TooltipThi from '../components/ui/tooltip-thi'
 import { FormSettingsSchema, services } from '../config'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
-import { cn, generateAPIKeyPlaceholder } from '../helpers/helpers'
+import { cn, generateAPIKeyPlaceholder, validateApiKey } from '../helpers/helpers'
 import { FormSettings, Service, ServiceObject } from '../type'
 import FormMenuOptions from './form-menu-options'
 import OptionsHeader from './options-header'
@@ -31,6 +32,9 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     services.find(e => e.value === props.settings.service)!.models
   )
   const [isFormChanged, setIsFormChanged] = useState(false)
+  // We need this "trick" instead of using formState.isValid directly because it's not updated in time
+  // especially when we remove an item from the array
+  const [isFormValid, setIsFormValid] = useState(false)
 
   const form = useForm<FormSettings>({
     defaultValues: props.settings,
@@ -53,23 +57,27 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
   const watch = form.watch()
   useEffect(() => {
     const isChanged = !isEqual(watch, props.settings)
+    setIsFormValid(form.formState.isValid)
     setIsFormChanged(isChanged)
   }, [watch])
-
-  const watchOptions = watch.menuOptions
-  const watchService = watch.service as Service
 
   function onSubmit(data: FormSettings) {
     if (form.formState.isValid) {
       props.setSettings(data)
       form.reset(data)
+      setIsValidKey(null)
     }
   }
 
-  const verifyAPIKey = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const [isVerifyingKey, setIsVerifyingKey] = useState(false)
+  const [isValidKey, setIsValidKey] = useState<boolean | null>(null)
+  const verifyAPIKey = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     e.stopPropagation()
-    console.log('👉👉👉 verifyAPIKey')
+    setIsVerifyingKey(true)
+    const isValid = await validateApiKey(watch.service as Service, watch.apiKey, watch.model)
+    setIsValidKey(isValid)
+    setIsVerifyingKey(false)
   }
 
   const onServiceChange = (e: string) => {
@@ -121,10 +129,27 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                           name="apiKey"
                           label="API Key"
                           labelClassName="font-medium"
-                          placeholder={generateAPIKeyPlaceholder(watchService)}
+                          placeholder={generateAPIKeyPlaceholder(watch.service as Service)}
+                          onChange={() => setIsValidKey(null)}
                         />
-                        <Button onClick={e => verifyAPIKey(e)} variant="default">
-                          Verify key
+                        {isValidKey && (
+                          <TooltipThi content="API Key is valid">
+                            <Check className="w-6 h-6 text-green-500" />
+                          </TooltipThi>
+                        )}
+                        {!isValidKey && isValidKey !== null && (
+                          <TooltipThi content="Invalid API Key">
+                            <XCircle className="w-6 h-6 text-destructive" />
+                          </TooltipThi>
+                        )}
+                        <Button
+                          onClick={e => verifyAPIKey(e)}
+                          className="flex flex-row items-center h-8 gap-2 px-3"
+                          variant="default"
+                        >
+                          {!isVerifyingKey && <Search className="w-4 h-4" />}
+                          {isVerifyingKey && <LoaderCircle className="w-4 h-4 animate-spin" />}
+                          Verify
                         </Button>
                       </div>
                       <FormSwitch
@@ -151,7 +176,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                 <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
                   <div className="flex flex-row items-center h-8 gap-0 w-9">
                     <RewriteBtnWrapper
-                      options={watchOptions}
+                      options={watch.menuOptions}
                       preview={true}
                       className="w-8 border-none"
                       btnClassName="text-gray-500"
@@ -162,7 +187,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   </div>
 
                   <Button
-                    disabled={!isFormChanged || !form.formState.isValid}
+                    disabled={!isFormChanged || !isFormValid}
                     onClick={() => onSubmit(form.getValues())}
                     className="h-8 py-1 w-fit"
                     type="submit"

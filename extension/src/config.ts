@@ -30,7 +30,8 @@ export const services: ServiceObject[] = [
       { value: 'mistral-small-latest', name: 'Mistral Small' },
       { value: 'mistral-medium-latest', name: 'Mistral Medium' },
       { value: 'mistral-large-latest', name: 'Mistral Large' }
-    ]
+    ],
+    disabled: true
   },
   {
     name: 'Claude',
@@ -41,7 +42,8 @@ export const services: ServiceObject[] = [
       { value: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' },
       { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
       { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
-    ]
+    ],
+    disabled: true
   },
   {
     name: 'Gemini',
@@ -107,6 +109,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Improve writing',
     available: true,
     prompt: 'Improve the given text.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -116,6 +119,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Summarize',
     available: true,
     prompt: 'Summarize the given text.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -125,6 +129,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Explain this',
     available: true,
     prompt: 'Explain the given text.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -134,6 +139,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Fix spelling & grammar',
     available: true,
     prompt: 'Fix the spelling & grammar of the given text.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -143,6 +149,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Make shorter',
     available: true,
     prompt: 'Make the given text shorter.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -152,6 +159,7 @@ export const defaultMenuOptions: MenuOptionType[] = [
     displayName: 'Make longer',
     available: true,
     prompt: 'Make the given text longer.',
+    enableNestedOptions: false,
     nestedOptions: []
   },
   {
@@ -186,7 +194,7 @@ export const MenuOptionSchema = z.object({
 })
 
 export const menuOptionsSchema = MenuOptionSchema.extend({
-  enableNestedOptions: z.boolean().optional(),
+  enableNestedOptions: z.boolean().optional().default(false),
   nestedOptions: z.array(MenuOptionSchema).optional()
 }).superRefine((data, ctx) => {
   if (data.enableNestedOptions) {

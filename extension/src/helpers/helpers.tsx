@@ -3,6 +3,7 @@
  * DON'T include any browser only code here, use helpersBrowser.ts for that
  */
 
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { clsx, type ClassValue } from 'clsx'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -189,4 +190,51 @@ export function generateAPIKeyPlaceholder(service: Service): string {
 
 export function generateTranslatePrompt(language: string) {
   return 'Translate the given text into ' + language
+}
+
+/**
+ * Validate the given API key for the given service and model
+ */
+export async function validateApiKey(service: Service, apiKey: string, model: string) {
+  try {
+    switch (service) {
+      case 'openai':
+      default: {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({ model, messages: [{ role: 'user', content: 'Hello' }] })
+        })
+        if (res.status === 200) return true
+        else return false
+      }
+
+      // TODO: wait for Claude to allow use their APIs via browser-like client (CORS issue)
+      // OR: implement it via nextjs server
+      case 'mistral': {
+        return true
+      }
+
+      // TODO: wait for Claude to allow use their APIs via browser-like client (CORS issue)
+      // OR: implement it via nextjs server
+      case 'claude': {
+        return true
+      }
+
+      case 'gemini': {
+        const genAI = new GoogleGenerativeAI(apiKey)
+        const mdl = genAI.getGenerativeModel({ model })
+        await mdl.generateContent({
+          contents: [{ role: 'user', parts: [{ text: 'Hello, who are you?' }] }]
+        })
+        return true
+      }
+    }
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }

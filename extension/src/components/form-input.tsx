@@ -18,6 +18,7 @@ type FormInputProps = {
   description?: string
   onFocus?: () => void
   disabled?: boolean
+  onChange?: (value: string) => void
 }
 
 export default function FormInput(props: FormInputProps) {
@@ -58,7 +59,7 @@ export default function FormInput(props: FormInputProps) {
                 })}
               >
                 {!!label && (
-                  <div className='flex flex-row items-center gap-2'>
+                  <div className="flex flex-row items-center gap-2">
                     <FormLabel className={cn('text-base whitespace-nowrap', labelClassName)}>
                       {label}
                     </FormLabel>
@@ -71,7 +72,9 @@ export default function FormInput(props: FormInputProps) {
                 )}
                 {!!description && (
                   <>
-                    <FormDescription className={!wrap ? 'hidden' : ''}>{description}</FormDescription>
+                    <FormDescription className={!wrap ? 'hidden' : ''}>
+                      {description}
+                    </FormDescription>
                     {!wrap && (
                       <TooltipThi content={description}>
                         <Info className="w-4 h-4 opacity-60 hover:opacity-100" />
@@ -97,7 +100,10 @@ export default function FormInput(props: FormInputProps) {
                     {...field}
                     type={type === 'password' && showPassword ? 'text' : type}
                     placeholder={placeholder}
-                    onChange={field.onChange}
+                    onChange={e => {
+                      field.onChange(e)
+                      props.onChange?.(e.target.value)
+                    }}
                     value={field.value}
                     className="flex-1 min-w-0"
                     autoComplete={type === 'password' ? 'current-password' : undefined}
