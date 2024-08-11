@@ -52,7 +52,7 @@ export default function OptionsHeaderSettings(props: OptionsHeaderSettingsProps)
 
   return (
     <DropdownMenu>
-      <TooltipThi content="Configs">
+      <TooltipThi content="Settings">
         <DropdownMenuTrigger asChild className="bg-none">
           <Button size="icon" variant="ghost">
             <SlidersHorizontal className="w-5 h-5" />
@@ -61,10 +61,10 @@ export default function OptionsHeaderSettings(props: OptionsHeaderSettingsProps)
       </TooltipThi>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => handleDownloadConfigs()}>
-          <Download className="mr-1.5 h-4 w-4" /> Donwload configs
+          <Download className="mr-1.5 h-4 w-4" /> Donwload settings
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleUploadConfigs()}>
-          <Upload className="mr-1.5 h-4 w-4" /> Upload configs
+          <Upload className="mr-1.5 h-4 w-4" /> Upload settings
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

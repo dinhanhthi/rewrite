@@ -22,6 +22,15 @@ export const services: ServiceObject[] = [
     ]
   },
   {
+    name: 'Gemini',
+    value: 'gemini',
+    available: true,
+    models: [
+      { value: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+      { value: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro' }
+    ]
+  },
+  {
     name: 'Mistral',
     value: 'mistral',
     available: true,
@@ -31,7 +40,8 @@ export const services: ServiceObject[] = [
       { value: 'mistral-medium-latest', name: 'Mistral Medium' },
       { value: 'mistral-large-latest', name: 'Mistral Large' }
     ],
-    disabled: true
+    disabled: true,
+    note: 'Mistral doesn\'t support browser-like clients yet.'
   },
   {
     name: 'Claude',
@@ -43,16 +53,8 @@ export const services: ServiceObject[] = [
       { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
       { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
     ],
-    disabled: true
-  },
-  {
-    name: 'Gemini',
-    value: 'gemini',
-    available: true,
-    models: [
-      { value: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
-      { value: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro' }
-    ]
+    disabled: true,
+    note: 'Claude doesn\'t support browser-like clients yet.'
   }
   // { name: 'Llama', value: 'llama', available: false }
 ]

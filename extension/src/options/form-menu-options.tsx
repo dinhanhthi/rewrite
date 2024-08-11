@@ -50,6 +50,7 @@ export type FormMenuOptionsProps = {
   nestedName: string
   setValue: UseFormSetValue<FormSettings>
   getValue: UseFormGetValues<FormSettings>
+  bodyContainerRef?: React.RefObject<HTMLDivElement>
 }
 
 export default function FormMenuOptions(props: FormMenuOptionsProps) {
@@ -74,6 +75,22 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
       enableNestedOptions: false
     })
   }
+
+  // Scroll to the bottom of the container when a new item is added (except the first load)
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  useEffect(() => {
+    if (isFirstLoad) {
+      setIsFirstLoad(false)
+      return
+    }
+
+    if (props.bodyContainerRef?.current) {
+      props.bodyContainerRef.current.scrollTo({
+        top: props.bodyContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [parentFields.length])
 
   const moveItem = (index: number, direction: MoveItemDirection) => {
     moveItemGeneral(index, direction, moveParent, parentFields)
@@ -438,12 +455,12 @@ const ItemTemplate = (props: {
                   setConfirmRemoveAtIndex(-1)
                 }}
               >
-                <CircleCheck className="w-5 h-5 text-slate-700" />
+                <CircleCheck className="w-5 h-5 text-destructive" />
               </button>
             </TooltipThi>
             <TooltipThi content="Cancel remove">
               <button className="" onClick={() => setConfirmRemoveAtIndex(-1)}>
-                <CircleX className="w-5 h-5 text-slate-700" />
+                <CircleX className="w-5 h-5 text-destructive" />
               </button>
             </TooltipThi>
           </div>

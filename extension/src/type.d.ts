@@ -13,6 +13,7 @@ export interface ServiceObject {
   available?: boolean
   models: { value: string; name: string }[]
   disabled?: boolean // still shown but disabled
+  note?: string
 }
 
 export type MenuOptionType = z.infer<typeof menuOptionsSchema>

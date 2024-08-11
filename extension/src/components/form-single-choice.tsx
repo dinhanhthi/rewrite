@@ -9,7 +9,7 @@ import TooltipThi from './ui/tooltip-thi'
 type FormSingleChoiceProps = {
   control: Control<any, any>
   name: string
-  data: { value: string; name: string; disabled?: boolean }[]
+  data: any[]
   label: string
   labelClassName?: string
   wrap?: boolean
@@ -51,7 +51,7 @@ export default function FormSingleChoice(props: FormSingleChoiceProps) {
                   <FormLabel className="!ml-2 font-normal flex items-center gap-2">
                     <span className={e.disabled ? 'opacity-60' : ''}>{e.name}</span>
                     {e.disabled && (
-                      <TooltipThi content="not supported yet">
+                      <TooltipThi content={e.note ?? 'not supported yet'}>
                         <Info size={16} className="text-slate-500" />
                       </TooltipThi>
                     )}

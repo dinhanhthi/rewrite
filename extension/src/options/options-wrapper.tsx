@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { isEqual } from 'lodash'
 import { Check, LoaderCircle, Search, XCircle } from 'lucide-react'
@@ -86,6 +86,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     form.setValue('model', mds[0].value)
   }
 
+  const bodyContainerRef = useRef<HTMLDivElement>(null)
+
   return (
     <ErrorBoundary>
       <Form {...form}>
@@ -101,7 +103,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
           {loaded && (
             <>
-              <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
+              <div ref={bodyContainerRef} className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
                 <div className="container h-full p-4 lg:max-w-3xl ">
                   <div className="flex flex-row pt-4 pb-8">
                     <div className="flex flex-col w-full gap-6">
@@ -166,6 +168,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         nestedName="nestedOptions"
                         setValue={form.setValue}
                         getValue={form.getValues}
+                        bodyContainerRef={bodyContainerRef}
                       />
                     </div>
                   </div>
