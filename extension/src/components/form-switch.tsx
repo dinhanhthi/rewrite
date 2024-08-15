@@ -18,36 +18,34 @@ type FormSwitchProps = {
 }
 
 export default function FormSwitch(props: FormSwitchProps) {
-  const {
-    control,
-    className,
-    name,
-    label,
-    description,
-    size = 'default',
-    labelClassName,
-    tooltip,
-    controlComesFirst
-  } = props
   return (
     <FormField
-      control={control}
-      name={name}
+      control={props.control}
+      name={props.name}
       render={({ field }) => (
-        <FormItem className={cn('flex flex-col gap-1', className)}>
-          <TooltipThi content={tooltip}>
-            <div className={cn('flex items-center gap-3', {
-              'flex-row-reverse justify-end': controlComesFirst
-            })}>
-              {!!label && (
-                <FormLabel className={cn('text-base', labelClassName)}>{label}</FormLabel>
+        <FormItem className={cn('flex flex-col gap-1', props.className)}>
+          <TooltipThi content={props.tooltip}>
+            <div
+              className={cn('flex items-center gap-3', {
+                'flex-row-reverse justify-end': props.controlComesFirst
+              })}
+            >
+              {!!props.label && (
+                <FormLabel className={cn('text-base', props.labelClassName)}>
+                  {props.label}
+                </FormLabel>
               )}
               <FormControl>
-                <Switch {...field} checked={field.value} onCheckedChange={field.onChange} size={size} />
+                <Switch
+                  {...field}
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  size={props.size}
+                />
               </FormControl>
             </div>
           </TooltipThi>
-          {!!description && <FormDescription>{description}</FormDescription>}
+          {!!props.description && <FormDescription>{props.description}</FormDescription>}
         </FormItem>
       )}
     />

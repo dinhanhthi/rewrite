@@ -54,7 +54,6 @@ export type FormMenuOptionsProps = {
 }
 
 export default function FormMenuOptions(props: FormMenuOptionsProps) {
-  const { control, name, nestedName, setValue, getValue } = props
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
 
   const {
@@ -62,7 +61,7 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     append: appendParent,
     remove: removeParent,
     move: moveParent
-  } = useFieldArray({ control, name })
+  } = useFieldArray({ control: props.control, name: props.name })
 
   const handleAddItem = () => {
     appendParent({
@@ -96,11 +95,13 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  const formState = useFormState({ control, name })
+  const formState = useFormState({ control: props.control, name: props.name })
   const error = formState.errors?.menuOptions
 
   return (
-    <FocusContext.Provider value={{ focusedIndex, setFocusedIndex, setValue, getValue }}>
+    <FocusContext.Provider
+      value={{ focusedIndex, setFocusedIndex, setValue: props.setValue, getValue: props.getValue }}
+    >
       <div
         className={cn('relative flex flex-col gap-4 py-4 pt-6 mt-4 border rounded-xl', {
           'border-destructive': !!error,
@@ -128,10 +129,10 @@ export default function FormMenuOptions(props: FormMenuOptionsProps) {
             return (
               <Item
                 key={item.id}
-                name={name}
-                nestedName={nestedName}
+                name={props.name}
+                nestedName={props.nestedName}
                 index={index}
-                control={control}
+                control={props.control}
                 remove={removeParent}
                 moveItem={moveItem}
                 isFirst={index === 0}
@@ -163,9 +164,8 @@ const Item = (props: {
   isLast: boolean
   isFocus: boolean
 }) => {
-  const { index, control, name, nestedName, remove, moveItem, isFirst, isLast, isFocus } = props
-  const nameIndex = `${name}[${index}]`
-  const watchValue = useWatch({ control, name: nameIndex })
+  const nameIndex = `${name}[${props.index}]`
+  const watchValue = useWatch({ control: props.control, name: nameIndex })
 
   const {
     fields: nestedFields,
@@ -173,8 +173,8 @@ const Item = (props: {
     remove: removeNested,
     move: moveNested
   } = useFieldArray({
-    control,
-    name: `${nameIndex}.${nestedName}`
+    control: props.control,
+    name: `${nameIndex}.${props.nestedName}`
   })
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -191,7 +191,7 @@ const Item = (props: {
     appendNested({
       system: false,
       icon: getRandomEmoji(),
-      value: `option-${index}-${nestedFields.length + 1}`,
+      value: `option-${props.index}-${nestedFields.length + 1}`,
       displayName: '',
       available: true,
       prompt: ''
@@ -208,20 +208,20 @@ const Item = (props: {
     <div className="px-4">
       <div
         className={cn('flex flex-col flex-1 border rounded-lg bg-gray-50 overflow-hidden', {
-          'border-green-600 shadow-sm shadow-green-100': isFocus,
-          'border-slate-200': !isFocus
+          'border-green-600 shadow-sm shadow-green-100': props.isFocus,
+          'border-slate-200': !props.isFocus
         })}
       >
         <ItemTemplate
           watchValue={watchValue}
-          index={index}
-          control={control}
+          index={props.index}
+          control={props.control}
           nameIndex={nameIndex}
-          moveItem={moveItem}
-          remove={remove}
-          isFirst={isFirst}
-          isLast={isLast}
-          parentIndex={index}
+          moveItem={props.moveItem}
+          remove={props.remove}
+          isFirst={props.isFirst}
+          isLast={props.isLast}
+          parentIndex={props.index}
         />
 
         <div
@@ -248,7 +248,7 @@ const Item = (props: {
                   <AccordionTrigger className="h-4"></AccordionTrigger>
                   <span>Nested options of{'  '}</span>
                   <span className="inline-flex items-center justify-center w-6 h-6 text-sm text-white scale-90 bg-gray-400 border rounded-full">
-                    {index + 1}
+                    {props.index + 1}
                   </span>
                   <span className="text-sm opacity-80">({nestedFields.length} items)</span>
                   {isEmpty && (
@@ -271,11 +271,11 @@ const Item = (props: {
                       {nestedFields.map((nestedItem, nestedIndex) => (
                         <NestedItem
                           index={nestedIndex}
-                          parentIndex={index}
+                          parentIndex={props.index}
                           key={nestedItem.id}
-                          parentName={name}
-                          name={nestedName}
-                          control={control}
+                          parentName={props.name}
+                          name={props.nestedName}
+                          control={props.control}
                           remove={removeNested}
                           moveItem={moveNestedItem}
                           isFirst={nestedIndex === 0}
@@ -315,23 +315,22 @@ const NestedItem = (props: {
   isFirst: boolean
   isLast: boolean
 }) => {
-  const { parentIndex, parentName, name, index, control, remove, moveItem, isFirst, isLast } = props
-  const nameIndex = `${parentName}[${parentIndex}].${name}[${index}]`
-  const watchValue = useWatch({ control, name: nameIndex })
+  const nameIndex = `${props.parentName}[${props.parentIndex}].${props.name}[${props.index}]`
+  const watchValue = useWatch({ control: props.control, name: nameIndex })
 
   return (
     <div className="px-4">
       <div className="flex flex-col gap-4 bg-gray-100 border rounded-lg border-slate-200">
         <ItemTemplate
           watchValue={watchValue}
-          index={index}
-          parentIndex={parentIndex}
-          control={control}
+          index={props.index}
+          parentIndex={props.parentIndex}
+          control={props.control}
           nameIndex={nameIndex}
-          moveItem={moveItem}
-          remove={remove}
-          isFirst={isFirst}
-          isLast={isLast}
+          moveItem={props.moveItem}
+          remove={props.remove}
+          isFirst={props.isFirst}
+          isLast={props.isLast}
           isNested={true}
         />
       </div>
@@ -354,24 +353,12 @@ const ItemTemplate = (props: {
   isLast: boolean
   isNested?: boolean
 }) => {
-  const {
-    watchValue,
-    index,
-    parentIndex,
-    control,
-    nameIndex,
-    moveItem,
-    remove,
-    isFirst,
-    isLast,
-    isNested
-  } = props
   const { setFocusedIndex, setValue, getValue } = useContext(FocusContext)
   const [confirmRemoveAtIndex, setConfirmRemoveAtIndex] = useState<number>(-1)
 
   const handleFocus = () => {
-    if (parentIndex !== undefined) {
-      setFocusedIndex(parentIndex)
+    if (props.parentIndex !== undefined) {
+      setFocusedIndex(props.parentIndex)
     }
   }
 
@@ -381,37 +368,37 @@ const ItemTemplate = (props: {
   ) => {
     e.preventDefault()
     e.stopPropagation()
-    moveItem(index, direction)
+    props.moveItem(props.index, direction)
   }
 
-  const initialEmoji = getValue(`${nameIndex}.icon`) as string
-  const SysIcon = systemIcons.find(e => e.value === watchValue.value)?.icon
+  const initialEmoji = getValue(`${props.nameIndex}.icon`) as string
+  const SysIcon = systemIcons.find(e => e.value === props.watchValue.value)?.icon
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-row items-center gap-4">
           <div className="flex items-center justify-center w-6 h-6 text-sm font-semibold text-white bg-gray-600 border rounded-full shadow-sm">
-            {isNested ? convertIndexToAlphabet(index) : index + 1}
+            {props.isNested ? convertIndexToAlphabet(props.index) : props.index + 1}
           </div>
 
           <FormSwitch
-            control={control}
-            name={`${nameIndex}.available`}
+            control={props.control}
+            name={`${props.nameIndex}.available`}
             labelClassName="text-sm"
             size="smaller"
             tooltip={
-              watchValue.enableNestedOptions
-                ? `Disable this ${isNested ? 'nested' : ''} option`
-                : `Enable this ${isNested ? 'nested' : ''} option`
+              props.watchValue.enableNestedOptions
+                ? `Disable this ${props.isNested ? 'nested' : ''} option`
+                : `Enable this ${props.isNested ? 'nested' : ''} option`
             }
             controlComesFirst={true}
           />
 
           <div className="flex flex-row items-center gap-2">
-            <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option up`}>
+            <TooltipThi content={`Move this ${props.isNested ? 'nested' : ''} option up`}>
               <Button
-                disabled={isFirst}
+                disabled={props.isFirst}
                 className="w-6 h-6"
                 variant="ghost"
                 size="icon"
@@ -421,9 +408,9 @@ const ItemTemplate = (props: {
               </Button>
             </TooltipThi>
 
-            <TooltipThi content={`Move this ${isNested ? 'nested' : ''} option down`}>
+            <TooltipThi content={`Move this ${props.isNested ? 'nested' : ''} option down`}>
               <Button
-                disabled={isLast}
+                disabled={props.isLast}
                 className="w-6 h-6"
                 variant="ghost"
                 size="icon"
@@ -433,25 +420,31 @@ const ItemTemplate = (props: {
               </Button>
             </TooltipThi>
 
-            {watchValue.system && <Badge className="bg-gray-500 hover:bg-gray-500">built-in</Badge>}
+            {props.watchValue.system && (
+              <Badge className="bg-gray-500 hover:bg-gray-500">built-in</Badge>
+            )}
           </div>
         </div>
 
-        {confirmRemoveAtIndex !== index && (
-          <TooltipThi content={`Remove this ${isNested ? 'nested' : ''} option`}>
-            <button className="group" type="button" onClick={() => setConfirmRemoveAtIndex(index)}>
+        {confirmRemoveAtIndex !== props.index && (
+          <TooltipThi content={`Remove this ${props.isNested ? 'nested' : ''} option`}>
+            <button
+              className="group"
+              type="button"
+              onClick={() => setConfirmRemoveAtIndex(props.index)}
+            >
               <Trash className="w-5 h-5 text-slate-500 group-hover:text-slate-700" />
             </button>
           </TooltipThi>
         )}
 
-        {confirmRemoveAtIndex === index && (
+        {confirmRemoveAtIndex === props.index && (
           <div className="flex items-center justify-center gap-2">
             <TooltipThi content="Confirm remove">
               <button
                 className=""
                 onClick={() => {
-                  remove(index)
+                  props.remove(props.index)
                   setConfirmRemoveAtIndex(-1)
                 }}
               >
@@ -468,16 +461,16 @@ const ItemTemplate = (props: {
       </div>
 
       <div className="flex flex-col items-start gap-y-4 gap-x-6 md:flex-row md:items-center">
-        {!watchValue.system && (
+        {!props.watchValue.system && (
           <FormEmoji
-            control={control}
-            name={`${nameIndex}.icon`}
+            control={props.control}
+            name={`${props.nameIndex}.icon`}
             initialValue={initialEmoji}
             setValue={setValue}
           />
         )}
 
-        {watchValue.system && !!SysIcon && (
+        {props.watchValue.system && !!SysIcon && (
           <div className="flex flex-row items-center gap-3">
             Icon
             <div className="flex items-center justify-center w-8 h-8 bg-white border rounded-md">
@@ -487,25 +480,25 @@ const ItemTemplate = (props: {
         )}
 
         <FormInput
-          control={control}
+          control={props.control}
           type="text"
-          name={`${nameIndex}.displayName`}
+          name={`${props.nameIndex}.displayName`}
           label="Disaply name"
           labelClassName="text-sm"
           placeholder="eg. Translate"
           className="w-full"
           wrap={false}
           onFocus={handleFocus}
-          disabled={watchValue.system}
+          disabled={props.watchValue.system}
         />
       </div>
 
-      {!isNested && !watchValue.system && (
+      {!props.isNested && !props.watchValue.system && (
         <FormSwitch
-          control={control}
-          name={`${nameIndex}.enableNestedOptions`}
+          control={props.control}
+          name={`${props.nameIndex}.enableNestedOptions`}
           label={
-            watchValue.enableNestedOptions
+            props.watchValue.enableNestedOptions
               ? "Nested options are enabled (parent's prompt is disabled)"
               : "Nested options are disabled (parent's prompt is required)"
           }
@@ -515,16 +508,16 @@ const ItemTemplate = (props: {
         />
       )}
 
-      {!watchValue.system && (
+      {!props.watchValue.system && (
         <FormTextarea
-          disabled={watchValue.enableNestedOptions}
-          control={control}
-          name={`${nameIndex}.prompt`}
+          disabled={props.watchValue.enableNestedOptions}
+          control={props.control}
+          name={`${props.nameIndex}.prompt`}
           label="Prompt"
           labelClassName="text-sm"
           placeholder="eg. Translate the given text to English."
           className={cn('w-full', {
-            hidden: watchValue.enableNestedOptions
+            hidden: props.watchValue.enableNestedOptions
           })}
           wrap={true}
           rows={2}

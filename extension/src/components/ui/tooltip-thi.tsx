@@ -13,31 +13,22 @@ type TooltipThiProps = {
 }
 
 export default function TooltipThi(props: TooltipThiProps) {
-  const {
-    children,
-    content,
-    contentClassName,
-    delayDuration = 100,
-    skipDelayDuration = 10,
-    disableHoverableContent = true,
-    asChild = true
-  } = props
-  return !!content ? (
+  return !!props.content ? (
     <TooltipProvider
-      delayDuration={delayDuration}
-      skipDelayDuration={skipDelayDuration}
-      disableHoverableContent={disableHoverableContent}
+      delayDuration={props.delayDuration}
+      skipDelayDuration={props.skipDelayDuration}
+      disableHoverableContent={props.disableHoverableContent}
     >
       <Tooltip>
-        <TooltipTrigger asChild={asChild}>{children}</TooltipTrigger>
+        <TooltipTrigger asChild={props.asChild}>{props.children}</TooltipTrigger>
         <TooltipContent
-          className={contentClassName ?? 'text-[12px] text-white bg-black px-1.5 py-1'}
+          className={props.contentClassName ?? 'text-[12px] text-white bg-black px-1.5 py-1'}
         >
-          {content}
+          {props.content}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   ) : (
-    children
+    props.children
   )
 }

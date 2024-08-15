@@ -22,46 +22,33 @@ type FormInputProps = {
 }
 
 export default function FormInput(props: FormInputProps) {
-  const {
-    control,
-    name,
-    label,
-    placeholder = '',
-    type = 'text',
-    wrap,
-    className,
-    description,
-    labelClassName,
-    onFocus,
-    disabled
-  } = props
   const [showPassword, setShowPassword] = useState(false)
   return (
     <FormField
-      control={control}
-      name={name}
+      control={props.control}
+      name={props.name}
       render={({ field, fieldState: { error } }) => {
         return (
           <FormItem
             className={cn(
               'flex flex-row items-center gap-x-4',
               {
-                'flex-wrap gap-y-2': wrap
+                'flex-wrap gap-y-2': props.wrap
               },
-              className
+              props.className
             )}
           >
-            {(!!label || !!description) && (
+            {(!!props.label || !!props.description) && (
               <div
                 className={cn('flex', {
-                  'flex-row gap-2 items-center': !wrap,
-                  'flex-col gap-0.5': wrap
+                  'flex-row gap-2 items-center': !props.wrap,
+                  'flex-col gap-0.5': props.wrap
                 })}
               >
-                {!!label && (
+                {!!props.label && (
                   <div className="flex flex-row items-center gap-2">
-                    <FormLabel className={cn('text-base whitespace-nowrap', labelClassName)}>
-                      {label}
+                    <FormLabel className={cn('text-base whitespace-nowrap', props.labelClassName)}>
+                      {props.label}
                     </FormLabel>
                     {!!error?.message && (
                       <TooltipThi content={error.message}>
@@ -70,13 +57,13 @@ export default function FormInput(props: FormInputProps) {
                     )}
                   </div>
                 )}
-                {!!description && (
+                {!!props.description && (
                   <>
-                    <FormDescription className={!wrap ? 'hidden' : ''}>
-                      {description}
+                    <FormDescription className={!props.wrap ? 'hidden' : ''}>
+                      {props.description}
                     </FormDescription>
-                    {!wrap && (
-                      <TooltipThi content={description}>
+                    {!props.wrap && (
+                      <TooltipThi content={props.description}>
                         <Info className="w-4 h-4 opacity-60 hover:opacity-100" />
                       </TooltipThi>
                     )}
@@ -87,7 +74,7 @@ export default function FormInput(props: FormInputProps) {
 
             <div className="flex flex-row items-center w-full gap-2 flex-nowrap">
               <div className="relative w-full">
-                {type === 'password' && (
+                {props.type === 'password' && (
                   <input
                     type="text"
                     name="username"
@@ -98,21 +85,21 @@ export default function FormInput(props: FormInputProps) {
                 <FormControl>
                   <Input
                     {...field}
-                    type={type === 'password' && showPassword ? 'text' : type}
-                    placeholder={placeholder}
+                    type={props.type === 'password' && showPassword ? 'text' : props.type}
+                    placeholder={props.placeholder}
                     onChange={e => {
                       field.onChange(e)
                       props.onChange?.(e.target.value)
                     }}
                     value={field.value}
                     className="flex-1 min-w-0"
-                    autoComplete={type === 'password' ? 'current-password' : undefined}
-                    onFocus={onFocus}
-                    disabled={disabled}
+                    autoComplete={props.type === 'password' ? 'current-password' : undefined}
+                    onFocus={props.onFocus}
+                    disabled={props.disabled}
                   />
                 </FormControl>
               </div>
-              {type === 'password' && (
+              {props.type === 'password' && (
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}

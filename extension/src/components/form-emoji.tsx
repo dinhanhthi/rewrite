@@ -15,25 +15,24 @@ type FormEmojiProps = {
 }
 
 export default function FormEmoji(props: FormEmojiProps) {
-  const { control, name, setValue, initialValue } = props
-  const [selectedEmoji, setSelectedEmoji] = useState(initialValue || '😀')
+  const [selectedEmoji, setSelectedEmoji] = useState(props.initialValue || '😀')
 
   const onSelect = (emoji: any) => {
-    setValue(name, emoji.native, { shouldValidate: true, shouldDirty: true })
+    props.setValue(name, emoji.native, { shouldValidate: true, shouldDirty: true })
     setSelectedEmoji(emoji.native)
   }
 
   return (
     <FormField
-      control={control}
-      name={name}
+      control={props.control}
+      name={props.name}
       render={() => {
         return (
           <Popover>
-            <div className='flex flex-row items-center gap-3'>
+            <div className="flex flex-row items-center gap-3">
               Icon
               <PopoverTrigger asChild>
-                <Button variant="outline" size="icon" className='w-8 h-8 p-0'>
+                <Button variant="outline" size="icon" className="w-8 h-8 p-0">
                   {selectedEmoji}
                 </Button>
               </PopoverTrigger>
