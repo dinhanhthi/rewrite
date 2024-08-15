@@ -13,17 +13,18 @@ import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { FormSettingsSchema, services } from '../config'
-import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { cn, generateAPIKeyPlaceholder, validateApiKey } from '../helpers/helpers'
-import { FormSettings, Service, ServiceObject } from '../type'
-import FormMenuOptions from './form-menu-options'
+import { FormMenuOptions, FormSettings, Service, ServiceObject } from '../type'
 import OptionsHeader from './options-header'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog'
 
 export type OptionsWrapperProps = {
   className?: string
   version?: string
   settings: FormSettings
   setSettings: (settings: FormSettings) => void
+  menuOptions: FormMenuOptions
+  setMenuOptions: (menuOptions: FormMenuOptions) => void
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
@@ -103,7 +104,10 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
           {loaded && (
             <>
-              <div ref={bodyContainerRef} className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
+              <div
+                ref={bodyContainerRef}
+                className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar"
+              >
                 <div className="container h-full p-4 lg:max-w-3xl ">
                   <div className="flex flex-row pt-4 pb-8">
                     <div className="flex flex-col w-full gap-6">
@@ -162,14 +166,28 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         size="smaller"
                         controlComesFirst={false}
                       />
-                      <FormMenuOptions
+
+                      <Dialog>
+                        <DialogTrigger>Menu options:</DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will permanently delete your
+                              account and remove your data from our servers.
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+
+                      {/* <FormMenuOptions
                         control={form.control}
                         name="menuOptions"
                         nestedName="nestedOptions"
                         setValue={form.setValue}
                         getValue={form.getValues}
                         bodyContainerRef={bodyContainerRef}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -177,9 +195,9 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
               <div className="w-full border-t border-slate-200">
                 <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
-                  <div className="flex flex-row items-center h-8 gap-0 w-9">
+                  {/* <div className="flex flex-row items-center h-8 gap-0 w-9">
                     <RewriteBtnWrapper
-                      options={watch.menuOptions}
+                      options={menuOptions}
                       preview={true}
                       className="w-8 border-none"
                       btnClassName="text-gray-500"
@@ -187,7 +205,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     <span className="text-sm text-gray-600 whitespace-nowrap">
                       👈 What it looks like
                     </span>
-                  </div>
+                  </div> */}
 
                   <Button
                     disabled={!isFormChanged || !isFormValid}

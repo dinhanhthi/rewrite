@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { FormSettingsSchema, MenuOptionSchema, menuOptionsSchema } from './config'
+import { FormMenuOptionsSchema, FormSettingsSchema, MenuOptionSchema, menuOptionsSchema } from './config'
 
 export type Mode = 'browser' | 'playground'
 
@@ -21,3 +21,5 @@ export type MenuOptionType = z.infer<typeof menuOptionsSchema>
 export type MenuNestedOptionType = z.infer<typeof MenuOptionSchema>
 
 export type FormSettings = z.infer<typeof FormSettingsSchema>
+
+export type FormMenuOptions = z.infer<typeof FormMenuOptionsSchema>

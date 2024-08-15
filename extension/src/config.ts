@@ -41,7 +41,7 @@ export const services: ServiceObject[] = [
       { value: 'mistral-large-latest', name: 'Mistral Large' }
     ],
     disabled: true,
-    note: 'Mistral doesn\'t support browser-like clients yet.'
+    note: "Mistral doesn't support browser-like clients yet."
   },
   {
     name: 'Claude',
@@ -54,7 +54,7 @@ export const services: ServiceObject[] = [
       { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
     ],
     disabled: true,
-    note: 'Claude doesn\'t support browser-like clients yet.'
+    note: "Claude doesn't support browser-like clients yet."
   }
   // { name: 'Llama', value: 'llama', available: false }
 ]
@@ -250,27 +250,43 @@ export const FormSettingsSchema = z.object({
   }),
   model: z.string(),
   apiKey: z.string().min(1, 'This field is required.'),
-  stream: z.boolean().optional().default(false),
-  menuOptions: z
-    .array(menuOptionsSchema)
-    .min(1, 'At least one option is required.')
-    .superRefine((val, ctx) => {
-      if (val.filter(e => e.available).length > MAX_OPTIONS) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_big,
-          message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
-          inclusive: true,
-          maximum: MAX_OPTIONS,
-          type: 'array'
-        })
-      }
-    })
+  stream: z.boolean().optional().default(false)
+  // menuOptions: z
+  //   .array(menuOptionsSchema)
+  //   .min(1, 'At least one option is required.')
+  //   .superRefine((val, ctx) => {
+  //     if (val.filter(e => e.available).length > MAX_OPTIONS) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.too_big,
+  //         message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
+  //         inclusive: true,
+  //         maximum: MAX_OPTIONS,
+  //         type: 'array'
+  //       })
+  //     }
+  //   })
 })
 
 export const defaultSettings: FormSettings = {
   service: 'openai',
   model: 'gpt-4o-mini',
   apiKey: '',
-  stream: false,
-  menuOptions: defaultMenuOptions
+  stream: false
+  // menuOptions: defaultMenuOptions
 }
+
+export const FormMenuOptionsSchema = z
+  .array(menuOptionsSchema)
+  .min(1, 'At least one option is required.')
+  .superRefine((val, ctx) => {
+    if (val.filter(e => e.available).length > MAX_OPTIONS) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
+        inclusive: true,
+        maximum: MAX_OPTIONS,
+        type: 'array'
+      })
+    }
+  })
+  .default(defaultMenuOptions)
