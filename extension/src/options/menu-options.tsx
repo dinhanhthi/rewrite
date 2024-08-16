@@ -1,5 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { isEqual } from 'lodash'
 import { Settings } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Button } from '../components/ui/button'
 import {
   Dialog,
@@ -11,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '../components/ui/dialog'
+import { FormMenuOptionsSchema } from '../config'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { FormMenuOptions } from '../type'
 import MenuOptionsForm from './menu-options-form'
@@ -21,7 +25,39 @@ export type MenuOptionsProps = {
 }
 
 export default function MenuOptions(props: MenuOptionsProps) {
-  const [triggerAdd, setTriggerAdd] = React.useState(false)
+  const [triggerAdd, setTriggerAdd] = useState(false)
+  const [isFormChanged, setIsFormChanged] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(false)
+
+  const form = useForm<FormMenuOptions>({
+    defaultValues: props.menuOptions,
+    resolver: zodResolver(FormMenuOptionsSchema),
+    // mode: 'onChange'
+    // mode: 'all'
+    mode: 'onBlur'
+  })
+
+  const watch = form.watch()
+  useEffect(() => {
+    // /* ###Thi */ console.log(`👉👉👉 watch: `, watch)
+    // /* ###Thi */ console.log(`👉👉👉 props.menuOptions: `, props.menuOptions)
+    const isChanged = !isEqual(watch, props.menuOptions)
+    // /* ###Thi */ console.log(`👉👉👉 isChanged: `, isChanged)
+    // /* ###Thi */ console.log(`👉👉👉 form.formState.isValid: `, form.formState.isValid)
+    // /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
+    setIsFormValid(form.formState.isValid)
+    setIsFormChanged(isChanged)
+  }, [watch])
+
+  function onSubmit() {
+    /* ###Thi */ console.log(`👉👉👉 isFormChanged: `, isFormChanged);
+    /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
+    if (form.formState.isValid && isFormChanged) {
+      /* ###Thi */ console.log(`👉👉👉 Saved clicked`);
+      // props.setMenuOptions(data)
+      // form.reset(data)
+    }
+  }
 
   return (
     <Dialog>
@@ -45,6 +81,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
         </DialogHeader>
 
         <MenuOptionsForm
+          form={form}
           menuOptions={props.menuOptions}
           setMenuOptions={props.setMenuOptions}
           triggerAdd={triggerAdd}
@@ -74,7 +111,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
                 Cancel
               </Button>
             </DialogClose>
-            <Button variant="default" size="sm">
+            <Button variant="default" size="sm" onClick={() => onSubmit()}>
               Save
             </Button>
           </div>

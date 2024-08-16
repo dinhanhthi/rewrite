@@ -1,5 +1,4 @@
 import data, { EmojiMartData } from '@emoji-mart/data'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ChevronDown,
   ChevronUp,
@@ -10,15 +9,7 @@ import {
   TriangleAlert
 } from 'lucide-react'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
-import {
-  Control,
-  useFieldArray,
-  UseFieldArrayMove,
-  UseFieldArrayRemove,
-  useForm,
-  useFormState,
-  useWatch
-} from 'react-hook-form'
+import { Control, useFieldArray, UseFieldArrayMove, UseFormReturn, useWatch } from 'react-hook-form'
 import FormEmoji from '../components/form-emoji'
 import FormInput from '../components/form-input'
 import FormSwitch from '../components/form-switch'
@@ -33,13 +24,13 @@ import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import TooltipThi from '../components/ui/tooltip-thi'
-import { FormMenuOptionsSchema, MAX_OPTIONS, systemIcons } from '../config'
+import { MAX_OPTIONS, systemIcons } from '../config'
 import { cn } from '../helpers/helpers'
 import { FormMenuOptions } from '../type'
-
 type MoveItemDirection = 'up' | 'down'
 
 type MenuOptionsFormProps = {
+  form: UseFormReturn<FormMenuOptions>
   menuOptions: FormMenuOptions
   setMenuOptions: (menuOptions: FormMenuOptions) => void
   triggerAdd?: boolean
@@ -55,35 +46,22 @@ const FocusContext = createContext({
 export default function MenuOptionsForm(props: MenuOptionsFormProps) {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
 
-  const form = useForm<FormMenuOptions>({
-    defaultValues: props.menuOptions,
-    resolver: zodResolver(FormMenuOptionsSchema),
-    mode: 'onChange'
-  })
-
-  function onSubmit(data: FormMenuOptions) {
-    if (form.formState.isValid) {
-      props.setMenuOptions(data)
-      form.reset(data)
-    }
-  }
-
   const {
     fields: parentFields,
     append: appendParent,
     remove: removeParent,
     move: moveParent
-  } = useFieldArray({ control: form.control, name: 'options' })
+  } = useFieldArray({ control: props.form.control, name: 'options' })
 
   const moveItem = (index: number, direction: MoveItemDirection): void => {
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  const formState = useFormState({ control: form.control, name: 'options' })
-  const error = formState.errors?.options
+  // const formState = useFormState({ control: form.control, name: 'options' })
+  // const error = formState.errors?.options // ###Thi
 
   const bodyContainerRef = useRef<HTMLDivElement>(null)
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState(false)
   useEffect(() => {
     if (bodyContainerRef?.current && isAdding) {
       bodyContainerRef.current.scrollTo({
@@ -118,10 +96,15 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
 
   return (
     <FocusContext.Provider
-      value={{ focusedIndex, setFocusedIndex, setValue: form.setValue, getValues: form.getValues }}
+      value={{
+        focusedIndex,
+        setFocusedIndex,
+        setValue: props.form.setValue,
+        getValues: props.form.getValues
+      }}
     >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 min-h-0 gap-4">
+      <Form {...props.form}>
+        <form className="flex flex-col flex-1 min-h-0 gap-4">
           <div
             ref={bodyContainerRef}
             className="flex flex-col flex-1 min-h-0 gap-4 overflow-auto dat-scrollbar dat-scrollbar-small"
@@ -133,7 +116,7 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
                   name="options"
                   nestedName="nestedOptions"
                   index={index}
-                  control={form.control}
+                  control={props.form.control}
                   remove={handleRemoveItem}
                   moveItem={moveItem}
                   isFirst={index === 0}
@@ -193,7 +176,7 @@ const Item = (props: {
   })
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState(false)
   useEffect(() => {
     if (containerRef.current && isAdding) {
       containerRef.current.scrollTo({
