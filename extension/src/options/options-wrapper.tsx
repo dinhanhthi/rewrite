@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { isEqual } from 'lodash'
 import { Check, LoaderCircle, Search, XCircle } from 'lucide-react'
@@ -15,8 +15,8 @@ import TooltipThi from '../components/ui/tooltip-thi'
 import { FormSettingsSchema, services } from '../config'
 import { cn, generateAPIKeyPlaceholder, validateApiKey } from '../helpers/helpers'
 import { FormMenuOptions, FormSettings, Service, ServiceObject } from '../type'
+import MenuOptions from './menu-options'
 import OptionsHeader from './options-header'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog'
 
 export type OptionsWrapperProps = {
   className?: string
@@ -87,8 +87,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     form.setValue('model', mds[0].value)
   }
 
-  const bodyContainerRef = useRef<HTMLDivElement>(null)
-
   return (
     <ErrorBoundary>
       <Form {...form}>
@@ -104,10 +102,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
           {loaded && (
             <>
-              <div
-                ref={bodyContainerRef}
-                className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar"
-              >
+              <div className="flex-1 w-full min-h-0 overflow-auto dat-scrollbar">
                 <div className="container h-full p-4 lg:max-w-3xl ">
                   <div className="flex flex-row pt-4 pb-8">
                     <div className="flex flex-col w-full gap-6">
@@ -167,37 +162,32 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         controlComesFirst={false}
                       />
 
-                      <Dialog>
-                        <DialogTrigger>Menu options:</DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone. This will permanently delete your
-                              account and remove your data from our servers.
-                            </DialogDescription>
-                          </DialogHeader>
-                        </DialogContent>
-                      </Dialog>
+                      <div className="flex flex-row items-center gap-4">
+                        Menu options
+                        <MenuOptions
+                          menuOptions={props.menuOptions}
+                          setMenuOptions={props.setMenuOptions}
+                        />
+                      </div>
 
-                      {/* <FormMenuOptions
-                        control={form.control}
-                        name="menuOptions"
-                        nestedName="nestedOptions"
-                        setValue={form.setValue}
-                        getValue={form.getValues}
-                        bodyContainerRef={bodyContainerRef}
-                      /> */}
+                      <Button
+                        disabled={!isFormChanged || !isFormValid}
+                        onClick={() => onSubmit(form.getValues())}
+                        className="h-8 py-1 w-fit"
+                        type="submit"
+                      >
+                        Save settings
+                      </Button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="w-full border-t border-slate-200">
+              {/* <div className="w-full border-t border-slate-200">
                 <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
-                  {/* <div className="flex flex-row items-center h-8 gap-0 w-9">
+                  <div className="flex flex-row items-center h-8 gap-0 w-9">
                     <RewriteBtnWrapper
-                      options={menuOptions}
+                      options={props.menuOptions.options}
                       preview={true}
                       className="w-8 border-none"
                       btnClassName="text-gray-500"
@@ -205,7 +195,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     <span className="text-sm text-gray-600 whitespace-nowrap">
                       👈 What it looks like
                     </span>
-                  </div> */}
+                  </div>
 
                   <Button
                     disabled={!isFormChanged || !isFormValid}
@@ -216,7 +206,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                     Save settings
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
 

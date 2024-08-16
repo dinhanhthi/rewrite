@@ -40,7 +40,7 @@ export default function FormSwitch(props: FormSwitchProps) {
                   {...field}
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  size={props.size}
+                  size={props.size ?? 'default'}
                 />
               </FormControl>
             </div>

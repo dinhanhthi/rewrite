@@ -15,12 +15,12 @@ type TooltipThiProps = {
 export default function TooltipThi(props: TooltipThiProps) {
   return !!props.content ? (
     <TooltipProvider
-      delayDuration={props.delayDuration}
-      skipDelayDuration={props.skipDelayDuration}
+      delayDuration={props.delayDuration ?? 100}
+      skipDelayDuration={props.skipDelayDuration ?? 10}
       disableHoverableContent={props.disableHoverableContent}
     >
       <Tooltip>
-        <TooltipTrigger asChild={props.asChild}>{props.children}</TooltipTrigger>
+        <TooltipTrigger asChild={props.asChild ?? true}>{props.children}</TooltipTrigger>
         <TooltipContent
           className={props.contentClassName ?? 'text-[12px] text-white bg-black px-1.5 py-1'}
         >

@@ -72,10 +72,10 @@ export default function FormTextarea(props: FormTextareaProps) {
           <FormControl>
             <Textarea
               {...field}
-              placeholder={props.placeholder}
+              placeholder={props.placeholder ?? ''}
               disabled={props.disabled}
               className="resize-none"
-              rows={props.rows}
+              rows={props.rows ?? 3}
               onFocus={props.onFocus}
             />
           </FormControl>

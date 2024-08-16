@@ -1,10 +1,21 @@
 import React from 'react'
-import { defaultSettings } from '../../config'
+import { defaultMenuOptionsForm, defaultSettings } from '../../config'
 import useLocalStorage from '../../helpers/hooks/use-local-storage'
 import OptionsWrapper from '../../options/options-wrapper'
-import { FormSettings } from '../../type'
+import { FormMenuOptions, FormSettings } from '../../type'
 
 export default function OptionsPlayground() {
   const [settings, setSettings] = useLocalStorage<FormSettings>('settings', defaultSettings)
-  return <OptionsWrapper settings={settings} setSettings={setSettings} />
+  const [menuOptions, setMenuOptions] = useLocalStorage<FormMenuOptions>(
+    'menuOptions',
+    defaultMenuOptionsForm
+  )
+  return (
+    <OptionsWrapper
+      settings={settings}
+      setSettings={setSettings}
+      menuOptions={menuOptions}
+      setMenuOptions={setMenuOptions}
+    />
+  )
 }

@@ -86,7 +86,7 @@ export default function FormInput(props: FormInputProps) {
                   <Input
                     {...field}
                     type={props.type === 'password' && showPassword ? 'text' : props.type}
-                    placeholder={props.placeholder}
+                    placeholder={props.placeholder ?? ''}
                     onChange={e => {
                       field.onChange(e)
                       props.onChange?.(e.target.value)

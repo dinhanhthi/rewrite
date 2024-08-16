@@ -53,7 +53,7 @@ export default function OptionsHeaderSettings(props: OptionsHeaderSettingsProps)
   return (
     <DropdownMenu>
       <TooltipThi content="Settings">
-        <DropdownMenuTrigger asChild className="bg-none">
+        <DropdownMenuTrigger asChild={true} className="bg-none">
           <Button size="icon" variant="ghost">
             <SlidersHorizontal className="w-5 h-5" />
           </Button>

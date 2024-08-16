@@ -9,7 +9,7 @@ export default function CancelDialogPlayground() {
     })
   }
   return (
-    <div className="flex items-center justify-center w-full h-full bg-slate-500">
+    <div className="flex items-center justify-center w-full h-full bg-[#000c]">
       <CancelDialog
         discard={() => actionClicked('discard')}
         cancel={() => actionClicked('cancel')}

@@ -4,7 +4,7 @@ import { generateTranslatePrompt } from './helpers/helpers'
 import LongerIcon from './icons/longer-icon'
 import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
-import { FormSettings, MenuOptionType, ServiceObject } from './type'
+import { FormMenuOptions, FormSettings, MenuOptionType, ServiceObject } from './type'
 
 export const MAX_OPTIONS = 10
 
@@ -251,20 +251,6 @@ export const FormSettingsSchema = z.object({
   model: z.string(),
   apiKey: z.string().min(1, 'This field is required.'),
   stream: z.boolean().optional().default(false)
-  // menuOptions: z
-  //   .array(menuOptionsSchema)
-  //   .min(1, 'At least one option is required.')
-  //   .superRefine((val, ctx) => {
-  //     if (val.filter(e => e.available).length > MAX_OPTIONS) {
-  //       ctx.addIssue({
-  //         code: z.ZodIssueCode.too_big,
-  //         message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
-  //         inclusive: true,
-  //         maximum: MAX_OPTIONS,
-  //         type: 'array'
-  //       })
-  //     }
-  //   })
 })
 
 export const defaultSettings: FormSettings = {
@@ -272,21 +258,25 @@ export const defaultSettings: FormSettings = {
   model: 'gpt-4o-mini',
   apiKey: '',
   stream: false
-  // menuOptions: defaultMenuOptions
 }
 
-export const FormMenuOptionsSchema = z
-  .array(menuOptionsSchema)
-  .min(1, 'At least one option is required.')
-  .superRefine((val, ctx) => {
-    if (val.filter(e => e.available).length > MAX_OPTIONS) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
-        inclusive: true,
-        maximum: MAX_OPTIONS,
-        type: 'array'
-      })
-    }
-  })
-  .default(defaultMenuOptions)
+export const FormMenuOptionsSchema = z.object({
+  options: z
+    .array(menuOptionsSchema)
+    .min(1, 'At least one option is required.')
+    .superRefine((val, ctx) => {
+      if (val.filter(e => e.available).length > MAX_OPTIONS) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          message: `Max ${MAX_OPTIONS} options are allowed to be actived.`,
+          inclusive: true,
+          maximum: MAX_OPTIONS,
+          type: 'array'
+        })
+      }
+    })
+})
+
+export const defaultMenuOptionsForm: FormMenuOptions = {
+  options: defaultMenuOptions
+}

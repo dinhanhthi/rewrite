@@ -47,7 +47,10 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
           <div
             className={cn(
               props.className,
-              'h-full w-full pr-1 border-r border-slate-200 group notion-ignore py-0 !rounded-none'
+              'h-full w-full border-r border-slate-200 group notion-ignore py-0 !rounded-none',
+              {
+                'pr-1': !props.preview,
+              }
             )}
           >
             <RewriteBtn
