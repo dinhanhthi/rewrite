@@ -13,7 +13,7 @@ import '../styles/popup.scss'
 import '../styles/tailwind.scss'
 import CancelDialogPlayground from './components/cancel-dialog-playground'
 import Logo from './components/logo'
-import MenuOptionsFormPlayground from './components/menu-options-form-playground'
+import MenuOptionsModalPlayground from './components/menu-options-form-playground'
 import NotionMenuBar from './components/notion-menu-bar'
 import NotionPopoverMenu from './components/notion-popover-menu'
 import OptionsPlayground from './components/options-playground'
@@ -144,10 +144,10 @@ const menus: {
     props: {}
   },
   {
-    name: 'MenuOptionsForm',
-    path: '/MenuOptionsForm',
+    name: 'Menu options modal',
+    path: '/MenuOptionsModal',
     description: 'When we click on the menu options configs.',
-    component: MenuOptionsFormPlayground,
+    component: MenuOptionsModalPlayground,
     props: {}
   },
   {

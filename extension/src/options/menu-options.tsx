@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../components/ui/button'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -15,8 +14,8 @@ import {
   DialogTrigger
 } from '../components/ui/dialog'
 import { FormMenuOptionsSchema } from '../config'
-import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { FormMenuOptions } from '../type'
+import MenuOptionsFooter from './menu-options-footer'
 import MenuOptionsForm from './menu-options-form'
 
 export type MenuOptionsProps = {
@@ -28,6 +27,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
   const [triggerAdd, setTriggerAdd] = useState(false)
   const [isFormChanged, setIsFormChanged] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
+  const [open, setOpen] = React.useState(false)
 
   const form = useForm<FormMenuOptions>({
     defaultValues: props.menuOptions,
@@ -50,17 +50,17 @@ export default function MenuOptions(props: MenuOptionsProps) {
   }, [watch])
 
   function onSubmit() {
-    /* ###Thi */ console.log(`👉👉👉 isFormChanged: `, isFormChanged);
-    /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
+    /* ###Thi */ console.log(`👉👉👉 isFormChanged: `, isFormChanged)
+    // /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
     if (form.formState.isValid && isFormChanged) {
-      /* ###Thi */ console.log(`👉👉👉 Saved clicked`);
+      /* ###Thi */ console.log(`👉👉👉 Saved clicked`)
       // props.setMenuOptions(data)
       // form.reset(data)
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Settings className="w-4 h-4" />
@@ -71,7 +71,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
         className="max-h-[95%] max-w-[min(95%,768px)] overflow-hidden flex flex-col p-4"
         onPointerDownOutside={e => e.preventDefault()}
         onInteractOutside={e => e.preventDefault()}
-        onEscapeKeyDown={e => e.preventDefault()}
+        // onEscapeKeyDown={e => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>Menu options</DialogTitle>
@@ -86,35 +86,14 @@ export default function MenuOptions(props: MenuOptionsProps) {
           setMenuOptions={props.setMenuOptions}
           triggerAdd={triggerAdd}
         />
-
-        <DialogFooter className="flex flex-row items-center !justify-between">
-          <div className="flex flex-row items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setTriggerAdd(trigger => !trigger)}
-            >
-              Add option
-            </Button>
-            <div className="w-8 h-8">
-              <RewriteBtnWrapper
-                options={props.menuOptions.options}
-                preview={true}
-                className="w-full border-none"
-                btnClassName="text-gray-500"
-              />
-            </div>
-          </div>
-          <div className="flex flex-row gap-4">
-            <DialogClose asChild>
-              <Button variant="secondary" size="sm">
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button variant="default" size="sm" onClick={() => onSubmit()}>
-              Save
-            </Button>
-          </div>
+        <DialogFooter>
+          <MenuOptionsFooter
+            setOpen={setOpen}
+            menuOptions={form.watch()}
+            triggerAdd={triggerAdd}
+            setTriggerAdd={setTriggerAdd}
+            onSubmit={onSubmit}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
