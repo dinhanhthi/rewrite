@@ -31,9 +31,7 @@ type MoveItemDirection = 'up' | 'down'
 
 type MenuOptionsFormProps = {
   form: UseFormReturn<FormMenuOptions>
-  menuOptions: FormMenuOptions
-  setMenuOptions: (menuOptions: FormMenuOptions) => void
-  triggerAdd?: boolean
+  triggerAdd?: number
 }
 
 const FocusContext = createContext({
@@ -57,9 +55,6 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
     moveItemGeneral(index, direction, moveParent, parentFields)
   }
 
-  // const formState = useFormState({ control: form.control, name: 'options' })
-  // const error = formState.errors?.options // ###Thi
-
   const bodyContainerRef = useRef<HTMLDivElement>(null)
   const [isAdding, setIsAdding] = useState(false)
   useEffect(() => {
@@ -72,7 +67,10 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
   }, [parentFields.length])
 
   useEffect(() => {
-    handleAddOption()
+    if (props.triggerAdd) {
+      /* ###Thi */ console.log(`👉👉👉 props.triggerAdd: `, props.triggerAdd);
+      handleAddOption()
+    }
   }, [props.triggerAdd])
 
   const handleAddOption = () => {
@@ -126,12 +124,6 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
               )
             })}
           </div>
-
-          {/* <AddMoreOptionButton
-            disabled={error?.type === 'too_big'}
-            tooltip={error?.type === 'too_big' ? (error?.message as string) : ''}
-            onClick={handleAddOption}
-          /> */}
         </form>
       </Form>
     </FocusContext.Provider>
@@ -451,12 +443,12 @@ const ItemTemplate = (props: {
                   setConfirmRemoveAtIndex(-1)
                 }}
               >
-                <CircleCheck className="w-5 h-5 text-destructive" />
+                <CircleCheck className="w-5 h-5 text-gray-500 hover:text-gray-700" />
               </button>
             </TooltipThi>
             <TooltipThi content="Cancel remove">
               <button className="" onClick={() => setConfirmRemoveAtIndex(-1)}>
-                <CircleX className="w-5 h-5 text-destructive" />
+                <CircleX className="w-5 h-5 text-gray-500 hover:text-gray-700" />
               </button>
             </TooltipThi>
           </div>

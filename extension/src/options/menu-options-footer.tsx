@@ -4,9 +4,10 @@ import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { FormMenuOptions } from '../type'
 
 type MenuOptionsFooterProps = {
+  saveDisabled?: boolean
   menuOptions: FormMenuOptions
-  triggerAdd: boolean
-  setTriggerAdd: React.Dispatch<React.SetStateAction<boolean>>
+  triggerAdd?: number
+  setTriggerAdd: React.Dispatch<React.SetStateAction<number>>
   onSubmit: () => void
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -18,7 +19,7 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         <Button
           variant="secondary"
           size="sm"
-          onClick={() => props.setTriggerAdd(trigger => !trigger)}
+          onClick={() => props.setTriggerAdd(triggered => triggered + 1)}
         >
           Add option
         </Button>
@@ -35,7 +36,12 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         <Button onClick={() => props.setOpen(false)} variant="secondary" size="sm">
           Cancel
         </Button>
-        <Button variant="default" size="sm" onClick={() => props.onSubmit()}>
+        <Button
+          disabled={props.saveDisabled}
+          variant="default"
+          size="sm"
+          onClick={() => props.onSubmit()}
+        >
           Save
         </Button>
       </div>

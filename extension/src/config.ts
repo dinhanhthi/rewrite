@@ -1,6 +1,6 @@
 import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
 import { z } from 'zod'
-import { generateTranslatePrompt } from './helpers/helpers'
+// import { generateTranslatePrompt } from './helpers/helpers'
 import LongerIcon from './icons/longer-icon'
 import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
@@ -78,92 +78,92 @@ export const systemIcons: { value: string; icon: any }[] = [
  * "icon" property of teh system options will be taken from the systemIcons array.
  */
 export const defaultMenuOptions: MenuOptionType[] = [
-  {
-    system: true,
-    icon: '🔥',
-    value: 'translate',
-    displayName: 'Translate',
-    available: true,
-    enableNestedOptions: true,
-    nestedOptions: [
-      'Vietnamese',
-      'English',
-      'Chinese',
-      'Japanese',
-      'Spanish',
-      'French',
-      'Russian',
-      'Portuguese',
-      'German',
-      'Italian'
-    ].map(lang => ({
-      system: true,
-      value: lang.toLowerCase(),
-      displayName: lang,
-      available: true,
-      prompt: generateTranslatePrompt(lang)
-    }))
-  },
-  {
-    system: true,
-    icon: '✨',
-    value: 'improve-writing',
-    displayName: 'Improve writing',
-    available: true,
-    prompt: 'Improve the given text.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
-  {
-    system: true,
-    icon: '📝',
-    value: 'summarize',
-    displayName: 'Summarize',
-    available: true,
-    prompt: 'Summarize the given text.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
-  {
-    system: true,
-    icon: '❓',
-    value: 'explain-this',
-    displayName: 'Explain this',
-    available: true,
-    prompt: 'Explain the given text.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
-  {
-    system: true,
-    icon: '🔤',
-    value: 'fix-spelling-grammar',
-    displayName: 'Fix spelling & grammar',
-    available: true,
-    prompt: 'Fix the spelling & grammar of the given text.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
-  {
-    system: true,
-    icon: '🔽',
-    value: 'make-shorter',
-    displayName: 'Make shorter',
-    available: true,
-    prompt: 'Make the given text shorter.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
-  {
-    system: true,
-    icon: '🔼',
-    value: 'make-longer',
-    displayName: 'Make longer',
-    available: true,
-    prompt: 'Make the given text longer.',
-    enableNestedOptions: false,
-    nestedOptions: []
-  },
+  // {
+  //   system: true,
+  //   icon: '🔥',
+  //   value: 'translate',
+  //   displayName: 'Translate',
+  //   available: true,
+  //   enableNestedOptions: true,
+  //   nestedOptions: [
+  //     'Vietnamese',
+  //     'English',
+  //     'Chinese',
+  //     'Japanese',
+  //     'Spanish',
+  //     'French',
+  //     'Russian',
+  //     'Portuguese',
+  //     'German',
+  //     'Italian'
+  //   ].map(lang => ({
+  //     system: true,
+  //     value: lang.toLowerCase(),
+  //     displayName: lang,
+  //     available: true,
+  //     prompt: generateTranslatePrompt(lang)
+  //   }))
+  // },
+  // {
+  //   system: true,
+  //   icon: '✨',
+  //   value: 'improve-writing',
+  //   displayName: 'Improve writing',
+  //   available: true,
+  //   prompt: 'Improve the given text.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
+  // {
+  //   system: true,
+  //   icon: '📝',
+  //   value: 'summarize',
+  //   displayName: 'Summarize',
+  //   available: true,
+  //   prompt: 'Summarize the given text.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
+  // {
+  //   system: true,
+  //   icon: '❓',
+  //   value: 'explain-this',
+  //   displayName: 'Explain this',
+  //   available: true,
+  //   prompt: 'Explain the given text.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
+  // {
+  //   system: true,
+  //   icon: '🔤',
+  //   value: 'fix-spelling-grammar',
+  //   displayName: 'Fix spelling & grammar',
+  //   available: true,
+  //   prompt: 'Fix the spelling & grammar of the given text.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
+  // {
+  //   system: true,
+  //   icon: '🔽',
+  //   value: 'make-shorter',
+  //   displayName: 'Make shorter',
+  //   available: true,
+  //   prompt: 'Make the given text shorter.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
+  // {
+  //   system: true,
+  //   icon: '🔼',
+  //   value: 'make-longer',
+  //   displayName: 'Make longer',
+  //   available: true,
+  //   prompt: 'Make the given text longer.',
+  //   enableNestedOptions: false,
+  //   nestedOptions: []
+  // },
   {
     system: true,
     icon: '🎤',
@@ -189,7 +189,7 @@ export const MenuOptionSchema = z.object({
   system: z.boolean().optional(),
   icon: z.any().optional(),
   value: z.string().min(1),
-  displayName: z.string().max(35, 'Max 35 characters allowed!').optional(),
+  displayName: z.string().max(35, 'Max 35 characters allowed!'),
   available: z.boolean().optional(),
   tooltip: z.string().optional(),
   prompt: z.string().optional()
@@ -199,6 +199,14 @@ export const menuOptionsSchema = MenuOptionSchema.extend({
   enableNestedOptions: z.boolean().optional().default(false),
   nestedOptions: z.array(MenuOptionSchema).optional()
 }).superRefine((data, ctx) => {
+  if (!data.displayName || data.displayName.trim().length === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'This field is required.',
+      path: ['displayName']
+    })
+  }
+
   if (data.enableNestedOptions) {
     if (!data.nestedOptions || data.nestedOptions.length === 0) {
       ctx.addIssue({
@@ -233,14 +241,6 @@ export const menuOptionsSchema = MenuOptionSchema.extend({
         path: ['prompt']
       })
     }
-  }
-
-  if (!data.displayName || data.displayName.trim().length === 0) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'This field is required.',
-      path: ['displayName']
-    })
   }
 })
 

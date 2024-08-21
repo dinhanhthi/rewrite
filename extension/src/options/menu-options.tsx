@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isEqual } from 'lodash'
-import { Settings } from 'lucide-react'
+import { Settings, TriangleAlert } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '../components/ui/button'
@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '../components/ui/dialog'
+import TooltipThi from '../components/ui/tooltip-thi'
 import { FormMenuOptionsSchema } from '../config'
 import { FormMenuOptions } from '../type'
 import MenuOptionsFooter from './menu-options-footer'
@@ -24,38 +25,29 @@ export type MenuOptionsProps = {
 }
 
 export default function MenuOptions(props: MenuOptionsProps) {
-  const [triggerAdd, setTriggerAdd] = useState(false)
+  const [triggerAdd, setTriggerAdd] = useState(0)
   const [isFormChanged, setIsFormChanged] = useState(false)
-  const [isFormValid, setIsFormValid] = useState(false)
   const [open, setOpen] = React.useState(false)
 
   const form = useForm<FormMenuOptions>({
     defaultValues: props.menuOptions,
     resolver: zodResolver(FormMenuOptionsSchema),
     // mode: 'onChange'
-    // mode: 'all'
-    mode: 'onBlur'
+    mode: 'all'
+    // mode: 'onBlur'
   })
 
   const watch = form.watch()
   useEffect(() => {
-    // /* ###Thi */ console.log(`👉👉👉 watch: `, watch)
-    // /* ###Thi */ console.log(`👉👉👉 props.menuOptions: `, props.menuOptions)
     const isChanged = !isEqual(watch, props.menuOptions)
-    // /* ###Thi */ console.log(`👉👉👉 isChanged: `, isChanged)
-    // /* ###Thi */ console.log(`👉👉👉 form.formState.isValid: `, form.formState.isValid)
-    // /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
-    setIsFormValid(form.formState.isValid)
     setIsFormChanged(isChanged)
   }, [watch])
 
   function onSubmit() {
-    /* ###Thi */ console.log(`👉👉👉 isFormChanged: `, isFormChanged)
-    // /* ###Thi */ console.log(`👉👉👉 errors: `, form.formState.errors)
     if (form.formState.isValid && isFormChanged) {
       /* ###Thi */ console.log(`👉👉👉 Saved clicked`)
-      // props.setMenuOptions(data)
-      // form.reset(data)
+      props.setMenuOptions(form.getValues())
+      form.reset(form.getValues())
     }
   }
 
@@ -74,18 +66,20 @@ export default function MenuOptions(props: MenuOptionsProps) {
         // onEscapeKeyDown={e => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Menu options</DialogTitle>
+          <DialogTitle>
+            Menu options
+            {!watch.options?.length && (
+              <TooltipThi content="At least one option is required!">
+                <TriangleAlert className="inline w-5 h-5 text-destructive" />
+              </TooltipThi>
+            )}
+          </DialogTitle>
           <DialogDescription>
             This is the list of options when you click the Rewrite button.
           </DialogDescription>
         </DialogHeader>
 
-        <MenuOptionsForm
-          form={form}
-          menuOptions={props.menuOptions}
-          setMenuOptions={props.setMenuOptions}
-          triggerAdd={triggerAdd}
-        />
+        <MenuOptionsForm form={form} triggerAdd={triggerAdd} />
         <DialogFooter>
           <MenuOptionsFooter
             setOpen={setOpen}
@@ -93,6 +87,11 @@ export default function MenuOptions(props: MenuOptionsProps) {
             triggerAdd={triggerAdd}
             setTriggerAdd={setTriggerAdd}
             onSubmit={onSubmit}
+            saveDisabled={
+              (form.formState.isValid && form.formState.isDirty && isFormChanged) ||
+              !form.formState.isDirty ||
+              !isFormChanged
+            }
           />
         </DialogFooter>
       </DialogContent>

@@ -182,31 +182,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="w-full border-t border-slate-200">
-                <div className="container flex flex-row items-center justify-between px-4 py-2 lg:max-w-3xl">
-                  <div className="flex flex-row items-center h-8 gap-0 w-9">
-                    <RewriteBtnWrapper
-                      options={props.menuOptions.options}
-                      preview={true}
-                      className="w-8 border-none"
-                      btnClassName="text-gray-500"
-                    />
-                    <span className="text-sm text-gray-600 whitespace-nowrap">
-                      👈 What it looks like
-                    </span>
-                  </div>
-
-                  <Button
-                    disabled={!isFormChanged || !isFormValid}
-                    onClick={() => onSubmit(form.getValues())}
-                    className="h-8 py-1 w-fit"
-                    type="submit"
-                  >
-                    Save settings
-                  </Button>
-                </div>
-              </div> */}
             </>
           )}
 
