@@ -47,6 +47,12 @@ export default function MenuOptionsModalPlayground() {
     }
   }
 
+  function onReset() {
+    /* ###Thi */ console.log(`👉👉👉 onReset called`)
+    form.reset(defaultMenuOptionsForm)
+    setMenuOptions(defaultMenuOptionsForm)
+  }
+
   return (
     <div className="flex items-center justify-center w-full h-full bg-[#aaa]">
       <div className="max-h-[min(90%,600px)] w-full max-w-[min(95%,768px)] gap-4 bg-white overflow-hidden flex flex-col p-4 rounded-md">
@@ -65,6 +71,7 @@ export default function MenuOptionsModalPlayground() {
         </div>
         <MenuOptionsForm triggerAdd={triggerAdd} form={form} />
         <MenuOptionsFooter
+          onReset={onReset}
           setOpen={() => toast({ description: `Close triggered` })}
           menuOptions={form.watch()}
           triggerAdd={triggerAdd}

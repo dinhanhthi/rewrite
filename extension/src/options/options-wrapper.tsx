@@ -162,7 +162,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         controlComesFirst={false}
                       />
 
-                      <div className="flex flex-row items-center gap-4">
+                      <div className="flex flex-row items-center gap-4 text-base">
                         Menu options
                         <MenuOptions
                           menuOptions={props.menuOptions}

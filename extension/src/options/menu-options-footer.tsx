@@ -1,4 +1,15 @@
 import React from 'react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '../components/ui/alert-dialog'
 import { Button } from '../components/ui/button'
 import RewriteBtnWrapper from '../content-script/notion/rewrite-btn-wrapper'
 import { FormMenuOptions } from '../type'
@@ -10,6 +21,7 @@ type MenuOptionsFooterProps = {
   setTriggerAdd: React.Dispatch<React.SetStateAction<number>>
   onSubmit: () => void
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onReset: () => void
 }
 
 export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
@@ -36,6 +48,26 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         <Button onClick={() => props.setOpen(false)} variant="secondary" size="sm">
           Cancel
         </Button>
+        {/* <Button onClick={() => props.onReset()} variant="secondary" size="sm">
+          Reset
+        </Button> */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="secondary" size="sm">
+              Reset
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset the option menu to the default</AlertDialogTitle>
+              <AlertDialogDescription>🚨 This action cannot be undone.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => props.onReset()}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <Button
           disabled={props.saveDisabled}
           variant="default"

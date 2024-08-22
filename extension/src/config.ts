@@ -1,10 +1,10 @@
 import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
 import { z } from 'zod'
-// import { generateTranslatePrompt } from './helpers/helpers'
 import LongerIcon from './icons/longer-icon'
 import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
 import { FormMenuOptions, FormSettings, MenuOptionType, ServiceObject } from './type'
+import { generateTranslatePrompt } from './helpers/helpers'
 
 export const MAX_OPTIONS = 10
 
@@ -78,92 +78,92 @@ export const systemIcons: { value: string; icon: any }[] = [
  * "icon" property of teh system options will be taken from the systemIcons array.
  */
 export const defaultMenuOptions: MenuOptionType[] = [
-  // {
-  //   system: true,
-  //   icon: '🔥',
-  //   value: 'translate',
-  //   displayName: 'Translate',
-  //   available: true,
-  //   enableNestedOptions: true,
-  //   nestedOptions: [
-  //     'Vietnamese',
-  //     'English',
-  //     'Chinese',
-  //     'Japanese',
-  //     'Spanish',
-  //     'French',
-  //     'Russian',
-  //     'Portuguese',
-  //     'German',
-  //     'Italian'
-  //   ].map(lang => ({
-  //     system: true,
-  //     value: lang.toLowerCase(),
-  //     displayName: lang,
-  //     available: true,
-  //     prompt: generateTranslatePrompt(lang)
-  //   }))
-  // },
-  // {
-  //   system: true,
-  //   icon: '✨',
-  //   value: 'improve-writing',
-  //   displayName: 'Improve writing',
-  //   available: true,
-  //   prompt: 'Improve the given text.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
-  // {
-  //   system: true,
-  //   icon: '📝',
-  //   value: 'summarize',
-  //   displayName: 'Summarize',
-  //   available: true,
-  //   prompt: 'Summarize the given text.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
-  // {
-  //   system: true,
-  //   icon: '❓',
-  //   value: 'explain-this',
-  //   displayName: 'Explain this',
-  //   available: true,
-  //   prompt: 'Explain the given text.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
-  // {
-  //   system: true,
-  //   icon: '🔤',
-  //   value: 'fix-spelling-grammar',
-  //   displayName: 'Fix spelling & grammar',
-  //   available: true,
-  //   prompt: 'Fix the spelling & grammar of the given text.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
-  // {
-  //   system: true,
-  //   icon: '🔽',
-  //   value: 'make-shorter',
-  //   displayName: 'Make shorter',
-  //   available: true,
-  //   prompt: 'Make the given text shorter.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
-  // {
-  //   system: true,
-  //   icon: '🔼',
-  //   value: 'make-longer',
-  //   displayName: 'Make longer',
-  //   available: true,
-  //   prompt: 'Make the given text longer.',
-  //   enableNestedOptions: false,
-  //   nestedOptions: []
-  // },
+  {
+    system: true,
+    icon: '🔥',
+    value: 'translate',
+    displayName: 'Translate',
+    available: true,
+    enableNestedOptions: true,
+    nestedOptions: [
+      'Vietnamese',
+      'English',
+      'Chinese',
+      'Japanese',
+      'Spanish',
+      'French',
+      'Russian',
+      'Portuguese',
+      'German',
+      'Italian'
+    ].map(lang => ({
+      system: true,
+      value: lang.toLowerCase(),
+      displayName: lang,
+      available: true,
+      prompt: generateTranslatePrompt(lang)
+    }))
+  },
+  {
+    system: true,
+    icon: '✨',
+    value: 'improve-writing',
+    displayName: 'Improve writing',
+    available: true,
+    prompt: 'Improve the given text.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
+  {
+    system: true,
+    icon: '📝',
+    value: 'summarize',
+    displayName: 'Summarize',
+    available: true,
+    prompt: 'Summarize the given text.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
+  {
+    system: true,
+    icon: '❓',
+    value: 'explain-this',
+    displayName: 'Explain this',
+    available: true,
+    prompt: 'Explain the given text.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
+  {
+    system: true,
+    icon: '🔤',
+    value: 'fix-spelling-grammar',
+    displayName: 'Fix spelling & grammar',
+    available: true,
+    prompt: 'Fix the spelling & grammar of the given text.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
+  {
+    system: true,
+    icon: '🔽',
+    value: 'make-shorter',
+    displayName: 'Make shorter',
+    available: true,
+    prompt: 'Make the given text shorter.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
+  {
+    system: true,
+    icon: '🔼',
+    value: 'make-longer',
+    displayName: 'Make longer',
+    available: true,
+    prompt: 'Make the given text longer.',
+    enableNestedOptions: false,
+    nestedOptions: []
+  },
   {
     system: true,
     icon: '🎤',

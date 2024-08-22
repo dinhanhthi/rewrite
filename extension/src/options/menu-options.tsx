@@ -14,7 +14,7 @@ import {
   DialogTrigger
 } from '../components/ui/dialog'
 import TooltipThi from '../components/ui/tooltip-thi'
-import { FormMenuOptionsSchema } from '../config'
+import { defaultMenuOptionsForm, FormMenuOptionsSchema } from '../config'
 import { FormMenuOptions } from '../type'
 import MenuOptionsFooter from './menu-options-footer'
 import MenuOptionsForm from './menu-options-form'
@@ -51,6 +51,11 @@ export default function MenuOptions(props: MenuOptionsProps) {
     }
   }
 
+  function onReset() {
+    form.reset(defaultMenuOptionsForm)
+    props.setMenuOptions(defaultMenuOptionsForm)
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -82,6 +87,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
         <MenuOptionsForm form={form} triggerAdd={triggerAdd} />
         <DialogFooter>
           <MenuOptionsFooter
+            onReset={onReset}
             setOpen={setOpen}
             menuOptions={form.watch()}
             triggerAdd={triggerAdd}
