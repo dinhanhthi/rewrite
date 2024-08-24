@@ -148,15 +148,22 @@ export default function RewriteEditor(props: RewriteEditorProps) {
             <div className="flex flex-col h-full w-full rounded-[6px] bg-white p-0 notion-box-shadow overflow-hidden">
               {/* Main editor */}
               <div className="h-full p-4 overflow-y-auto dat-scrollbar dat-scrollbar-small">
-                <div
-                  ref={editorRef}
-                  contentEditable={true}
-                  suppressContentEditableWarning={true}
-                  className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap notion-editor-style"
-                  dangerouslySetInnerHTML={{
-                    __html: props.content || 'Start typing here...'
-                  }}
-                ></div>
+                {!!props.content && (
+                  <div
+                    ref={editorRef}
+                    contentEditable={true}
+                    suppressContentEditableWarning={true}
+                    className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap notion-editor-style"
+                    dangerouslySetInnerHTML={{
+                      __html: props.content || 'Start typing here...'
+                    }}
+                  ></div>
+                )}
+                {!props.content && (
+                  <div className="text-transparent animate-pulse bg-clip-text bg-gradient-to-r from-green-700 to-violet-900">
+                    AI is thinking...
+                  </div>
+                )}
               </div>
 
               {/* Controls */}

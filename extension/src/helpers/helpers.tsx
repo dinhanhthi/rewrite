@@ -5,11 +5,12 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { clsx, type ClassValue } from 'clsx'
+import OpenAI from 'openai'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../components/rewrite-editor'
-import { EditorFrom, Service } from '../type'
+import { EditorFrom, FormSettings, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -200,16 +201,17 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
     switch (service) {
       case 'openai':
       default: {
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey}`
-          },
-          body: JSON.stringify({ model, messages: [{ role: 'user', content: 'Hello' }] })
-        })
-        if (res.status === 200) return true
-        else return false
+        try {
+          const openAI = new OpenAI({ apiKey, dangerouslyAllowBrowser: true })
+          await openAI.chat.completions.create({
+            model,
+            messages: [{ role: 'user', content: 'Hello' }]
+          })
+          return true
+        } catch (error) {
+          // console.error(error)
+          return false
+        }
       }
 
       // TODO: wait for Claude to allow use their APIs via browser-like client (CORS issue)
@@ -236,5 +238,29 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
   } catch (error) {
     console.error(error)
     return false
+  }
+}
+
+/**
+ * Handle the prompt and text to get the response from the service
+ *
+ * @param settings FormSettings
+ * @param prompt string - The system prompt (eg. Translate the given text into Vietnamese)
+ * @param text string - The text to be processed
+ */
+export async function handlePrompt(settings: FormSettings, prompt: string, text: string) {
+  const finalPrompt =
+    prompt + '\n' + text + '\n' + 'Keep the html formatting, for example <b>text</b>.'
+  /* ###Thi */ console.log(`👉👉👉 finalPrompt: `, finalPrompt)
+  switch (settings.service) {
+    case 'openai':
+    default: {
+      const openAI = new OpenAI({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
+      const completion = await openAI.chat.completions.create({
+        model: settings.model,
+        messages: [{ role: 'user', content: finalPrompt }]
+      })
+      return completion.choices[0].message.content ?? ''
+    }
   }
 }

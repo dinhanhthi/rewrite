@@ -1,5 +1,6 @@
 import React from 'react'
 import { defaultMenuOptions, systemIcons } from '../config'
+import { cn } from '../helpers/helpers'
 import { MenuOptionType } from '../type'
 import {
   MenubarContent,
@@ -8,14 +9,13 @@ import {
   MenubarSubContent,
   MenubarSubTrigger
 } from './ui/menubar'
-import { cn } from '../helpers/helpers'
 
 type RewriteMenuProps = {
   options?: MenuOptionType[]
   className?: string
   forceMount?: boolean
   setShowRewriteEditor?: React.Dispatch<React.SetStateAction<boolean>>
-  handleItemClicked?: () => void
+  handleItemClicked: (prompt: string) => void
   disableFocusOutside?: boolean
 }
 
@@ -53,7 +53,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
                   ?.filter(opt => opt.available)
                   .map(nestedMenu => (
                     <MenubarItem
-                      onClick={props.handleItemClicked}
+                      onClick={() => props.handleItemClicked(nestedMenu.prompt!)}
                       className="w-full p-0"
                       key={nestedMenu.value}
                     >
@@ -73,7 +73,11 @@ export default function RewriteMenu(props: RewriteMenuProps) {
           )
         } else {
           return (
-            <MenubarItem onClick={props.handleItemClicked} className="w-full p-0" key={menu.value}>
+            <MenubarItem
+              onClick={() => props.handleItemClicked(menu.prompt!)}
+              className="w-full p-0"
+              key={menu.value}
+            >
               <div className="flex flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100">
                 {menu.system && !!SysIcon && <SysIcon className="w-4 h-4 text-green-700" />}
                 {!menu.system && menu.icon}

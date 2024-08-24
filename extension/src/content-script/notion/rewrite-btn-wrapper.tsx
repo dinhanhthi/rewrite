@@ -3,9 +3,9 @@ import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
 import { toast } from '../../components/ui/use-toast'
 import { cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
+import { MenuOptionType } from '../../type'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
-import { MenuOptionType } from '../../type'
 
 type RewriteBtnWrapperProps = {
   className?: string
@@ -23,13 +23,24 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
     setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
   }, [props.alwaysShowMenu])
 
-  const handleItemClicked = async () => {
+  const handleItemClicked = async (prompt: string) => {
+    /* ###Thi */ console.log(`👉👉👉 prompt: `, prompt)
     if (ctx.mode === 'browser') {
       document.execCommand('copy')
       const [clipboardItem] = await navigator.clipboard.read()
       const outputBlob = await clipboardItem.getType('text/html')
       const output = await outputBlob.text()
       const formatedText = formatSelectedText(output)
+      /* ###Thi */ console.log(`👉👉👉 formatedText: `, formatedText)
+      // const response = await ctx.talkToBackground!({
+      //   portName: 'port-prompt',
+      //   message: {
+      //     type: 'prompt',
+      //     prompt,
+      //     text: formatedText
+      //   }
+      // })
+      // /* ###Thi */ console.log(`👉👉👉 response: `, response)
       createRewriteEditor('menu', formatedText)
     } else {
       toast({ description: `Menu item clicked` })
@@ -49,7 +60,7 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
               props.className,
               'h-full w-full border-r border-slate-200 group notion-ignore py-0 !rounded-none',
               {
-                'pr-1': !props.preview,
+                'pr-1': !props.preview
               }
             )}
           >
