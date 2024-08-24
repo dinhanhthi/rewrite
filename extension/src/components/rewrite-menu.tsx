@@ -8,6 +8,7 @@ import {
   MenubarSubContent,
   MenubarSubTrigger
 } from './ui/menubar'
+import { cn } from '../helpers/helpers'
 
 type RewriteMenuProps = {
   options?: MenuOptionType[]
@@ -29,7 +30,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
 
   return (
     <MenubarContent
-      className={props.className}
+      className={cn(props.className, 'w-fit')}
       container={document.querySelector('.rewrite-overlay')}
       onInteractOutside={handleInteractOutside}
     >

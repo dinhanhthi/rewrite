@@ -9,10 +9,21 @@ import FormInput from '../components/form-input'
 import FormSelect from '../components/form-select'
 import FormSingleChoice from '../components/form-single-choice'
 import FormSwitch from '../components/form-switch'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '../components/ui/alert-dialog'
 import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import TooltipThi from '../components/ui/tooltip-thi'
-import { FormSettingsSchema, services } from '../config'
+import { defaultSettings, FormSettingsSchema, services } from '../config'
 import { cn, generateAPIKeyPlaceholder, validateApiKey } from '../helpers/helpers'
 import { FormMenuOptions, FormSettings, Service, ServiceObject } from '../type'
 import MenuOptions from './menu-options'
@@ -62,14 +73,6 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     setIsFormChanged(isChanged)
   }, [watch])
 
-  function onSubmit(data: FormSettings) {
-    if (form.formState.isValid) {
-      props.setSettings(data)
-      form.reset(data)
-      setIsValidKey(null)
-    }
-  }
-
   const [isVerifyingKey, setIsVerifyingKey] = useState(false)
   const [isValidKey, setIsValidKey] = useState<boolean | null>(null)
   const verifyAPIKey = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -85,6 +88,20 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     const mds = services.find(_e => _e.value === e)!.models
     setModels(mds)
     form.setValue('model', mds[0].value)
+  }
+
+  function onSubmit() {
+    if (form.formState.isValid) {
+      form.reset(form.getValues())
+      props.setSettings(form.getValues())
+      setIsValidKey(null)
+    }
+  }
+
+  function onReset() {
+    form.reset(defaultSettings)
+    props.setSettings(defaultSettings)
+    setIsValidKey(null)
   }
 
   return (
@@ -170,14 +187,36 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         />
                       </div>
 
-                      <Button
-                        disabled={!isFormChanged || !isFormValid}
-                        onClick={() => onSubmit(form.getValues())}
-                        className="h-8 py-1 w-fit"
-                        type="submit"
-                      >
-                        Save settings
-                      </Button>
+                      <div className="flex flex-row items-center gap-4">
+                        <Button
+                          disabled={!isFormChanged || !isFormValid}
+                          onClick={() => onSubmit()}
+                          className="h-8 py-1 w-fit"
+                          type="submit"
+                        >
+                          Save settings
+                        </Button>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="secondary" size={'sm'}>Reset</Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Reset the settings to the default</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                🚨 This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => onReset()}>
+                                Confirm
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </div>
                   </div>
                 </div>

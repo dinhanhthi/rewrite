@@ -48,9 +48,6 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         <Button onClick={() => props.setOpen(false)} variant="secondary" size="sm">
           Cancel
         </Button>
-        {/* <Button onClick={() => props.onReset()} variant="secondary" size="sm">
-          Reset
-        </Button> */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="secondary" size="sm">
