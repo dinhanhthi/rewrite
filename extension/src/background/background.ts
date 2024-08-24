@@ -71,7 +71,7 @@ try {
             const settings = await getLocal<FormSettings>('settings', defaultSettings)
             console.log('settings: ', settings)
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
-              response = await handlePrompt(settings, message.prompt, message.text)
+              response = await handlePrompt(settings, message.prompt)
             } else {
               response = `Fake response for SUGGEST with data: "${message.text}"`
             }

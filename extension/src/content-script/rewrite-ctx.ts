@@ -5,11 +5,10 @@ export type TalkToBackgroundProps = {
   message: {
     type: string
     prompt: string
-    text: any
   }
 }
 
-type TalkToBackgroundFunc = (props: TalkToBackgroundProps) => Promise<any>
+export type TalkToBackgroundFunc = (props: TalkToBackgroundProps) => Promise<any>
 
 type RewriteCtxType = {
   selected?: string

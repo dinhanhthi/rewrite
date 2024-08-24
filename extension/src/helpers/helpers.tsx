@@ -10,13 +10,14 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../components/rewrite-editor'
+import { RewriteCtx, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { EditorFrom, FormSettings, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createRewriteEditor(from: EditorFrom, content?: string) {
+export function createRewriteEditor(from: EditorFrom, content?: string, talkToBackground?: TalkToBackgroundFunc) {
   removeAllRewriteEditors()
 
   let endContainer: HTMLElement | null = null
@@ -54,7 +55,11 @@ export function createRewriteEditor(from: EditorFrom, content?: string) {
       scroller.appendChild(editor)
       const root = createRoot(editor)
       const editorHeight = 200
-      root.render(<RewriteEditor mode="browser" height={editorHeight} content={content} />)
+      root.render(
+        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground }}>
+          <RewriteEditor mode="browser" height={editorHeight} content={content} />
+        </RewriteCtx.Provider>
+      )
 
       /**
        * We don't use `rect.bottom` because the editor isn't rendered yet, instead we use
@@ -248,19 +253,27 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
  * @param prompt string - The system prompt (eg. Translate the given text into Vietnamese)
  * @param text string - The text to be processed
  */
-export async function handlePrompt(settings: FormSettings, prompt: string, text: string) {
-  const finalPrompt =
-    prompt + '\n' + text + '\n' + 'Keep the html formatting, for example <b>text</b>.'
-  /* ###Thi */ console.log(`👉👉👉 finalPrompt: `, finalPrompt)
+export async function handlePrompt(settings: FormSettings, prompt: string) {
   switch (settings.service) {
     case 'openai':
     default: {
       const openAI = new OpenAI({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
       const completion = await openAI.chat.completions.create({
         model: settings.model,
-        messages: [{ role: 'user', content: finalPrompt }]
+        messages: [
+          {
+            role: 'assistant',
+            content:
+              'You are a writing assistant. If the user asks you to modify or transform the text and in this text, there is html tag like <b>text</b> or <i> or similar things, keep these formatting in the transformed result.'
+          },
+          { role: 'user', content: prompt }
+        ]
       })
       return completion.choices[0].message.content ?? ''
     }
   }
+}
+
+export function buildFinalPrompt(system: string, text: string): string {
+  return `${system}:\n${text}`
 }

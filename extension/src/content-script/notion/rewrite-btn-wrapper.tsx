@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
 import { toast } from '../../components/ui/use-toast'
-import { cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
+import { buildFinalPrompt, cn, createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
 import { MenuOptionType } from '../../type'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
@@ -23,25 +23,15 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
     setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
   }, [props.alwaysShowMenu])
 
-  const handleItemClicked = async (prompt: string) => {
-    /* ###Thi */ console.log(`👉👉👉 prompt: `, prompt)
+  const handleItemClicked = async (sysPrompt: string) => {
+    /* ###Thi */ console.log(`👉👉👉 prompt: `, sysPrompt)
     if (ctx.mode === 'browser') {
       document.execCommand('copy')
       const [clipboardItem] = await navigator.clipboard.read()
       const outputBlob = await clipboardItem.getType('text/html')
       const output = await outputBlob.text()
       const formatedText = formatSelectedText(output)
-      /* ###Thi */ console.log(`👉👉👉 formatedText: `, formatedText)
-      // const response = await ctx.talkToBackground!({
-      //   portName: 'port-prompt',
-      //   message: {
-      //     type: 'prompt',
-      //     prompt,
-      //     text: formatedText
-      //   }
-      // })
-      // /* ###Thi */ console.log(`👉👉👉 response: `, response)
-      createRewriteEditor('menu', formatedText)
+      createRewriteEditor('menu', buildFinalPrompt(sysPrompt, formatedText), ctx.talkToBackground)
     } else {
       toast({ description: `Menu item clicked` })
     }

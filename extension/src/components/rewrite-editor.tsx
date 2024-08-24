@@ -1,6 +1,7 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { Check, Copy, RotateCcw, Settings2, X } from 'lucide-react'
-import React from 'react'
+import { Check, Copy, LoaderCircle, RotateCcw, Settings2, X } from 'lucide-react'
+import React, { useEffect } from 'react'
+import { RewriteCtx } from '../content-script/rewrite-ctx'
 import { cn } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import { Mode } from '../type'
@@ -24,10 +25,30 @@ type RewriteEditorProps = {
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
+  const [result, setResult] = React.useState('')
+  const ctx = React.useContext(RewriteCtx)
   const [copied, setCopied] = React.useState(false)
   const editorRef = React.useRef<HTMLDivElement>(null)
   const [showDiscardWarning, setShowDiscardWarning] = React.useState(false)
   const useThisTextLabel = 'Use this text'
+
+  useEffect(() => {
+    const fetchData = async () => {
+      /* ###Thi */ console.log(`👉👉👉 props.content: `, props.content)
+      const response = props.content
+        ? await ctx.talkToBackground!({
+            portName: 'port-prompt',
+            message: {
+              type: 'prompt',
+              prompt: props.content
+            }
+          })
+        : null
+      /* ###Thi */ console.log(`👉👉👉 response: `, response)
+      setResult(response)
+    }
+    fetchData()
+  }, [])
 
   const useThisContent = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -148,20 +169,23 @@ export default function RewriteEditor(props: RewriteEditorProps) {
             <div className="flex flex-col h-full w-full rounded-[6px] bg-white p-0 notion-box-shadow overflow-hidden">
               {/* Main editor */}
               <div className="h-full p-4 overflow-y-auto dat-scrollbar dat-scrollbar-small">
-                {!!props.content && (
+                {!!result && (
                   <div
                     ref={editorRef}
                     contentEditable={true}
                     suppressContentEditableWarning={true}
                     className="h-full w-full text-[15px] cursor-text focus:border-none focus:outline-none whitespace-pre-wrap notion-editor-style"
                     dangerouslySetInnerHTML={{
-                      __html: props.content || 'Start typing here...'
+                      __html: result || 'Start typing here...'
                     }}
                   ></div>
                 )}
-                {!props.content && (
-                  <div className="text-transparent animate-pulse bg-clip-text bg-gradient-to-r from-green-700 to-violet-900">
-                    AI is thinking...
+                {!result && (
+                  <div className="flex flex-row items-center gap-2 font-normal text-gray-400 animate-pulse">
+                    <LoaderCircle className="w-5 h-5 animate-spin" />
+                    <span className="italic">
+                      AI is thinking, please wait...
+                    </span>
                   </div>
                 )}
               </div>
