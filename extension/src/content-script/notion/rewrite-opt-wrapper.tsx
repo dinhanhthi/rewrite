@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
-import { toast } from '../../components/ui/use-toast'
-import { createRewriteEditor, formatSelectedText } from '../../helpers/helpers'
+import { handleMenuItemClicked } from '../../helpers/helpers'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteOpt from './rewrite-opt'
 
@@ -18,18 +17,8 @@ export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
     setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
   }, [props.alwaysShowMenu])
 
-  const handleItemClicked = async () => {
-    if (ctx.mode === 'browser') {
-      document.execCommand('copy')
-      const [clipboardItem] = await navigator.clipboard.read()
-      const outputBlob = await clipboardItem.getType('text/html')
-      const output = await outputBlob.text()
-      const formatedText = formatSelectedText(output)
-      console.log(formatedText)
-      createRewriteEditor('opt', formatedText, ctx.talkToBackground)
-    } else {
-      toast({ description: `Menu item clicked` })
-    }
+  const handleItemClicked = (prompt: string) => {
+    handleMenuItemClicked(ctx, prompt)
   }
 
   const handleMouseEnter = () => {

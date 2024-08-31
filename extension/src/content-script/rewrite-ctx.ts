@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { FormMenuOptions, FormSettings } from '../type'
 
 export type TalkToBackgroundProps = {
   portName?: string
@@ -10,14 +11,20 @@ export type TalkToBackgroundProps = {
 
 export type TalkToBackgroundFunc = (props: TalkToBackgroundProps) => Promise<any>
 
-type RewriteCtxType = {
-  selected?: string
+export type RewriteCtxType = {
+  settings?: FormSettings
+  menuOptions?: FormMenuOptions
+  selectedText?: string
   talkToBackground?: TalkToBackgroundFunc
   mode?: 'browser' | 'playground'
 }
 
 export const RewriteCtx = createContext<RewriteCtxType>({
-  selected: '',
+  // settings: defaultSettings, // Cannot use defaultSettings here there is an error
+  settings: {} as FormSettings,
+  // menuOptions: defaultMenuOptionsForm, // Cannot use defaultMenuOptionsForm here there is an error
+  menuOptions: {} as FormMenuOptions,
+  selectedText: '',
   mode: 'playground',
-  talkToBackground: {} as TalkToBackgroundFunc,
+  talkToBackground: {} as TalkToBackgroundFunc
 })

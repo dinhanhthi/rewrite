@@ -10,14 +10,23 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../components/rewrite-editor'
-import { RewriteCtx, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
-import { EditorFrom, FormSettings, Service } from '../type'
+import { toast } from '../components/ui/use-toast'
+import { RewriteCtx, RewriteCtxType, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
+import { EditorFrom, FormMenuOptions, FormSettings, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createRewriteEditor(from: EditorFrom, content?: string, talkToBackground?: TalkToBackgroundFunc) {
+export function createRewriteEditor(options: {
+  from: EditorFrom
+  content?: string
+  talkToBackground?: TalkToBackgroundFunc
+  settings?: FormSettings
+  menuOptions?: FormMenuOptions
+}) {
+  const { from, content, talkToBackground, settings, menuOptions } = options
+
   removeAllRewriteEditors()
 
   let endContainer: HTMLElement | null = null
@@ -36,27 +45,39 @@ export function createRewriteEditor(from: EditorFrom, content?: string, talkToBa
   }
 
   if (endContainer) {
-    const pos = {
-      top: endContainer.offsetTop + endContainer.offsetHeight + 4,
-      left: endContainer.offsetLeft,
-      width: endContainer.offsetWidth
-    }
+    const pos = settings?.adaptivePosition
+      ? {
+          top: endContainer.offsetTop + endContainer.offsetHeight + 4,
+          left: endContainer.offsetLeft,
+          width: endContainer.offsetWidth
+        }
+      : {
+          bottom: 16,
+          right: 16,
+          width: 400
+        }
     const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
       const editor = document.createElement('div')
       editor.classList.add('dinhanhthi')
       editor.id = 'rewrite-editor'
-      editor.style.position = 'absolute'
-      editor.style.top = pos.top + 'px'
-      editor.style.left = pos.left + 'px'
-      editor.style.width = pos.width + 'px'
+      editor.style.position = settings?.adaptivePosition ? 'absolute' : 'fixed'
+      if (settings?.adaptivePosition) {
+        editor.style.top = pos.top + 'px'
+        editor.style.left = pos.left + 'px'
+        editor.style.width = pos.width + 'px'
+      } else {
+        editor.style.bottom = pos.bottom + 'px'
+        editor.style.right = pos.right + 'px'
+        editor.style.width = pos.width + 'px'
+      }
       editor.style.height = 'auto'
       editor.style.zIndex = '1000'
       scroller.appendChild(editor)
       const root = createRoot(editor)
       const editorHeight = 200
       root.render(
-        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground }}>
+        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground, settings, menuOptions }}>
           <RewriteEditor mode="browser" height={editorHeight} content={content} />
         </RewriteCtx.Provider>
       )
@@ -276,4 +297,23 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
 
 export function buildFinalPrompt(system: string, text: string): string {
   return `${system}:\n${text}`
+}
+
+export const handleMenuItemClicked = async (ctx: RewriteCtxType, sysPrompt: string) => {
+  if (ctx.mode === 'browser') {
+    document.execCommand('copy')
+    const [clipboardItem] = await navigator.clipboard.read()
+    const outputBlob = await clipboardItem.getType('text/html')
+    const output = await outputBlob.text()
+    const formatedText = formatSelectedText(output)
+    createRewriteEditor({
+      from: 'menu',
+      content: buildFinalPrompt(sysPrompt, formatedText),
+      talkToBackground: ctx.talkToBackground,
+      settings: ctx.settings,
+      menuOptions: ctx.menuOptions
+    })
+  } else {
+    toast({ description: `Menu item clicked` })
+  }
 }

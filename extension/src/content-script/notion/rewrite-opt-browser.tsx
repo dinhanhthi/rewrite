@@ -1,15 +1,32 @@
 import React from 'react'
-import RewriteOptWrapper from './rewrite-opt-wrapper'
-import { RewriteCtx } from '../rewrite-ctx'
+import { defaultMenuOptionsForm, defaultSettings } from '../../config'
 import { talkToBackground } from '../../helpers/helpers-browser'
+import useChromeStorageLocal from '../../helpers/hooks/use-browser-storage'
+import { FormMenuOptions, FormSettings } from '../../type'
+import { RewriteCtx } from '../rewrite-ctx'
+import RewriteOptWrapper from './rewrite-opt-wrapper'
 
 type RewriteOptBrowserProps = {
-  selected?: string
+  selectedText?: string
 }
 
 export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
+  const [settings] = useChromeStorageLocal<FormSettings>('settings', defaultSettings)
+  const [menuOptions] = useChromeStorageLocal<FormMenuOptions>(
+    'menuOptions',
+    defaultMenuOptionsForm
+  )
+
   return (
-    <RewriteCtx.Provider value={{ selected: props.selected, mode: 'browser', talkToBackground }}>
+    <RewriteCtx.Provider
+      value={{
+        selectedText: props.selectedText,
+        mode: 'browser',
+        talkToBackground,
+        settings,
+        menuOptions
+      }}
+    >
       <RewriteOptWrapper />
     </RewriteCtx.Provider>
   )
