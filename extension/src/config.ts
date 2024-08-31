@@ -250,14 +250,16 @@ export const FormSettingsSchema = z.object({
   }),
   model: z.string(),
   apiKey: z.string().min(1, 'This field is required.'),
-  stream: z.boolean().optional().default(false)
+  stream: z.boolean().optional().default(false),
+  adaptivePosition: z.boolean().optional().default(true)
 })
 
 export const defaultSettings: FormSettings = {
   service: 'openai',
   model: 'gpt-4o-mini',
   apiKey: '',
-  stream: false
+  stream: false,
+  adaptivePosition: true
 }
 
 export const FormMenuOptionsSchema = z.object({

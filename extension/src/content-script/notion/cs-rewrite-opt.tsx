@@ -45,7 +45,7 @@ function showRewriteOpt(notionOverlayContainer: Element | null) {
   divBelowSearchParent.insertBefore(rewriteOpt, secondChild)
   const root = createRoot(rewriteOpt)
   autoSetBgColorToNoneToOtherItems(rewriteOpt, divBelowSearch)
-  root.render(<RewriteOptBrowser selected={getSelectedBlocksHtml()} />)
+  root.render(<RewriteOptBrowser selectedText={getSelectedBlocksHtml()} />)
 }
 
 function autoSetBgColorToNoneToOtherItems(rewriteOpt: HTMLElement, divBelowSearch: Element | null) {

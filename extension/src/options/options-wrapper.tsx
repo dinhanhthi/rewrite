@@ -51,7 +51,8 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
   const form = useForm<FormSettings>({
     defaultValues: props.settings,
     resolver: zodResolver(FormSettingsSchema),
-    mode: 'onChange'
+    // mode: 'onChange'
+    mode: 'all'
   })
 
   useEffect(() => {
@@ -131,6 +132,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         labelClassName="font-medium"
                         onChange={onServiceChange}
                       />
+
                       <FormSelect
                         control={form.control}
                         name="model"
@@ -139,6 +141,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         labelClassName="font-medium"
                         triggerClassName="w-fit px-4"
                       />
+
                       <div className="flex flex-row items-center w-full gap-4">
                         <FormInput
                           className="flex-1"
@@ -170,21 +173,38 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                           Verify
                         </Button>
                       </div>
+
                       <FormSwitch
                         control={form.control}
                         name="stream"
                         label="Streaming response"
+                        description='Enable streaming response for the AI service. The response will be displayed as it comes, word by word.'
                         labelClassName="gap-4"
                         size="smaller"
                         controlComesFirst={false}
                       />
 
-                      <div className="flex flex-row items-center gap-4 text-base">
-                        Menu options
-                        <MenuOptions
-                          menuOptions={props.menuOptions}
-                          setMenuOptions={props.setMenuOptions}
-                        />
+                      <FormSwitch
+                        control={form.control}
+                        name="adaptivePosition"
+                        label="Adaptive editor position"
+                        description="Automatically position the popup editor based on the cursor position if possible. Otherwise, it will be positioned at the bottom right of the screen."
+                        labelClassName="gap-4"
+                        size="smaller"
+                        controlComesFirst={false}
+                      />
+
+                      <div className="flex flex-col items-start gap-0">
+                        <div className='flex flex-row items-center gap-4 text-base'>
+                          Menu options
+                          <MenuOptions
+                            menuOptions={props.menuOptions}
+                            setMenuOptions={props.setMenuOptions}
+                          />
+                        </div>
+                        <div className='text-sm text-muted-foreground'>
+                          Customize the options in the context menu. You can enable or disable the options, change the display name, and the prompt message.
+                        </div>
                       </div>
 
                       <div className="flex flex-row items-center gap-4">
@@ -199,7 +219,9 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
 
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button variant="secondary" size={'sm'}>Reset</Button>
+                            <Button variant="secondary" size={'sm'}>
+                              Reset
+                            </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>

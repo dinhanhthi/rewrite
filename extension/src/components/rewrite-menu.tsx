@@ -1,3 +1,4 @@
+import { PencilLine } from 'lucide-react'
 import React from 'react'
 import { defaultMenuOptions, systemIcons } from '../config'
 import { cn } from '../helpers/helpers'
@@ -87,6 +88,13 @@ export default function RewriteMenu(props: RewriteMenuProps) {
           )
         }
       })}
+      <hr className="mt-2 mb-1.5" />
+      <MenubarItem className="w-full p-0">
+        <div className="flex text-gray-600 flex-row items-center gap-3 py-1.5 pl-2 pr-6 rounded-sm hover:cursor-pointer group-hover:bg-gray-100 group-hover:text-gray-900">
+          <PencilLine className="w-4 h-4" />
+          <div className="text-[14px] whitespace-nowrap">Ask AI to do...</div>
+        </div>
+      </MenubarItem>
       {!menus.length && <div className="p-2 text-sm text-gray-600">Menu is empty.</div>}
     </MenubarContent>
   )

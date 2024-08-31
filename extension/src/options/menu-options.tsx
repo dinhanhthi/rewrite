@@ -85,6 +85,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
         </DialogHeader>
 
         <MenuOptionsForm form={form} triggerAdd={triggerAdd} />
+
         <DialogFooter>
           <MenuOptionsFooter
             onReset={onReset}

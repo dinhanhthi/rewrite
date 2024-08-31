@@ -93,6 +93,8 @@ const developmentConfig = {
 }
 
 const productionConfig = {
+  // 👇 This will automatically set NODE_ENV to "production"
+  // ref. https://webpack.js.org/guides/production/#specify-the-mode
   mode: 'production',
   performance: {
     hints: false,

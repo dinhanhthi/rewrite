@@ -73,7 +73,8 @@ try {
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
               response = await handlePrompt(settings, message.prompt)
             } else {
-              response = `Fake response for SUGGEST with data: "${message.text}"`
+              await new Promise(resolve => setTimeout(resolve, 1000))
+              response = `Fake response for SUGGEST with data: "${message.prompt}"`
             }
             port.postMessage({
               type: message.type,

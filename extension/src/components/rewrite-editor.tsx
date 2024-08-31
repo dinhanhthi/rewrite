@@ -66,7 +66,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     }
 
     if (props.mode === 'browser') {
-      document.execCommand('paste') // enable later
+      document.execCommand('paste')
       removeAllRewriteEditors()
     } else {
       toast({ description: `Button "${useThisTextLabel}" clicked!` })
@@ -183,7 +183,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                 {!result && (
                   <div className="flex flex-row items-center gap-2 font-normal text-gray-400 animate-pulse">
                     <LoaderCircle className="w-5 h-5 animate-spin" />
-                    <span className="italic">
+                    <span className="text-sm italic">
                       AI is thinking, please wait...
                     </span>
                   </div>
@@ -192,7 +192,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
               {/* Controls */}
               <div className="z-50 flex items-center justify-between w-full gap-4 p-2 bg-slate-100">
-                <div className="flex flex-row items-center gap-3">
+                <div onClick={e => e.stopPropagation()} className="flex flex-row items-center gap-3">
                   <Badge
                     className="text-xs font-medium text-gray-600 border-gray-400 whitespace-nowrap"
                     variant="outline"
