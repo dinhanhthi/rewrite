@@ -1,6 +1,7 @@
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { Check, Copy, LoaderCircle, RotateCcw, Settings2, X } from 'lucide-react'
 import React, { useEffect } from 'react'
+import { EDITOR_MAX_HEIGHT } from '../config'
 import { RewriteCtx } from '../content-script/rewrite-ctx'
 import { cn } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
@@ -17,7 +18,7 @@ import { Badge } from './ui/badge'
 import { toast } from './ui/use-toast'
 
 type RewriteEditorProps = {
-  height?: number
+  maxHeight?: number
   className?: string
   hideOverlay?: boolean // need it for the playground
   mode?: Mode
@@ -156,19 +157,21 @@ export default function RewriteEditor(props: RewriteEditorProps) {
         ></div>
       )}
       <div
-        style={{ height: `${props.height}px` || '200px' }}
         onClick={handleEditorClick}
         className={cn(
-          'w-full !p-0 border-none outline-none bg-transparent z-50 isolate relative',
+          'w-full !p-0 border-none outline-none bg-transparent z-50 isolate relative flex items-end',
           props.className
         )}
       >
-        <div className="w-full">
+        <div className="w-full h-full">
           {/* Main editor */}
           <div className="z-30 h-full">
             <div className="flex flex-col h-full w-full rounded-[6px] bg-white p-0 notion-box-shadow overflow-hidden">
               {/* Main editor */}
-              <div className="h-full p-4 overflow-y-auto dat-scrollbar dat-scrollbar-small">
+              <div
+                style={{ maxHeight: `${props.maxHeight}px` || `${EDITOR_MAX_HEIGHT}px` }}
+                className="h-full p-4 overflow-y-auto dat-scrollbar dat-scrollbar-small"
+              >
                 {!!result && (
                   <div
                     ref={editorRef}
@@ -183,16 +186,17 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                 {!result && (
                   <div className="flex flex-row items-center gap-2 font-normal text-gray-400 animate-pulse">
                     <LoaderCircle className="w-5 h-5 animate-spin" />
-                    <span className="text-sm italic">
-                      AI is thinking, please wait...
-                    </span>
+                    <span className="text-sm italic">AI is thinking, please wait...</span>
                   </div>
                 )}
               </div>
 
               {/* Controls */}
               <div className="z-50 flex items-center justify-between w-full gap-4 p-2 bg-slate-100">
-                <div onClick={e => e.stopPropagation()} className="flex flex-row items-center gap-3">
+                <div
+                  onClick={e => e.stopPropagation()}
+                  className="flex flex-row items-center gap-3"
+                >
                   <Badge
                     className="text-xs font-medium text-gray-600 border-gray-400 whitespace-nowrap"
                     variant="outline"

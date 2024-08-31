@@ -11,6 +11,7 @@ import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
 import RewriteEditor from '../components/rewrite-editor'
 import { toast } from '../components/ui/use-toast'
+import { EDITOR_MAX_HEIGHT, EDITOR_MAX_HEIGHT_ADAPTIVE } from '../config'
 import { RewriteCtx, RewriteCtxType, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { EditorFrom, FormMenuOptions, FormSettings, Service } from '../type'
 
@@ -52,9 +53,8 @@ export function createRewriteEditor(options: {
           width: endContainer.offsetWidth
         }
       : {
-          bottom: 16,
-          right: 16,
-          width: 400
+          bottom: 32,
+          right: 32
         }
     const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
@@ -69,16 +69,18 @@ export function createRewriteEditor(options: {
       } else {
         editor.style.bottom = pos.bottom + 'px'
         editor.style.right = pos.right + 'px'
-        editor.style.width = pos.width + 'px'
+        editor.style.width = 'max(400px, 50%)'
       }
       editor.style.height = 'auto'
       editor.style.zIndex = '1000'
       scroller.appendChild(editor)
       const root = createRoot(editor)
-      const editorHeight = 200
+      const editorHeight = settings?.adaptivePosition
+        ? EDITOR_MAX_HEIGHT_ADAPTIVE
+        : EDITOR_MAX_HEIGHT
       root.render(
         <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground, settings, menuOptions }}>
-          <RewriteEditor mode="browser" height={editorHeight} content={content} />
+          <RewriteEditor mode="browser" maxHeight={editorHeight} content={content} />
         </RewriteCtx.Provider>
       )
 

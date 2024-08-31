@@ -7,6 +7,8 @@ import { FormMenuOptions, FormSettings, MenuOptionType, ServiceObject } from './
 import { generateTranslatePrompt } from './helpers/helpers'
 
 export const MAX_OPTIONS = 10
+export const EDITOR_MAX_HEIGHT = 400
+export const EDITOR_MAX_HEIGHT_ADAPTIVE = 300
 
 export const services: ServiceObject[] = [
   {
