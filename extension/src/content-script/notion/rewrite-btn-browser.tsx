@@ -15,7 +15,7 @@ export default function ReWriteBtnBrowser() {
 
   return (
     <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground, settings, menuOptions }}>
-      <RewriteBtnWrapper />
+      <RewriteBtnWrapper options={menuOptions.options} />
     </RewriteCtx.Provider>
   )
 }
