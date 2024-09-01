@@ -6,7 +6,11 @@ import { FormMenuOptions, FormSettings } from '../../type'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtnWrapper from './rewrite-btn-wrapper'
 
-export default function ReWriteBtnBrowser() {
+type RewriteOptBrowserProps = {
+  selectedText?: string
+}
+
+export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
   const [settings] = useChromeStorageLocal<FormSettings>('settings', defaultSettings)
   const [menuOptions] = useChromeStorageLocal<FormMenuOptions>(
     'menuOptions',
@@ -14,7 +18,15 @@ export default function ReWriteBtnBrowser() {
   )
 
   return (
-    <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground, settings, menuOptions }}>
+    <RewriteCtx.Provider
+      value={{
+        selectedText: props.selectedText,
+        mode: 'browser',
+        talkToBackground,
+        settings,
+        menuOptions
+      }}
+    >
       <RewriteBtnWrapper options={menuOptions.options} />
     </RewriteCtx.Provider>
   )

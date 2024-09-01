@@ -65,7 +65,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
       </DialogTrigger>
 
       <DialogContent
-        className="max-h-[95%] max-w-[min(95%,768px)] overflow-hidden flex flex-col p-4"
+        className="max-h-[min(95%,700px)] max-w-[min(95%,768px)] overflow-hidden flex flex-col p-4"
         onPointerDownOutside={e => e.preventDefault()}
         onInteractOutside={e => e.preventDefault()}
         // onEscapeKeyDown={e => e.preventDefault()}

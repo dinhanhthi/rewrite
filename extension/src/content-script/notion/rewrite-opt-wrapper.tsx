@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
-import { handleMenuItemClicked } from '../../helpers/helpers'
-import { RewriteCtx } from '../rewrite-ctx'
 import RewriteOpt from './rewrite-opt'
 
 type RewriteOptWrapperProps = {
@@ -10,16 +8,11 @@ type RewriteOptWrapperProps = {
 }
 
 export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
-  const ctx = React.useContext(RewriteCtx)
   const [showMenu, setShowMenu] = React.useState(props.alwaysShowMenu ? 'rewrite-menu' : '')
 
   useEffect(() => {
     setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
   }, [props.alwaysShowMenu])
-
-  const handleItemClicked = (prompt: string) => {
-    handleMenuItemClicked(ctx, prompt)
-  }
 
   const handleMouseEnter = () => {
     setShowMenu('rewrite-menu')
@@ -47,7 +40,6 @@ export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
         </MenubarTrigger>
         <RewriteMenu
           className="absolute left-[calc(var(--radix-menubar-trigger-width)-4px)] top-[calc(var(--radix-menubar-trigger-height)*(-1)-10px)]"
-          handleItemClicked={handleItemClicked}
           disableFocusOutside={props.alwaysShowMenu}
         />
       </MenubarMenu>

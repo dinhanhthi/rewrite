@@ -19,6 +19,7 @@ import NotionPopoverMenu from './components/notion-popover-menu'
 import OptionsPlayground from './components/options-playground'
 import PopupPlayground from './components/popup-playground'
 import RewriteEditorPlayground from './components/rewrite-editor-playground'
+import CustomPromptEditorPlayground from './components/custom-prompt-editor-playground'
 
 export default function App() {
   const location = useLocation()
@@ -134,6 +135,12 @@ const menus: {
     name: 'RewriteEditor',
     path: '/RewriteEditor',
     component: RewriteEditorPlayground,
+    props: {}
+  },
+  {
+    name: 'CustomPromptEditor',
+    path: '/CustomPromptEditor',
+    component: CustomPromptEditorPlayground,
     props: {}
   },
   {

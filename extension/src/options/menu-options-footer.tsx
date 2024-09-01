@@ -35,14 +35,13 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         >
           Add option
         </Button>
-        <div className="w-8 h-8">
-          <RewriteBtnWrapper
-            options={props.menuOptions.options}
-            preview={true}
-            className="w-full border-none"
-            btnClassName="text-gray-500"
-          />
-        </div>
+      </div>
+      <div className="flex items-center w-8 h-8">
+        <RewriteBtnWrapper
+          options={props.menuOptions.options}
+          className="w-full border-none"
+          btnClassName="text-green-700"
+        />
       </div>
       <div className="flex flex-row gap-4">
         <Button onClick={() => props.setOpen(false)} variant="secondary" size="sm">

@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
-import { cn, handleMenuItemClicked } from '../../helpers/helpers'
+import { cn } from '../../helpers/helpers'
 import { MenuOptionType } from '../../type'
-import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtn from './rewrite-btn'
 
 type RewriteBtnWrapperProps = {
@@ -15,16 +14,11 @@ type RewriteBtnWrapperProps = {
 }
 
 export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
-  const ctx = React.useContext(RewriteCtx)
   const [showMenu, setShowMenu] = React.useState(props.alwaysShowMenu ? 'rewrite-menu' : '')
 
   useEffect(() => {
     setShowMenu(props.alwaysShowMenu ? 'rewrite-menu' : '')
   }, [props.alwaysShowMenu])
-
-  const handleItemClicked = (prompt: string) => {
-    handleMenuItemClicked(ctx, prompt)
-  }
 
   return (
     <Menubar
@@ -53,7 +47,6 @@ export default function RewriteBtnWrapper(props: RewriteBtnWrapperProps) {
         <RewriteMenu
           options={props.options}
           className="w-0"
-          handleItemClicked={handleItemClicked}
           disableFocusOutside={props.alwaysShowMenu}
         />
       </MenubarMenu>

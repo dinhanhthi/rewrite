@@ -9,6 +9,7 @@ import OpenAI from 'openai'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { twMerge } from 'tailwind-merge'
+import CustomPromptEditor from '../components/custom-prompt-editor'
 import RewriteEditor from '../components/rewrite-editor'
 import { toast } from '../components/ui/use-toast'
 import { EDITOR_MAX_HEIGHT, EDITOR_MAX_HEIGHT_ADAPTIVE } from '../config'
@@ -17,6 +18,63 @@ import { EditorFrom, FormMenuOptions, FormSettings, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function createCustomPromptEditor(props: { talkToBackground?: TalkToBackgroundFunc }) {
+  removeAllCustomPromptEditors()
+
+  let endContainer: HTMLElement | null = null
+  const selectedText = window.getSelection()
+  if (selectedText && selectedText.rangeCount > 0) {
+    const range = selectedText.getRangeAt(0)
+    endContainer = range.endContainer as HTMLElement
+    while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
+      if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+    }
+  }
+
+  if (endContainer) {
+    const pos = {
+      top: endContainer.offsetTop + endContainer.offsetHeight + 4,
+      left: endContainer.offsetLeft,
+      width: endContainer.offsetWidth
+    }
+    const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
+    if (scroller) {
+      const editor = document.createElement('div')
+      editor.classList.add('dinhanhthi')
+      editor.id = 'custom-prompt-editor'
+      editor.style.position = 'absolute'
+      editor.style.top = pos.top + 'px'
+      editor.style.left = pos.left + 'px'
+      editor.style.width = pos.width + 'px'
+      editor.style.height = 'auto'
+      editor.style.zIndex = '1000'
+      scroller.appendChild(editor)
+      const root = createRoot(editor)
+      const editorHeight = 50
+      root.render(
+        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground: props.talkToBackground }}>
+          <CustomPromptEditor mode="browser" />
+        </RewriteCtx.Provider>
+      )
+
+      /**
+       * We don't use `rect.bottom` because the editor isn't rendered yet, instead we use
+       * `rect.top + editorHeight`
+       */
+      const rect = editor.getBoundingClientRect()
+      const isEditorInViewport =
+        rect.top >= 0 &&
+        rect.top + editorHeight <= (window.innerHeight || document.documentElement.clientHeight)
+      if (!isEditorInViewport) {
+        scroller.scrollTo({
+          top: scroller.scrollTop + editorHeight + 10,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }
 }
 
 export function createRewriteEditor(options: {
@@ -53,8 +111,8 @@ export function createRewriteEditor(options: {
           width: endContainer.offsetWidth
         }
       : {
-          bottom: 32,
-          right: 32
+          bottom: 30, // for notion first
+          right: 80 // for notion first
         }
     const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
@@ -104,6 +162,11 @@ export function createRewriteEditor(options: {
 
 export function removeAllRewriteEditors() {
   const editors = document.querySelectorAll('#rewrite-editor')
+  editors.forEach(editor => editor.remove())
+}
+
+export function removeAllCustomPromptEditors() {
+  const editors = document.querySelectorAll('#custom-prompt-editor')
   editors.forEach(editor => editor.remove())
 }
 
@@ -169,38 +232,6 @@ function textInsideParagraph(doc: HTMLElement) {
 
   return doc.innerHTML
 }
-
-// TODO: remove or remove export only?
-export const notionBlockTypes = [
-  'notion-text-block',
-  'notion-header-block',
-  'notion-sub_header-block',
-  'notion-sub_sub_header-block',
-  'notion-bulleted_list-block',
-  'notion-numbered_list-block',
-  'notion-to_do-block',
-  'notion-toggle-block',
-  'notion-quote-block',
-  'notion-callout-block',
-  'notion-bookmark-block',
-  'notion-image-block',
-  'notion-video-block',
-  'notion-audio-block',
-  'notion-file-block',
-  'notion-pdf-block',
-  'notion-equation-block',
-  'notion-code-block',
-  'notion-embed-block',
-  'notion-collection_view-block',
-  'notion-table_of_contents-block',
-  'notion-child-page-block',
-  'notion-breadcrumb-block',
-  'notion-divider-block',
-  'notion-column-list-block',
-  'notion-column-block',
-  'notion-page-block',
-  'notion-unsupported-block'
-]
 
 export function generateAPIKeyPlaceholder(service: Service): string {
   const prefix = 'Example: '

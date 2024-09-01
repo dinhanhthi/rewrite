@@ -3,7 +3,7 @@ import { Check, Copy, LoaderCircle, RotateCcw, Settings2, X } from 'lucide-react
 import React, { useEffect } from 'react'
 import { EDITOR_MAX_HEIGHT } from '../config'
 import { RewriteCtx } from '../content-script/rewrite-ctx'
-import { cn } from '../helpers/helpers'
+import { cn, removeAllRewriteEditors } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import { Mode } from '../type'
 import CancelDialog from './cancel-dialog'
@@ -26,8 +26,8 @@ type RewriteEditorProps = {
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
-  const [result, setResult] = React.useState('')
   const ctx = React.useContext(RewriteCtx)
+  const [result, setResult] = React.useState('')
   const [copied, setCopied] = React.useState(false)
   const editorRef = React.useRef<HTMLDivElement>(null)
   const [showDiscardWarning, setShowDiscardWarning] = React.useState(false)
@@ -118,11 +118,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
   const cancelDialogBtnClicked = () => {
     setShowDiscardWarning(false)
-  }
-
-  function removeAllRewriteEditors() {
-    const editors = document.querySelectorAll('#rewrite-editor')
-    editors.forEach(editor => editor.remove())
   }
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -237,7 +232,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
                     <div className="rounded-[1em] w-fit overflow-hidden">
                       <button
                         onClick={useThisContent}
-                        className="flex items-center text-sm h-full gap-2 py-1 px-3 text-white transition-all bg-green-700 w-fit hover:px-3.5 _bg-rainbow group whitespace-nowrap group drop-shadow-md"
+                        className="flex items-center text-sm h-full gap-2 py-1 px-3 text-white transition-all bg-green-700 duration-300 w-fit hover:px-3.5 _bg-rainbow group whitespace-nowrap group drop-shadow-md"
                       >
                         <LogoRewriteIcon className="w-4.5 h-4.5 transition-transform group-active:scale-90" />{' '}
                         {useThisTextLabel}
