@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import RewriteOptBrowser from './rewrite-opt-browser'
+import { decorateSelectedText } from '../content-script'
 
 /**
  * When selecting a block or clicking on "..." in the menu bar (after selecting words)
@@ -14,6 +15,7 @@ export function watchAndCreateRewriteOpt() {
         if (selectedDecoBlocks.length > 0) {
           setTimeout(() => {
             showRewriteOpt(notionOverlayContainer)
+            decorateSelectedText()
           }, 0)
         }
       }

@@ -20,6 +20,13 @@ function addRewriteOverlay() {
   document.body.appendChild(overlay)
 }
 
-export function getSelectedText() {
-  return window?.getSelection()?.toString() || ''
+/**
+ * Decorate the selected text by using the CSS Highlight API
+ */
+export function decorateSelectedText() {
+  const selection = window.getSelection()
+  if (!selection || selection.isCollapsed) return
+  const range = selection.getRangeAt(0)
+  const highlight = new Highlight(range);
+  CSS.highlights.set("rewrite-highlight", highlight);
 }

@@ -1,7 +1,11 @@
 /* styles for all components (content script, popup, options, playground, etc.) */
 @tailwind base;
 
-[data-state="closed"] {
+::highlight(rewrite-highlight) {
+  background-color: rgba(35, 131, 226, 0.14);
+}
+
+[data-state='closed'] {
   .dat-border-accordion {
     border: none !important;
     padding-top: 0.5rem !important;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import RewriteBtnBrowser from './rewrite-btn-browser'
-import { getSelectedText } from '../content-script'
+import { decorateSelectedText } from '../content-script'
 
 /**
  * When selecting words
@@ -11,9 +11,10 @@ export function watchAndCreateRewriteBtn() {
   const observer = new MutationObserver((mutationsList, _observer) => {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
-        if (getSelectedText().length > 0) {
+        if ((window?.getSelection()?.toString() || '').length > 0) {
           setTimeout(() => {
             showReWriteBtn()
+            decorateSelectedText()
           }, 0)
         }
       }
