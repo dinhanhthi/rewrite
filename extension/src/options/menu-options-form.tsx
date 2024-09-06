@@ -68,7 +68,6 @@ export default function MenuOptionsForm(props: MenuOptionsFormProps) {
 
   useEffect(() => {
     if (props.triggerAdd) {
-      /* ###Thi */ console.log(`👉👉👉 props.triggerAdd: `, props.triggerAdd);
       handleAddOption()
     }
   }, [props.triggerAdd])

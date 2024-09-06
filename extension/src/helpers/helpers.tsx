@@ -20,17 +20,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function createCustomPromptEditor(props: { talkToBackground?: TalkToBackgroundFunc }) {
+export function createCustomPromptEditor(props: {
+  talkToBackground?: TalkToBackgroundFunc
+  from: EditorFrom
+  settings?: FormSettings
+}) {
   removeAllCustomPromptEditors()
 
   let endContainer: HTMLElement | null = null
-  const selectedText = window.getSelection()
-  if (selectedText && selectedText.rangeCount > 0) {
-    const range = selectedText.getRangeAt(0)
-    endContainer = range.endContainer as HTMLElement
-    while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
-      if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+  if (props.from === 'menu') {
+    const selectedText = window.getSelection()
+    if (selectedText && selectedText.rangeCount > 0) {
+      const range = selectedText.getRangeAt(0)
+      endContainer = range.endContainer as HTMLElement
+      while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
+        if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+      }
     }
+  } else {
+    const notionHalos = document.querySelectorAll('.notion-selectable-halo')
+    endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
   }
 
   if (endContainer) {
@@ -54,7 +63,14 @@ export function createCustomPromptEditor(props: { talkToBackground?: TalkToBackg
       const root = createRoot(editor)
       const editorHeight = 50
       root.render(
-        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground: props.talkToBackground }}>
+        <RewriteCtx.Provider
+          value={{
+            from: props.from,
+            mode: 'browser',
+            talkToBackground: props.talkToBackground,
+            settings: props.settings
+          }}
+        >
           <CustomPromptEditor mode="browser" />
         </RewriteCtx.Provider>
       )
@@ -77,19 +93,17 @@ export function createCustomPromptEditor(props: { talkToBackground?: TalkToBackg
   }
 }
 
-export function createRewriteEditor(options: {
+export function createRewriteEditor(props: {
   from: EditorFrom
   content?: string
   talkToBackground?: TalkToBackgroundFunc
   settings?: FormSettings
   menuOptions?: FormMenuOptions
 }) {
-  const { from, content, talkToBackground, settings, menuOptions } = options
-
   removeAllRewriteEditors()
 
   let endContainer: HTMLElement | null = null
-  if (from === 'menu') {
+  if (props.from === 'menu') {
     const selectedText = window.getSelection()
     if (selectedText && selectedText.rangeCount > 0) {
       const range = selectedText.getRangeAt(0)
@@ -98,13 +112,13 @@ export function createRewriteEditor(options: {
         if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
       }
     }
-  } else if (from === 'opt') {
+  } else if (props.from === 'opt') {
     const notionHalos = document.querySelectorAll('.notion-selectable-halo')
     endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
   }
 
   if (endContainer) {
-    const pos = settings?.adaptivePosition
+    const pos = props.settings?.adaptivePosition
       ? {
           top: endContainer.offsetTop + endContainer.offsetHeight + 4,
           left: endContainer.offsetLeft,
@@ -119,8 +133,8 @@ export function createRewriteEditor(options: {
       const editor = document.createElement('div')
       editor.classList.add('dinhanhthi')
       editor.id = 'rewrite-editor'
-      editor.style.position = settings?.adaptivePosition ? 'absolute' : 'fixed'
-      if (settings?.adaptivePosition) {
+      editor.style.position = props.settings?.adaptivePosition ? 'absolute' : 'fixed'
+      if (props.settings?.adaptivePosition) {
         editor.style.top = pos.top + 'px'
         editor.style.left = pos.left + 'px'
         editor.style.width = pos.width + 'px'
@@ -133,12 +147,20 @@ export function createRewriteEditor(options: {
       editor.style.zIndex = '1000'
       scroller.appendChild(editor)
       const root = createRoot(editor)
-      const editorHeight = settings?.adaptivePosition
+      const editorHeight = props.settings?.adaptivePosition
         ? EDITOR_MAX_HEIGHT_ADAPTIVE
         : EDITOR_MAX_HEIGHT
       root.render(
-        <RewriteCtx.Provider value={{ mode: 'browser', talkToBackground, settings, menuOptions }}>
-          <RewriteEditor mode="browser" maxHeight={editorHeight} content={content} />
+        <RewriteCtx.Provider
+          value={{
+            from: props.from,
+            mode: 'browser',
+            talkToBackground: props.talkToBackground,
+            settings: props.settings,
+            menuOptions: props.menuOptions
+          }}
+        >
+          <RewriteEditor mode="browser" maxHeight={editorHeight} content={props.content} />
         </RewriteCtx.Provider>
       )
 
@@ -340,7 +362,7 @@ export const handleMenuItemClicked = async (ctx: RewriteCtxType, sysPrompt: stri
     const output = await outputBlob.text()
     const formatedText = formatSelectedText(output)
     createRewriteEditor({
-      from: 'menu',
+      from: ctx.from,
       content: buildFinalPrompt(sysPrompt, formatedText),
       talkToBackground: ctx.talkToBackground,
       settings: ctx.settings,

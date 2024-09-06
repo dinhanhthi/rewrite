@@ -1,9 +1,9 @@
-import { Github, Globe, Settings2 } from 'lucide-react'
+import { Github, Globe, MessageCircleWarning, Settings2 } from 'lucide-react'
 import React from 'react'
+import { Badge } from '../components/ui/badge'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { cn } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
-import { Badge } from '../components/ui/badge'
 
 export type PopupOptionsWrapperProps = {
   className?: string
@@ -19,13 +19,15 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
         props.className
       )}
     >
-      <div className='flex flex-col items-center gap-2'>
+      <div className="flex flex-col items-center gap-2">
         <div className="flex items-center justify-center gap-2 text-green-700">
           <LogoRewriteIcon className="w-5 h-5" />
           <div className="text-xl font-medium whitespace-nowrap">Rewrite</div>
         </div>
         <Badge variant="secondary">{props.version || 'v0.0.0'}</Badge>
-        <div className='text-sm text-center text-slate-600'>Type your phrases and get back a better version.</div>
+        <div className="text-sm text-center text-slate-600">
+          Type your phrases and get back a better version.
+        </div>
       </div>
 
       <div className="flex flex-row items-center justify-center w-full gap-4 text-slate-500">
@@ -44,6 +46,15 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
         <TooltipThi content="Settings">
           <a target="_blank" href={props.optionsUrl}>
             <Settings2 className="w-5 h-5 hover:text-green-700" />
+          </a>
+        </TooltipThi>
+
+        <TooltipThi content="Feedback">
+          <a
+            target="_blank"
+            href="mailto:me@dinhanhthi.com?subject=Rewrite%20Extension%20Feedback&cc=dinhanhthi@gmail.com"
+          >
+            <MessageCircleWarning className="w-5 h-5 hover:text-green-700" />
           </a>
         </TooltipThi>
       </div>

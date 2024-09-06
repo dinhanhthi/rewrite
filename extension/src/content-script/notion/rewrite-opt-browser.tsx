@@ -17,9 +17,12 @@ export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
     defaultMenuOptionsForm
   )
 
+  // /* ###Thi */ console.log(`👉👉👉 props.selectedText: `, props.selectedText);
+
   return (
     <RewriteCtx.Provider
       value={{
+        from: 'opt',
         selectedText: props.selectedText,
         mode: 'browser',
         talkToBackground,

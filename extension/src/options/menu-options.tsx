@@ -45,7 +45,6 @@ export default function MenuOptions(props: MenuOptionsProps) {
 
   function onSubmit() {
     if (form.formState.isValid && isFormChanged) {
-      /* ###Thi */ console.log(`👉👉👉 Saved clicked`)
       props.setMenuOptions(form.getValues())
       form.reset(form.getValues())
     }

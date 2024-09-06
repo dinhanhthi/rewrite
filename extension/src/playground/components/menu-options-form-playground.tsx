@@ -33,13 +33,6 @@ export default function MenuOptionsModalPlayground() {
   }, [form.watch()])
 
   function onSubmit() {
-    // /* ###Thi */ console.log(`👉👉👉 form.formState.errors: `, form.formState.errors);
-    // /* ###Thi */ console.log(`👉👉👉 form.formState.isValid: `, form.formState.isValid);
-    // /* ###Thi */ console.log(`👉👉👉 menuOptions: `, menuOptions);
-    // /* ###Thi */ console.log(`👉👉👉 form.watch: `, form.watch());
-    /* ###Thi */ console.log(`👉👉👉 isFormChanged: `, isFormChanged)
-    /* ###Thi */ console.log(`👉👉👉 form.formState.isDirty: `, form.formState.isDirty)
-    /* ###Thi */ console.log(`👉👉👉 props.form.formState.isValid: `, form.formState.isValid)
     if (form.formState.isValid && isFormChanged) {
       toast({ description: `Save triggered` })
       setMenuOptions(form.getValues())
@@ -48,7 +41,6 @@ export default function MenuOptionsModalPlayground() {
   }
 
   function onReset() {
-    /* ###Thi */ console.log(`👉👉👉 onReset called`)
     form.reset(defaultMenuOptionsForm)
     setMenuOptions(defaultMenuOptionsForm)
   }

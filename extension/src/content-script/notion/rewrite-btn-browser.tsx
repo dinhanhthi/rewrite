@@ -20,6 +20,7 @@ export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
   return (
     <RewriteCtx.Provider
       value={{
+        from: 'menu',
         selectedText: props.selectedText,
         mode: 'browser',
         talkToBackground,

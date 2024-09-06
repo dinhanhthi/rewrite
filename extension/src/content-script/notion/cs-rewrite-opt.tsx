@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import RewriteOptBrowser from './rewrite-opt-browser'
-import { decorateSelectedText } from '../content-script'
+// import { decorateSelectedText } from '../content-script'
 
 /**
  * When selecting a block or clicking on "..." in the menu bar (after selecting words)
@@ -12,10 +12,11 @@ export function watchAndCreateRewriteOpt() {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
+        // /* ###Thi */ console.log(`👉👉👉 selectedDecoBlocks: `, selectedDecoBlocks);
         if (selectedDecoBlocks.length > 0) {
           setTimeout(() => {
             showRewriteOpt(notionOverlayContainer)
-            decorateSelectedText()
+            // decorateSelectedText()
           }, 0)
         }
       }
@@ -47,6 +48,7 @@ function showRewriteOpt(notionOverlayContainer: Element | null) {
   divBelowSearchParent.insertBefore(rewriteOpt, secondChild)
   const root = createRoot(rewriteOpt)
   autoSetBgColorToNoneToOtherItems(rewriteOpt, divBelowSearch)
+  // /* ###Thi */ console.log(`👉👉👉 getSelectedBlocksHtml(): `, getSelectedBlocksHtml());
   root.render(<RewriteOptBrowser selectedText={getSelectedBlocksHtml()} />)
 }
 

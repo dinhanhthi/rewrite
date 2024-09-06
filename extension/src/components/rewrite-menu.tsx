@@ -36,7 +36,11 @@ export default function RewriteMenu(props: RewriteMenuProps) {
     if (ctx.mode === 'playground') {
       toast({ description: `Ask AI to do... clicked!` })
     } else {
-      createCustomPromptEditor({ talkToBackground: ctx.talkToBackground })
+      createCustomPromptEditor({
+        talkToBackground: ctx.talkToBackground,
+        from: ctx.from,
+        settings: ctx.settings
+      })
     }
   }
 
