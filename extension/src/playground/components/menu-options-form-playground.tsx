@@ -72,7 +72,7 @@ export default function MenuOptionsModalPlayground() {
         <MenuOptionsForm triggerAdd={triggerAdd} form={form} />
         <MenuOptionsFooter
           onReset={onReset}
-          setOpen={() => toast({ description: `Close triggered` })}
+          handleModalOpenChange={() => toast({ description: `Close triggered` })}
           menuOptions={form.watch()}
           triggerAdd={triggerAdd}
           setTriggerAdd={setTriggerAdd}

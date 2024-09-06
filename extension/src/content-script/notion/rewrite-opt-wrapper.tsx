@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
 import RewriteOpt from './rewrite-opt'
+import { RewriteCtx } from '../rewrite-ctx'
 
 type RewriteOptWrapperProps = {
   alwaysShowMenu?: boolean
 }
 
 export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
+  const ctx = useContext(RewriteCtx)
   const [showMenu, setShowMenu] = React.useState(props.alwaysShowMenu ? 'rewrite-menu' : '')
 
   useEffect(() => {
@@ -41,6 +43,7 @@ export default function RewriteOptWrapper(props: RewriteOptWrapperProps) {
         <RewriteMenu
           className="absolute left-[calc(var(--radix-menubar-trigger-width)-4px)] top-[calc(var(--radix-menubar-trigger-height)*(-1)-10px)]"
           disableFocusOutside={props.alwaysShowMenu}
+          options={ctx.menuOptions?.options}
         />
       </MenubarMenu>
     </Menubar>

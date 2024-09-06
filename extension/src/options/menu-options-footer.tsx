@@ -20,7 +20,7 @@ type MenuOptionsFooterProps = {
   triggerAdd?: number
   setTriggerAdd: React.Dispatch<React.SetStateAction<number>>
   onSubmit: () => void
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleModalOpenChange: (open: boolean) => void
   onReset: () => void
 }
 
@@ -44,7 +44,7 @@ export default function MenuOptionsFooter(props: MenuOptionsFooterProps) {
         />
       </div>
       <div className="flex flex-row gap-4">
-        <Button onClick={() => props.setOpen(false)} variant="secondary" size="sm">
+        <Button onClick={() => props.handleModalOpenChange(false)} variant="secondary" size="sm">
           Cancel
         </Button>
         <AlertDialog>

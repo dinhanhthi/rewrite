@@ -56,8 +56,15 @@ export default function MenuOptions(props: MenuOptionsProps) {
     props.setMenuOptions(defaultMenuOptionsForm)
   }
 
+  function handleModalOpenChange(open: boolean) {
+    setOpen(open)
+    if (!open) {
+      form.reset(props.menuOptions)
+    }
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleModalOpenChange}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Settings className="w-4 h-4" />
@@ -89,13 +96,13 @@ export default function MenuOptions(props: MenuOptionsProps) {
         <DialogFooter>
           <MenuOptionsFooter
             onReset={onReset}
-            setOpen={setOpen}
+            handleModalOpenChange={handleModalOpenChange}
             menuOptions={form.watch()}
             triggerAdd={triggerAdd}
             setTriggerAdd={setTriggerAdd}
             onSubmit={onSubmit}
             saveDisabled={
-              (form.formState.isValid && form.formState.isDirty && isFormChanged) ||
+              (!form.formState.isValid && form.formState.isDirty && isFormChanged) ||
               !form.formState.isDirty ||
               !isFormChanged
             }
