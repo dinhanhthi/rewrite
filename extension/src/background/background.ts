@@ -5,7 +5,7 @@ import { getLocal } from '../helpers/helpers-browser'
 import { FormSettings } from '../type'
 
 // ------------------ DEV ONLY -----------------------------------------------------------
-const fakeResponse = false // default: false
+const fakeResponse = true // default: false
 const fakeTimeout = 500 // default: 500
 // 👆 Despite this, "yarn build" always ignores this
 // ------------------ DEV ONLY -----------------------------------------------------------

@@ -15,6 +15,7 @@ import { toast } from '../components/ui/use-toast'
 import { EDITOR_MAX_HEIGHT, EDITOR_MAX_HEIGHT_ADAPTIVE } from '../config'
 import { RewriteCtx, RewriteCtxType, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { EditorFrom, FormMenuOptions, FormSettings, Service } from '../type'
+import { convertSelectedString } from './helpers-notion'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -192,69 +193,6 @@ export function removeAllCustomPromptEditors() {
   editors.forEach(editor => editor.remove())
 }
 
-/**
- * We use execCommand('copy') to get the already-transformed HTML (by Notion). However, when user
- * selects only text inside a paragraph, the HTML is not transformed. So we need to format it
- */
-export function formatSelectedText(text: string) {
-  if (text.includes('<span style="')) {
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(text, 'text/html')
-    const formattedText = textInsideParagraph(doc.body)
-    return formattedText
-  }
-
-  return text
-    .replace('<meta charset="utf-8">', '') // from notion
-    .replace(/<!--\s*notionvc:\s*[a-f0-9\-]+\s*-->/gi, '') // from notion
-    .replace(/(\r\n|\n|\r)/gm, '') // remove all new lines
-}
-
-function textInsideParagraph(doc: HTMLElement) {
-  function wrapTextWithTags(text: string, tags: string[]) {
-    tags.forEach(tag => {
-      text = `<${tag}>${text}</${tag}>`
-    })
-    return text
-  }
-
-  const spans = doc.querySelectorAll('span')
-
-  spans.forEach(span => {
-    const style = span.getAttribute('style')
-    if (style) {
-      let tags = []
-
-      if (style.includes('font-weight:600')) {
-        tags.push('b')
-      }
-      if (style.includes('font-style:italic')) {
-        tags.push('i')
-      }
-      if (style.includes('border-bottom:0.05em solid;word-wrap:break-word')) {
-        tags.push('u')
-      }
-      if (style.includes('text-decoration:line-through')) {
-        tags.push('s')
-      }
-      if (
-        style.includes('font-family') &&
-        (style.includes('Courier') || style.includes('monospace'))
-      ) {
-        tags.push('code')
-      }
-
-      if (tags.length > 0) {
-        const text = span.innerHTML
-        const wrappedText = wrapTextWithTags(text, tags)
-        span.outerHTML = wrappedText // replace completely current <span> with the new wrapped text
-      }
-    }
-  })
-
-  return doc.innerHTML
-}
-
 export function generateAPIKeyPlaceholder(service: Service): string {
   const prefix = 'Example: '
   switch (service) {
@@ -360,7 +298,9 @@ export const handleMenuItemClicked = async (ctx: RewriteCtxType, sysPrompt: stri
     const [clipboardItem] = await navigator.clipboard.read()
     const outputBlob = await clipboardItem.getType('text/html')
     const output = await outputBlob.text()
-    const formatedText = formatSelectedText(output)
+    /* ###Thi */ console.log(`👉👉👉 output: `, output)
+    const formatedText = convertSelectedString(output)
+    /* ###Thi */ console.log(`👉👉👉 formatedText: `, formatedText)
     createRewriteEditor({
       from: ctx.from,
       content: buildFinalPrompt(sysPrompt, formatedText),

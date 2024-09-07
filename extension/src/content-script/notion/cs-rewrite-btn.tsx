@@ -1,7 +1,8 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import RewriteBtnBrowser from './rewrite-btn-browser'
+import { convertSelectedString, getSelectedHtml } from '../../helpers/helpers-notion'
 import { decorateSelectedText } from '../content-script'
+import RewriteBtnBrowser from './rewrite-btn-browser'
 
 /**
  * When selecting words
@@ -36,6 +37,11 @@ function showReWriteBtn() {
   decorateReWriteBtn(reWriteBtn)
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
+
+  const selectedText = getSelectedHtml()
+  /* ###Thi */ console.log(`👉👉👉 selectedText: `, selectedText)
+  const extractedtext = convertSelectedString(selectedText)
+  /* ###Thi */ console.log(`👉👉👉 extractedtext: `, extractedtext)
 
   root.render(<RewriteBtnBrowser />)
 }

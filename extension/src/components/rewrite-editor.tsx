@@ -35,7 +35,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      /* ###Thi */ console.log(`👉👉👉 props.content: `, props.content)
+      // /* ###Thi */ console.log(`👉👉👉 props.content: `, props.content)
       const response = props.content
         ? await ctx.talkToBackground!({
             portName: 'port-prompt',
@@ -45,7 +45,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
             }
           })
         : null
-      /* ###Thi */ console.log(`👉👉👉 response: `, response)
+      // /* ###Thi */ console.log(`👉👉👉 response: `, response)
       setResult(response)
     }
     fetchData()

@@ -5,6 +5,7 @@ import useChromeStorageLocal from '../../helpers/hooks/use-browser-storage'
 import { FormMenuOptions, FormSettings } from '../../type'
 import { RewriteCtx } from '../rewrite-ctx'
 import RewriteOptWrapper from './rewrite-opt-wrapper'
+// import { formatSelectedText } from '../../helpers/helpers'
 
 type RewriteOptBrowserProps = {
   selectedText?: string
@@ -17,7 +18,9 @@ export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
     defaultMenuOptionsForm
   )
 
-  // /* ###Thi */ console.log(`👉👉👉 props.selectedText: `, props.selectedText);
+  /* ###Thi */ console.log(`👉👉👉 props.selectedText: `, props.selectedText);
+  // const formatedSelectedText = formatSelectedText(props.selectedText)
+  // /* ###Thi */ console.log(`👉👉👉 formatedSelectedText: `, formatedSelectedText);
 
   return (
     <RewriteCtx.Provider

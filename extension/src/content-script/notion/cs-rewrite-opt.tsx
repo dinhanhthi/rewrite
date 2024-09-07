@@ -1,5 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { getSelectedBlocksHtml } from '../../helpers/helpers-notion'
 import RewriteOptBrowser from './rewrite-opt-browser'
 // import { decorateSelectedText } from '../content-script'
 
@@ -77,21 +78,4 @@ function decorateRewriteOpt(rewriteBtn: HTMLElement) {
 
 function isRewriteOptAdded() {
   return document.querySelector('.rewrite-opt')
-}
-
-/**
- * Notion uses it own selection method (CSS) for selecting whole blocks. There is no native browser's
- * selection!
- *
- * TIP: Inspect element > choose div.notion-overlay-container > unselect z-index so that we can
- * inspect the below elements
- */
-function getSelectedBlocksHtml() {
-  const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
-  let html = ''
-  for (const block of selectedDecoBlocks) {
-    const selectedBlock = block?.previousSibling as HTMLElement
-    html += selectedBlock?.outerHTML
-  }
-  return html
 }
