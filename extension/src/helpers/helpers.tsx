@@ -14,42 +14,27 @@ import RewriteEditor from '../components/rewrite-editor'
 import { toast } from '../components/ui/use-toast'
 import { EDITOR_MAX_HEIGHT, EDITOR_MAX_HEIGHT_ADAPTIVE } from '../config'
 import { RewriteCtx, RewriteCtxType, TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
-import { EditorFrom, FormMenuOptions, FormSettings, Service } from '../type'
-import { convertSelectedString } from './helpers-notion'
+import { FormMenuOptions, FormSettings, Service } from '../type'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export function createCustomPromptEditor(props: {
+  selectedText: string
   talkToBackground?: TalkToBackgroundFunc
-  from: EditorFrom
   settings?: FormSettings
+  endContainer?: HTMLElement | null // for adaptive position
 }) {
   removeAllCustomPromptEditors()
 
-  let endContainer: HTMLElement | null = null
-  if (props.from === 'menu') {
-    const selectedText = window.getSelection()
-    if (selectedText && selectedText.rangeCount > 0) {
-      const range = selectedText.getRangeAt(0)
-      endContainer = range.endContainer as HTMLElement
-      while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
-        if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
-      }
-    }
-  } else {
-    const notionHalos = document.querySelectorAll('.notion-selectable-halo')
-    endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
-  }
-
-  if (endContainer) {
+  if (props.endContainer) {
     const pos = {
-      top: endContainer.offsetTop + endContainer.offsetHeight + 4,
-      left: endContainer.offsetLeft,
-      width: endContainer.offsetWidth
+      top: props.endContainer.offsetTop + props.endContainer.offsetHeight + 4,
+      left: props.endContainer.offsetLeft,
+      width: props.endContainer.offsetWidth
     }
-    const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
+    const scroller = props.endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
       const editor = document.createElement('div')
       editor.classList.add('dinhanhthi')
@@ -66,7 +51,7 @@ export function createCustomPromptEditor(props: {
       root.render(
         <RewriteCtx.Provider
           value={{
-            from: props.from,
+            selectedText: props.selectedText,
             mode: 'browser',
             talkToBackground: props.talkToBackground,
             settings: props.settings
@@ -95,41 +80,26 @@ export function createCustomPromptEditor(props: {
 }
 
 export function createRewriteEditor(props: {
-  from: EditorFrom
   content?: string
   talkToBackground?: TalkToBackgroundFunc
   settings?: FormSettings
   menuOptions?: FormMenuOptions
+  endContainer?: HTMLElement | null // for adaptive position
 }) {
   removeAllRewriteEditors()
 
-  let endContainer: HTMLElement | null = null
-  if (props.from === 'menu') {
-    const selectedText = window.getSelection()
-    if (selectedText && selectedText.rangeCount > 0) {
-      const range = selectedText.getRangeAt(0)
-      endContainer = range.endContainer as HTMLElement
-      while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
-        if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
-      }
-    }
-  } else if (props.from === 'opt') {
-    const notionHalos = document.querySelectorAll('.notion-selectable-halo')
-    endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
-  }
-
-  if (endContainer) {
+  if (props.endContainer) {
     const pos = props.settings?.adaptivePosition
       ? {
-          top: endContainer.offsetTop + endContainer.offsetHeight + 4,
-          left: endContainer.offsetLeft,
-          width: endContainer.offsetWidth
+          top: props.endContainer.offsetTop + props.endContainer.offsetHeight + 4,
+          left: props.endContainer.offsetLeft,
+          width: props.endContainer.offsetWidth
         }
       : {
           bottom: 30, // for notion first
           right: 80 // for notion first
         }
-    const scroller = endContainer.closest('.notion-scroller.vertical') as HTMLElement
+    const scroller = props.endContainer.closest('.notion-scroller.vertical') as HTMLElement
     if (scroller) {
       const editor = document.createElement('div')
       editor.classList.add('dinhanhthi')
@@ -152,17 +122,12 @@ export function createRewriteEditor(props: {
         ? EDITOR_MAX_HEIGHT_ADAPTIVE
         : EDITOR_MAX_HEIGHT
       root.render(
-        <RewriteCtx.Provider
-          value={{
-            from: props.from,
-            mode: 'browser',
-            talkToBackground: props.talkToBackground,
-            settings: props.settings,
-            menuOptions: props.menuOptions
-          }}
-        >
-          <RewriteEditor mode="browser" maxHeight={editorHeight} content={props.content} />
-        </RewriteCtx.Provider>
+        <RewriteEditor
+          mode="browser"
+          maxHeight={editorHeight}
+          content={props.content}
+          talkToBackground={props.talkToBackground}
+        />
       )
 
       /**
@@ -294,19 +259,13 @@ export function buildFinalPrompt(system: string, text: string): string {
 
 export const handleMenuItemClicked = async (ctx: RewriteCtxType, sysPrompt: string) => {
   if (ctx.mode === 'browser') {
-    document.execCommand('copy')
-    const [clipboardItem] = await navigator.clipboard.read()
-    const outputBlob = await clipboardItem.getType('text/html')
-    const output = await outputBlob.text()
-    /* ###Thi */ console.log(`👉👉👉 output: `, output)
-    const formatedText = convertSelectedString(output)
-    /* ###Thi */ console.log(`👉👉👉 formatedText: `, formatedText)
+    const content = buildFinalPrompt(sysPrompt, ctx.selectedText)
     createRewriteEditor({
-      from: ctx.from,
-      content: buildFinalPrompt(sysPrompt, formatedText),
+      content,
       talkToBackground: ctx.talkToBackground,
       settings: ctx.settings,
-      menuOptions: ctx.menuOptions
+      menuOptions: ctx.menuOptions,
+      endContainer: ctx.endContainer
     })
   } else {
     toast({ description: `Menu item clicked` })

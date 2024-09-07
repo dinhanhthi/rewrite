@@ -2,7 +2,7 @@ import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { Check, Copy, LoaderCircle, RotateCcw, Settings2, X } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { EDITOR_MAX_HEIGHT } from '../config'
-import { RewriteCtx } from '../content-script/rewrite-ctx'
+import { TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { cn, removeAllRewriteEditors } from '../helpers/helpers'
 import LogoRewriteIcon from '../icons/logo-rewrite-icon'
 import { Mode } from '../type'
@@ -18,6 +18,7 @@ import { Badge } from './ui/badge'
 import { toast } from './ui/use-toast'
 
 type RewriteEditorProps = {
+  talkToBackground?: TalkToBackgroundFunc
   maxHeight?: number
   className?: string
   hideOverlay?: boolean // need it for the playground
@@ -26,7 +27,6 @@ type RewriteEditorProps = {
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
-  const ctx = React.useContext(RewriteCtx)
   const [result, setResult] = React.useState('')
   const [copied, setCopied] = React.useState(false)
   const editorRef = React.useRef<HTMLDivElement>(null)
@@ -35,9 +35,8 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      // /* ###Thi */ console.log(`👉👉👉 props.content: `, props.content)
       const response = props.content
-        ? await ctx.talkToBackground!({
+        ? await props.talkToBackground!({
             portName: 'port-prompt',
             message: {
               type: 'prompt',
@@ -45,7 +44,6 @@ export default function RewriteEditor(props: RewriteEditorProps) {
             }
           })
         : null
-      // /* ###Thi */ console.log(`👉👉👉 response: `, response)
       setResult(response)
     }
     fetchData()

@@ -37,9 +37,10 @@ export default function RewriteMenu(props: RewriteMenuProps) {
       toast({ description: `Ask AI to do... clicked!` })
     } else {
       createCustomPromptEditor({
+        selectedText: ctx.selectedText,
         talkToBackground: ctx.talkToBackground,
-        from: ctx.from,
-        settings: ctx.settings
+        settings: ctx.settings,
+        endContainer: ctx.endContainer
       })
     }
   }

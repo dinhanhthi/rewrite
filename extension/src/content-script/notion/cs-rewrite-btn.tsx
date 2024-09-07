@@ -1,6 +1,10 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { convertSelectedString, getSelectedHtml } from '../../helpers/helpers-notion'
+import {
+  convertSelectedString,
+  getEndContainer,
+  getSelectedHtml
+} from '../../helpers/helpers-notion'
 import { decorateSelectedText } from '../content-script'
 import RewriteBtnBrowser from './rewrite-btn-browser'
 
@@ -38,12 +42,12 @@ function showReWriteBtn() {
   notionMenu.insertBefore(reWriteBtn, notionMenu.firstChild)
   const root = createRoot(reWriteBtn)
 
-  const selectedText = getSelectedHtml()
-  /* ###Thi */ console.log(`👉👉👉 selectedText: `, selectedText)
-  const extractedtext = convertSelectedString(selectedText)
-  /* ###Thi */ console.log(`👉👉👉 extractedtext: `, extractedtext)
+  const selected = getSelectedHtml()
+  const convertedText = convertSelectedString(selected)
 
-  root.render(<RewriteBtnBrowser />)
+  const endContainer = getEndContainer('menu')
+
+  root.render(<RewriteBtnBrowser selectedText={convertedText} endContainer={endContainer} />)
 }
 
 function getNotionMenu() {

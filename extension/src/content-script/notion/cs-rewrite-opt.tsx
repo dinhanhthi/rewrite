@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { getSelectedBlocksHtml } from '../../helpers/helpers-notion'
+import { convertSelectedString, getEndContainer, getSelectedBlocksHtml } from '../../helpers/helpers-notion'
 import RewriteOptBrowser from './rewrite-opt-browser'
 // import { decorateSelectedText } from '../content-script'
 
@@ -13,7 +13,6 @@ export function watchAndCreateRewriteOpt() {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         const selectedDecoBlocks = document.querySelectorAll('div.notion-selectable-halo')
-        // /* ###Thi */ console.log(`👉👉👉 selectedDecoBlocks: `, selectedDecoBlocks);
         if (selectedDecoBlocks.length > 0) {
           setTimeout(() => {
             showRewriteOpt(notionOverlayContainer)
@@ -49,8 +48,15 @@ function showRewriteOpt(notionOverlayContainer: Element | null) {
   divBelowSearchParent.insertBefore(rewriteOpt, secondChild)
   const root = createRoot(rewriteOpt)
   autoSetBgColorToNoneToOtherItems(rewriteOpt, divBelowSearch)
-  // /* ###Thi */ console.log(`👉👉👉 getSelectedBlocksHtml(): `, getSelectedBlocksHtml());
-  root.render(<RewriteOptBrowser selectedText={getSelectedBlocksHtml()} />)
+
+  const selectedBlocksHtml = getSelectedBlocksHtml()
+  const convertedText = convertSelectedString(selectedBlocksHtml)
+
+  const endContainer = getEndContainer('opt')
+
+  root.render(
+    <RewriteOptBrowser selectedText={convertedText} endContainer={endContainer} />
+  )
 }
 
 function autoSetBgColorToNoneToOtherItems(rewriteOpt: HTMLElement, divBelowSearch: Element | null) {

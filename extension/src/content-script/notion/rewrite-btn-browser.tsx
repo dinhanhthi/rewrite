@@ -7,7 +7,8 @@ import { RewriteCtx } from '../rewrite-ctx'
 import RewriteBtnWrapper from './rewrite-btn-wrapper'
 
 type RewriteOptBrowserProps = {
-  selectedText?: string
+  endContainer: HTMLElement | null
+  selectedText: string
 }
 
 export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
@@ -20,12 +21,12 @@ export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
   return (
     <RewriteCtx.Provider
       value={{
-        from: 'menu',
         selectedText: props.selectedText,
         mode: 'browser',
         talkToBackground,
         settings,
-        menuOptions
+        menuOptions,
+        endContainer: props.endContainer
       }}
     >
       <RewriteBtnWrapper options={menuOptions.options} />

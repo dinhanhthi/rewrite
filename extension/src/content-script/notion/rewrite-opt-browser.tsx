@@ -8,7 +8,8 @@ import RewriteOptWrapper from './rewrite-opt-wrapper'
 // import { formatSelectedText } from '../../helpers/helpers'
 
 type RewriteOptBrowserProps = {
-  selectedText?: string
+  endContainer: HTMLElement | null
+  selectedText: string
 }
 
 export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
@@ -18,19 +19,15 @@ export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
     defaultMenuOptionsForm
   )
 
-  /* ###Thi */ console.log(`👉👉👉 props.selectedText: `, props.selectedText);
-  // const formatedSelectedText = formatSelectedText(props.selectedText)
-  // /* ###Thi */ console.log(`👉👉👉 formatedSelectedText: `, formatedSelectedText);
-
   return (
     <RewriteCtx.Provider
       value={{
-        from: 'opt',
         selectedText: props.selectedText,
         mode: 'browser',
         talkToBackground,
         settings,
-        menuOptions
+        menuOptions,
+        endContainer: props.endContainer
       }}
     >
       <RewriteOptWrapper />

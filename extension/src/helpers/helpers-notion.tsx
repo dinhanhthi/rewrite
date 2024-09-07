@@ -1,3 +1,5 @@
+import { EditorFrom } from '../type'
+
 /**
  * Notion uses it own selection method (CSS) for selecting whole blocks. There is no native browser's
  * selection!
@@ -129,4 +131,27 @@ function convertParagraph(text?: string) {
     })
     return doc.innerHTML
   }
+}
+
+/**
+ * Used to get the container which we can use to insert the editors right below it. It's for
+ * the adaptive position.
+ */
+export function getEndContainer(from: EditorFrom): HTMLElement | null {
+  let endContainer: HTMLElement | null = null
+  if (from === 'menu') {
+    const selectedText = window.getSelection()
+    if (selectedText && selectedText.rangeCount > 0) {
+      const range = selectedText.getRangeAt(0)
+      endContainer = range.endContainer as HTMLElement
+      while (endContainer && !endContainer?.classList?.contains('notion-selectable')) {
+        if (endContainer.parentNode) endContainer = endContainer.parentNode as HTMLElement
+      }
+    }
+  } else if (from === 'opt') {
+    const notionHalos = document.querySelectorAll('.notion-selectable-halo')
+    endContainer = notionHalos?.[notionHalos.length - 1]?.parentNode as HTMLElement
+  }
+
+  return endContainer
 }
