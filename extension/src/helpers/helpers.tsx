@@ -20,17 +20,36 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function decorateSelected() {
+  decorateSelectedText()
+  decorateSelectedBlocks()
+}
+
 /**
  * Decorate the selected text by using the CSS Highlight API
  */
-export function decorateSelectedText() {
+function decorateSelectedText() {
   const selection = window.getSelection()
   if (!selection || selection.isCollapsed) return
   const range = selection.getRangeAt(0)
-  const highlight = new Highlight(range);
-  CSS.highlights.set("rewrite-highlight", highlight);
+  const highlight = new Highlight(range)
+  CSS.highlights.set('rewrite-highlight', highlight)
 }
 
+/**
+ * When user select blocks
+ */
+function decorateSelectedBlocks() {
+  const selectedDivs = document.querySelectorAll('div.notion-selectable-halo')
+  if (selectedDivs.length > 0) {
+    const range = new Range()
+    const prevSiblingOfFirst = selectedDivs[0].previousElementSibling || selectedDivs[0]
+    range.setStartBefore(prevSiblingOfFirst)
+    range.setEndAfter(selectedDivs[selectedDivs.length - 1])
+    const highlight = new Highlight(range)
+    CSS.highlights.set('rewrite-highlight', highlight)
+  }
+}
 
 export function createCustomPromptEditor(props: {
   selectedText: string

@@ -5,7 +5,7 @@ import { RewriteCtx } from '../content-script/rewrite-ctx'
 import {
   cn,
   createCustomPromptEditor,
-  decorateSelectedText,
+  decorateSelected,
   handleMenuItemClicked
 } from '../helpers/helpers'
 import { MenuOptionType } from '../type'
@@ -41,7 +41,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
     if (ctx.mode === 'playground') {
       toast({ description: `Ask AI to do... clicked!` })
     } else {
-      decorateSelectedText()
+      decorateSelected()
 
       createCustomPromptEditor({
         selectedText: ctx.selectedText,
@@ -53,7 +53,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
   }
 
   const handleItemClicked = (prompt: string) => {
-    decorateSelectedText()
+    decorateSelected()
     handleMenuItemClicked(ctx, prompt)
   }
 
