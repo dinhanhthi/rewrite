@@ -2,7 +2,12 @@ import { PencilLine } from 'lucide-react'
 import React from 'react'
 import { defaultMenuOptions, systemIcons } from '../config'
 import { RewriteCtx } from '../content-script/rewrite-ctx'
-import { cn, createCustomPromptEditor, handleMenuItemClicked } from '../helpers/helpers'
+import {
+  cn,
+  createCustomPromptEditor,
+  decorateSelectedText,
+  handleMenuItemClicked
+} from '../helpers/helpers'
 import { MenuOptionType } from '../type'
 import {
   MenubarContent,
@@ -36,6 +41,8 @@ export default function RewriteMenu(props: RewriteMenuProps) {
     if (ctx.mode === 'playground') {
       toast({ description: `Ask AI to do... clicked!` })
     } else {
+      decorateSelectedText()
+
       createCustomPromptEditor({
         selectedText: ctx.selectedText,
         talkToBackground: ctx.talkToBackground,
@@ -43,6 +50,11 @@ export default function RewriteMenu(props: RewriteMenuProps) {
         endContainer: ctx.endContainer
       })
     }
+  }
+
+  const handleItemClicked = (prompt: string) => {
+    decorateSelectedText()
+    handleMenuItemClicked(ctx, prompt)
   }
 
   return (
@@ -70,7 +82,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
                   ?.filter(opt => opt.available)
                   .map(nestedMenu => (
                     <MenubarItem
-                      onClick={() => handleMenuItemClicked(ctx, nestedMenu.prompt!)}
+                      onClick={() => handleItemClicked(nestedMenu.prompt!)}
                       className="w-full p-0"
                       key={nestedMenu.value}
                     >
@@ -91,7 +103,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
         } else {
           return (
             <MenubarItem
-              onClick={() => handleMenuItemClicked(ctx, menu.prompt!)}
+              onClick={() => handleItemClicked(menu.prompt!)}
               className="w-full p-0"
               key={menu.value}
             >

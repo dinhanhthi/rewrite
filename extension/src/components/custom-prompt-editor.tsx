@@ -44,6 +44,7 @@ export default function CustomPromptEditor(props: CustomPromptEditorProps) {
   const discardBtnClicked = () => {
     if (props.mode === 'browser') {
       removeAllCustomPromptEditors()
+      CSS.highlights.clear();
     } else {
       toast({
         description: 'Discard clicked!'
@@ -67,8 +68,8 @@ export default function CustomPromptEditor(props: CustomPromptEditorProps) {
         )}
       >
         <div className="w-full h-full">
-          <div className="flex flex-row items-center w-full h-full gap-2 py-1.5 pl-3 pr-2 overflow-hidden bg-white border shadow-md rounded-xl">
-            <LogoRewriteIcon className="w-6 h-6 text-green-700" />
+          <div className="flex flex-row items-center w-full h-full py-1.5 pl-3 pr-2 overflow-hidden bg-white border shadow-md rounded-xl">
+            <button onClick={e => e.stopPropagation()} className='pr-2 cursor-default'><LogoRewriteIcon className="w-6 h-6 text-green-700" /></button>
             <div className="z-30 flex items-center w-full h-full">
               <IframeWithInput
                 setValue={setQuery}

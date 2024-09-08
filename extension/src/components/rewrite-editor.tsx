@@ -106,6 +106,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   const discardBtnClicked = () => {
     if (props.mode === 'browser') {
       removeAllRewriteEditors()
+      CSS.highlights.clear();
     } else {
       toast({
         description: 'Discard clicked!'

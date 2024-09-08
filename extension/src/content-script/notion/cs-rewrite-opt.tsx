@@ -16,7 +16,6 @@ export function watchAndCreateRewriteOpt() {
         if (selectedDecoBlocks.length > 0) {
           setTimeout(() => {
             showRewriteOpt(notionOverlayContainer)
-            // decorateSelectedText()
           }, 0)
         }
       }

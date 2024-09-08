@@ -5,7 +5,6 @@ import {
   getEndContainer,
   getSelectedHtml
 } from '../../helpers/helpers-notion'
-import { decorateSelectedText } from '../content-script'
 import RewriteBtnBrowser from './rewrite-btn-browser'
 
 /**
@@ -19,7 +18,6 @@ export function watchAndCreateRewriteBtn() {
         if ((window?.getSelection()?.toString() || '').length > 0) {
           setTimeout(() => {
             showReWriteBtn()
-            decorateSelectedText()
           }, 0)
         }
       }

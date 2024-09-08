@@ -43,18 +43,18 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
           </a>
         </TooltipThi>
 
-        <TooltipThi content="Settings">
-          <a target="_blank" href={props.optionsUrl}>
-            <Settings2 className="w-5 h-5 hover:text-green-700" />
-          </a>
-        </TooltipThi>
-
         <TooltipThi content="Feedback">
           <a
             target="_blank"
             href="mailto:me@dinhanhthi.com?subject=Rewrite%20Extension%20Feedback&cc=dinhanhthi@gmail.com"
           >
             <MessageCircleWarning className="w-5 h-5 hover:text-green-700" />
+          </a>
+        </TooltipThi>
+
+        <TooltipThi content="Settings">
+          <a target="_blank" href={props.optionsUrl}>
+            <Settings2 className="w-5 h-5 hover:text-green-700" />
           </a>
         </TooltipThi>
       </div>
