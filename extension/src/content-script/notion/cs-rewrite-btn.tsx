@@ -42,10 +42,12 @@ function showReWriteBtn() {
 
   const selected = getSelectedHtml()
   const convertedText = convertSelectedString(selected)
-
   const endContainer = getEndContainer('menu')
+  const range = window.getSelection()?.getRangeAt(0)
 
-  root.render(<RewriteBtnBrowser selectedText={convertedText} endContainer={endContainer} />)
+  root.render(
+    <RewriteBtnBrowser selectedText={convertedText} endContainer={endContainer} range={range} />
+  )
 }
 
 function getNotionMenu() {

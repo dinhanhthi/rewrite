@@ -1,6 +1,10 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { convertSelectedString, getEndContainer, getSelectedBlocksHtml } from '../../helpers/helpers-notion'
+import {
+  convertSelectedString,
+  getEndContainer,
+  getSelectedBlocksHtml
+} from '../../helpers/helpers-notion'
 import RewriteOptBrowser from './rewrite-opt-browser'
 // import { decorateSelectedText } from '../content-script'
 
@@ -50,11 +54,21 @@ function showRewriteOpt(notionOverlayContainer: Element | null) {
 
   const selectedBlocksHtml = getSelectedBlocksHtml()
   const convertedText = convertSelectedString(selectedBlocksHtml)
-
   const endContainer = getEndContainer('opt')
 
+  // create a range based on selected divs
+  const selectedDivs = document.querySelectorAll('div.notion-selectable-halo')
+  let range: Range | undefined
+  if (selectedDivs.length > 0) {
+    range = new Range()
+    const prevSiblingOfFirst = selectedDivs[0].previousElementSibling || selectedDivs[0]
+    const prevSiblingOfLast = selectedDivs[selectedDivs.length - 1].previousElementSibling || selectedDivs[selectedDivs.length - 1]
+    range.setStartBefore(prevSiblingOfFirst)
+    range.setEndAfter(prevSiblingOfLast)
+  }
+
   root.render(
-    <RewriteOptBrowser selectedText={convertedText} endContainer={endContainer} />
+    <RewriteOptBrowser selectedText={convertedText} endContainer={endContainer} range={range} />
   )
 }
 

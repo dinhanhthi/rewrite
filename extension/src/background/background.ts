@@ -5,7 +5,7 @@ import { getLocal } from '../helpers/helpers-browser'
 import { FormSettings } from '../type'
 
 // ------------------ DEV ONLY -----------------------------------------------------------
-const fakeResponse = true // default: false
+const fakeResponse = false // default: false
 const fakeTimeout = 500 // default: 500
 // 👆 Despite this, "yarn build" always ignores this
 // ------------------ DEV ONLY -----------------------------------------------------------
@@ -75,7 +75,8 @@ try {
               response = await handlePrompt(settings, message.prompt)
             } else {
               await new Promise(resolve => setTimeout(resolve, fakeTimeout))
-              response = `Fake response for SUGGEST with data: "${message.prompt}"`
+              response = `Fake response <b>strong</b>...`
+              // response = `Fake response with input data: "${message.prompt}"`
             }
             port.postMessage({
               type: message.type,

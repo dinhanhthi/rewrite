@@ -24,6 +24,7 @@ type RewriteEditorProps = {
   hideOverlay?: boolean // need it for the playground
   mode?: Mode
   content?: string
+  range?: Range | null // Used to restore the selection of the texts
 }
 
 export default function RewriteEditor(props: RewriteEditorProps) {
@@ -65,8 +66,17 @@ export default function RewriteEditor(props: RewriteEditorProps) {
     }
 
     if (props.mode === 'browser') {
+      /* ###Thi */ console.log(`👉👉👉 range: `, props.range)
+      const selection = window.getSelection()
+      if (selection && props.range) {
+        /* ###Thi */ console.log(`👉👉👉 ready to create selection`);
+        selection.removeAllRanges()
+        selection.addRange(props.range)
+      }
+
       document.execCommand('paste')
       removeAllRewriteEditors()
+      CSS.highlights.clear()
     } else {
       toast({ description: `Button "${useThisTextLabel}" clicked!` })
     }
@@ -106,7 +116,7 @@ export default function RewriteEditor(props: RewriteEditorProps) {
   const discardBtnClicked = () => {
     if (props.mode === 'browser') {
       removeAllRewriteEditors()
-      CSS.highlights.clear();
+      CSS.highlights.clear()
     } else {
       toast({
         description: 'Discard clicked!'

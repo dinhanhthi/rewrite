@@ -10,6 +10,7 @@ import RewriteOptWrapper from './rewrite-opt-wrapper'
 type RewriteOptBrowserProps = {
   endContainer: HTMLElement | null
   selectedText: string
+  range?: Range
 }
 
 export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
@@ -27,7 +28,8 @@ export default function RewriteOptBrowser(props: RewriteOptBrowserProps) {
         talkToBackground,
         settings,
         menuOptions,
-        endContainer: props.endContainer
+        endContainer: props.endContainer,
+        range: props.range
       }}
     >
       <RewriteOptWrapper />

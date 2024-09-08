@@ -19,6 +19,7 @@ export type RewriteCtxType = {
   mode?: 'browser' | 'playground'
   // 👇 Used to get the container which we can use to insert the editors right below it. It's for the adaptive position.
   endContainer?: HTMLElement | null
+  range?: Range | null // used to re-construct the range for the selected text
 }
 
 export const RewriteCtx = createContext<RewriteCtxType>({
@@ -29,5 +30,6 @@ export const RewriteCtx = createContext<RewriteCtxType>({
   selectedText: '',
   mode: 'playground',
   talkToBackground: {} as TalkToBackgroundFunc,
-  endContainer: null
+  endContainer: null,
+  range: null
 })

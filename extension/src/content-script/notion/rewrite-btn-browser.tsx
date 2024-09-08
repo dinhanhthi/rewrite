@@ -9,6 +9,7 @@ import RewriteBtnWrapper from './rewrite-btn-wrapper'
 type RewriteOptBrowserProps = {
   endContainer: HTMLElement | null
   selectedText: string
+  range?: Range
 }
 
 export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
@@ -26,7 +27,8 @@ export default function ReWriteBtnBrowser(props: RewriteOptBrowserProps) {
         talkToBackground,
         settings,
         menuOptions,
-        endContainer: props.endContainer
+        endContainer: props.endContainer,
+        range: props.range
       }}
     >
       <RewriteBtnWrapper options={menuOptions.options} />

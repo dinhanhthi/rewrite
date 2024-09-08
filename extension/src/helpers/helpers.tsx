@@ -56,6 +56,7 @@ export function createCustomPromptEditor(props: {
   talkToBackground?: TalkToBackgroundFunc
   settings?: FormSettings
   endContainer?: HTMLElement | null // for adaptive position
+  range?: Range | null
 }) {
   removeAllCustomPromptEditors()
 
@@ -85,7 +86,8 @@ export function createCustomPromptEditor(props: {
             selectedText: props.selectedText,
             mode: 'browser',
             talkToBackground: props.talkToBackground,
-            settings: props.settings
+            settings: props.settings,
+            range: props.range
           }}
         >
           <CustomPromptEditor mode="browser" />
@@ -116,6 +118,7 @@ export function createRewriteEditor(props: {
   settings?: FormSettings
   menuOptions?: FormMenuOptions
   endContainer?: HTMLElement | null // for adaptive position
+  range?: Range | null
 }) {
   removeAllRewriteEditors()
 
@@ -158,6 +161,7 @@ export function createRewriteEditor(props: {
           maxHeight={editorHeight}
           content={props.content}
           talkToBackground={props.talkToBackground}
+          range={props.range}
         />
       )
 
@@ -296,7 +300,8 @@ export const handleMenuItemClicked = async (ctx: RewriteCtxType, sysPrompt: stri
       talkToBackground: ctx.talkToBackground,
       settings: ctx.settings,
       menuOptions: ctx.menuOptions,
-      endContainer: ctx.endContainer
+      endContainer: ctx.endContainer,
+      range: ctx.range
     })
   } else {
     toast({ description: `Menu item clicked` })
