@@ -1,4 +1,4 @@
-import { Github, Globe, MessageCircleWarning, Settings2 } from 'lucide-react'
+import { Github, Globe, MessageSquare, Settings2 } from 'lucide-react'
 import React from 'react'
 import { Badge } from '../components/ui/badge'
 import TooltipThi from '../components/ui/tooltip-thi'
@@ -30,7 +30,7 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-center w-full gap-4 text-slate-500">
+      <div className="flex flex-row items-center justify-center w-full gap-6 text-slate-500">
         <TooltipThi content="Source code">
           <a target="_blank" rel="noreferrer" href="https://github.com/dinhanhthi/rewrite">
             <Github className="w-5 h-5 hover:text-green-700" />
@@ -43,12 +43,9 @@ export default function PopupWrapper(props: PopupOptionsWrapperProps) {
           </a>
         </TooltipThi>
 
-        <TooltipThi content="Feedback">
-          <a
-            target="_blank"
-            href="mailto:me@dinhanhthi.com?subject=Rewrite%20Extension%20Feedback&cc=dinhanhthi@gmail.com"
-          >
-            <MessageCircleWarning className="w-5 h-5 hover:text-green-700" />
+        <TooltipThi content="Discussion & Feedback">
+          <a target="_blank" href="https://github.com/dinhanhthi/rewrite/discussions">
+            <MessageSquare className="w-5 h-5 hover:text-green-700" />
           </a>
         </TooltipThi>
 

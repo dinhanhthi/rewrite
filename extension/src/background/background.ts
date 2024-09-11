@@ -1,3 +1,4 @@
+import OpenAI from 'openai'
 import browser from 'webextension-polyfill'
 import { defaultSettings } from '../config'
 import { handlePrompt } from '../helpers/helpers'
@@ -65,24 +66,53 @@ try {
 
           isProcessing = true
           try {
-            let response: string
             console.log('Text to be sent: ', JSON.stringify(message.text))
             // const [settings] = useChromeStorageLocal<FormSettings>('settings', defaultSettings)
             // const { settings } = await browser.storage.local.get(['settings'])
             const settings = await getLocal<FormSettings>('settings', defaultSettings)
             console.log('settings: ', settings)
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
-              response = await handlePrompt(settings, message.prompt)
+              const completion = await handlePrompt(settings, message.prompt)
+              try {
+                if (!settings.stream) {
+                  const response =
+                    (completion as OpenAI.Chat.Completions.ChatCompletion).choices[0].message
+                      .content ?? ''
+                  port.postMessage({
+                    type: message.type,
+                    error: false,
+                    data: response
+                  })
+                } else {
+                  let response = ''
+                  for await (const chunk of completion as any) {
+                    response += chunk.choices?.[0]?.delta?.content || ''
+                    /* ###Thi */ console.log(`👉👉👉 response: `, response);
+                    port.postMessage({
+                      type: message.type,
+                      error: false,
+                      data: response
+                    })
+                  }
+                }
+              } catch (err) {
+                /* ###Thi */ console.log(`👉👉👉 err---> `, err);
+                port.postMessage({
+                  type: message.type,
+                  error: true,
+                  data: err
+                })
+              }
             } else {
               await new Promise(resolve => setTimeout(resolve, fakeTimeout))
-              response = `Fake response <b>strong</b>...`
+              const response = `Fake response <b>strong</b>...`
               // response = `Fake response with input data: "${message.prompt}"`
+              port.postMessage({
+                type: message.type,
+                error: false,
+                data: response
+              })
             }
-            port.postMessage({
-              type: message.type,
-              error: false,
-              data: response
-            })
           } catch (err: any) {
             console.log('err in message type prompt: ', err)
             if (err.name === 'AbortError') {

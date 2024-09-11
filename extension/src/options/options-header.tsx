@@ -57,7 +57,7 @@ export default function OptionsHeader(props: OptionsHeaderProps) {
             </Button>
           </TooltipThi>
 
-          <TooltipThi content="Discussion">
+          <TooltipThi content="Discussion & Feedback">
             <Button variant="ghost" size="icon" asChild>
               <a target="_blank" href="https://github.com/dinhanhthi/rewrite/discussions">
                 <MessageSquare className="w-5 h-5" />

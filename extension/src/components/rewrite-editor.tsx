@@ -16,6 +16,7 @@ import {
 } from './ui/alert-dialog'
 import { Badge } from './ui/badge'
 import { toast } from './ui/use-toast'
+import browser from 'webextension-polyfill'
 
 type RewriteEditorProps = {
   talkToBackground?: TalkToBackgroundFunc
@@ -36,16 +37,33 @@ export default function RewriteEditor(props: RewriteEditorProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = props.content
-        ? await props.talkToBackground!({
-            portName: 'port-prompt',
-            message: {
-              type: 'prompt',
-              prompt: props.content
-            }
-          })
-        : null
-      setResult(response)
+      // const response = props.content
+      //   ? await props.talkToBackground!({
+      //       portName: 'port-prompt',
+            // message: {
+            //   type: 'prompt',
+            //   prompt: props.content
+            // }
+      //     })
+      //   : null
+
+      const port = browser.runtime.connect({ name: 'port-prompt' })
+      port.postMessage({
+        type: 'prompt',
+        prompt: props.content
+      })
+
+      port.onMessage.addListener(function (response) {
+        // /* ###Thi */ console.log(`👉👉👉 response.data: `, response.data);
+        // if (response.error) reject({ message: response?.data, code: response?.code })
+        // else resolve(response.data)
+        /* ###Thi */ console.log(`👉👉👉 response editor: `, response.data);
+        setResult(response.data)
+        // port.disconnect()
+      })
+
+      // /* ###Thi */ console.log(`👉👉👉 response editor: `, response);
+      // setResult(response)
     }
     fetchData()
   }, [])

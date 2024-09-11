@@ -271,6 +271,7 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
   switch (settings.service) {
     case 'openai':
     default: {
+      /* ###Thi */ console.log(`👉👉👉 stream: `, settings.stream);
       const openAI = new OpenAI({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
       const completion = await openAI.chat.completions.create({
         model: settings.model,
@@ -281,9 +282,10 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
               'You are a writing assistant. If the user asks you to modify or transform the text and in this text, there is html tag like <b>text</b> or <i> or similar things, keep these formatting in the transformed result.'
           },
           { role: 'user', content: prompt }
-        ]
+        ],
+        stream: settings.stream
       })
-      return completion.choices[0].message.content ?? ''
+      return completion
     }
   }
 }

@@ -26,9 +26,10 @@ export async function talkToBackground(props: TalkToBackgroundProps): Promise<an
       const port = browser.runtime.connect({ name: props.portName })
       port.postMessage(props.message)
       port.onMessage.addListener(function (response) {
+        // /* ###Thi */ console.log(`👉👉👉 response.data: `, response.data);
         if (response.error) reject({ message: response?.data, code: response?.code })
         else resolve(response.data)
-        port.disconnect()
+        // port.disconnect()
       })
     } catch (error) {
       reject(error)
