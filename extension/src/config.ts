@@ -54,9 +54,7 @@ export const services: ServiceObject[] = [
       { value: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' },
       { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
       { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
-    ],
-    disabled: true,
-    note: "Claude doesn't support browser-like clients yet."
+    ]
   }
   // { name: 'Llama', value: 'llama', available: false }
 ]
@@ -260,7 +258,7 @@ export const defaultSettings: FormSettings = {
   service: 'openai',
   model: 'gpt-4o-mini',
   apiKey: '',
-  stream: false,
+  stream: true,
   adaptivePosition: true
 }
 

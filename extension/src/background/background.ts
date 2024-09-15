@@ -61,38 +61,53 @@ try {
 
           isProcessing = true
           try {
-            console.log('Text to be sent: ', JSON.stringify(message.text))
             const settings = await getLocal<FormSettings>('settings', defaultSettings)
-            console.log('settings: ', settings)
+            // console.log('settings: ', settings)
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
               const completion = await handlePrompt(settings, message.prompt)
               try {
                 if (!settings.stream) {
-                  const response =
-                    (completion as OpenAI.Chat.Completions.ChatCompletion).choices[0].message
-                      .content ?? ''
+                  let response = ''
+                  switch (settings.service) {
+                    case 'openai':
+                    default:
+                      response =
+                        (completion as OpenAI.Chat.Completions.ChatCompletion).choices[0].message
+                          .content ?? ''
+                      break
+
+                    case 'gemini':
+                      response = (completion as any).text() || ''
+                      break
+                  }
                   port.postMessage({
                     type: message.type,
                     error: false,
                     data: response
                   })
-                  port.postMessage({
-                    finished: true
-                  })
                 } else {
                   let response = ''
                   for await (const chunk of completion as any) {
-                    response += chunk.choices?.[0]?.delta?.content || ''
+                    switch (settings.service) {
+                      case 'openai':
+                      default:
+                        response += chunk.choices?.[0]?.delta?.content || ''
+                        break
+
+                      case 'gemini':
+                        response += chunk.text() || ''
+                        break
+                    }
                     port.postMessage({
                       type: message.type,
                       error: false,
                       data: response
                     })
                   }
-                  port.postMessage({
-                    finished: true
-                  })
                 }
+                port.postMessage({
+                  finished: true
+                })
               } catch (err) {
                 port.postMessage({
                   type: message.type,
@@ -102,8 +117,7 @@ try {
               }
             } else {
               await new Promise(resolve => setTimeout(resolve, fakeTimeout))
-              const response = `Fake response <b>strong</b>...`
-              // response = `Fake response with input data: "${message.prompt}"`
+              const response = `<b>Fake response</b> with input data: "${message.prompt}"`
               port.postMessage({
                 type: message.type,
                 error: false,

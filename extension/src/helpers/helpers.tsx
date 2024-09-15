@@ -239,8 +239,6 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
         return true
       }
 
-      // TODO: wait for Claude to allow use their APIs via browser-like client (CORS issue)
-      // OR: implement it via nextjs server
       case 'claude': {
         return true
       }
@@ -268,23 +266,41 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
  * @param text string - The text to be processed
  */
 export async function handlePrompt(settings: FormSettings, prompt: string) {
+  const systemPrompt =
+    'You are a writing assistant. If the user asks you to modify or transform the text and in this text, there is html tag like <b>text</b> or <i> or similar things, keep these formatting in the transformed result.'
+
   switch (settings.service) {
     case 'openai':
     default: {
-      /* ###Thi */ console.log(`👉👉👉 stream: `, settings.stream)
       const openAI = new OpenAI({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
       const completion = await openAI.chat.completions.create({
         model: settings.model,
         messages: [
           {
             role: 'assistant',
-            content:
-              'You are a writing assistant. If the user asks you to modify or transform the text and in this text, there is html tag like <b>text</b> or <i> or similar things, keep these formatting in the transformed result.'
+            content: systemPrompt
           },
           { role: 'user', content: prompt }
         ],
         stream: settings.stream
       })
+      return completion
+    }
+
+    case 'gemini': {
+      const genAI = new GoogleGenerativeAI(settings.apiKey)
+      const model = genAI.getGenerativeModel({ model: settings.model })
+      let completion: any
+      const request = {
+        systemInstruction: systemPrompt,
+        contents: [{ role: 'user', parts: [{ text: prompt }] }]
+      }
+      if (!settings.stream) {
+        completion = (await model.generateContent(request)).response
+        /* ###Thi */ console.log(`👉👉👉 completion: `, completion);
+      } else {
+        completion = (await model.generateContentStream(request)).stream
+      }
       return completion
     }
   }
