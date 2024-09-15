@@ -1,10 +1,10 @@
 import { Languages, MessageCircleQuestion, MicVocal, Sparkles, SpellCheck } from 'lucide-react'
 import { z } from 'zod'
+import { generateTranslatePrompt } from './helpers/helpers'
 import LongerIcon from './icons/longer-icon'
 import ShorterIcon from './icons/shorter-icon'
 import SummerizeIcon from './icons/summerize-icon'
 import { FormMenuOptions, FormSettings, MenuOptionType, ServiceObject } from './type'
-import { generateTranslatePrompt } from './helpers/helpers'
 
 export const MAX_OPTIONS = 10
 export const EDITOR_MAX_HEIGHT = 400

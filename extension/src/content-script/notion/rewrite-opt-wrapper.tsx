@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react'
 import RewriteMenu from '../../components/rewrite-menu'
 import { Menubar, MenubarMenu, MenubarTrigger } from '../../components/ui/menubar'
-import RewriteOpt from './rewrite-opt'
 import { RewriteCtx } from '../rewrite-ctx'
+import RewriteOpt from './rewrite-opt'
 
 type RewriteOptWrapperProps = {
   alwaysShowMenu?: boolean

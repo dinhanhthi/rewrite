@@ -15,6 +15,7 @@ import {
 } from '../components/ui/dialog'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { defaultMenuOptionsForm, FormMenuOptionsSchema } from '../config'
+import { TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { FormMenuOptions } from '../type'
 import MenuOptionsFooter from './menu-options-footer'
 import MenuOptionsForm from './menu-options-form'
@@ -22,6 +23,7 @@ import MenuOptionsForm from './menu-options-form'
 export type MenuOptionsProps = {
   menuOptions: FormMenuOptions
   setMenuOptions: (menuOptions: FormMenuOptions) => void
+  talkToBackground?: TalkToBackgroundFunc
 }
 
 export default function MenuOptions(props: MenuOptionsProps) {
@@ -47,6 +49,7 @@ export default function MenuOptions(props: MenuOptionsProps) {
     if (form.formState.isValid && isFormChanged) {
       props.setMenuOptions(form.getValues())
       form.reset(form.getValues())
+      props.talkToBackground?.({ message: { type: 'reload' } })
     }
   }
 

@@ -14,13 +14,15 @@ export default function RewriteEditorPlayground() {
         {/* z-index of below switch container must be greater than the overlay div in RewriteEditor */}
         <div className="z-20 flex items-center gap-2">
           <Switch
-            size='smaller'
-            className='bg-green-700'
+            size="smaller"
+            className="bg-green-700"
             defaultChecked={defaultChecked}
             onCheckedChange={handleOnCheckedChange}
             id="hide-overlay"
           />
-          <label htmlFor="hide-overlay" className='text-base'>Disable cliking outside</label>
+          <label htmlFor="hide-overlay" className="text-base">
+            Disable cliking outside
+          </label>
         </div>
         <RewriteEditor hideOverlay={hideOverlay} mode="playground" />
       </div>

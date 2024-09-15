@@ -97,7 +97,7 @@ try {
                 port.postMessage({
                   type: message.type,
                   error: true,
-                  data: 'An error occurred while processing the request to AI service.',
+                  data: 'An error occurred while processing the request to AI service.'
                 })
               }
             } else {
@@ -133,6 +133,12 @@ try {
           return
         }
       })
+    }
+  })
+
+  browser.runtime.onMessage.addListener(async message => {
+    if (message.type === 'reload') {
+      reloadAllNotionTabs()
     }
   })
 } catch (e) {

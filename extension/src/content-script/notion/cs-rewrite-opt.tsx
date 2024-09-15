@@ -62,7 +62,9 @@ function showRewriteOpt(notionOverlayContainer: Element | null) {
   if (selectedDivs.length > 0) {
     range = new Range()
     const prevSiblingOfFirst = selectedDivs[0].previousElementSibling || selectedDivs[0]
-    const prevSiblingOfLast = selectedDivs[selectedDivs.length - 1].previousElementSibling || selectedDivs[selectedDivs.length - 1]
+    const prevSiblingOfLast =
+      selectedDivs[selectedDivs.length - 1].previousElementSibling ||
+      selectedDivs[selectedDivs.length - 1]
     range.setStartBefore(prevSiblingOfFirst)
     range.setEndAfter(prevSiblingOfLast)
   }

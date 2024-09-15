@@ -271,7 +271,7 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
   switch (settings.service) {
     case 'openai':
     default: {
-      /* ###Thi */ console.log(`👉👉👉 stream: `, settings.stream);
+      /* ###Thi */ console.log(`👉👉👉 stream: `, settings.stream)
       const openAI = new OpenAI({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
       const completion = await openAI.chat.completions.create({
         model: settings.model,

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 type IframeWithInputProps = {
-  setValue: React.Dispatch<React.SetStateAction<string>>,
+  setValue: React.Dispatch<React.SetStateAction<string>>
   placeholder?: string
   onSubmit: () => void
 }
@@ -14,15 +14,14 @@ export default function IframeWithInput(props: IframeWithInputProps) {
       if (event.data?.type === 'submit') {
         props.onSubmit()
       }
-    };
+    }
 
-    window.addEventListener('message', handleMessage);
+    window.addEventListener('message', handleMessage)
 
     return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, [props.onSubmit]);
-
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [props.onSubmit])
 
   useEffect(() => {
     if (iframeRef.current) {
@@ -82,11 +81,11 @@ export default function IframeWithInput(props: IframeWithInputProps) {
             props.setValue(target.value)
           })
 
-          inputElement.addEventListener('keydown', (event) => {
+          inputElement.addEventListener('keydown', event => {
             if (event.key === 'Enter') {
-              window.parent.postMessage({ type: 'submit' }, '*');
+              window.parent.postMessage({ type: 'submit' }, '*')
             }
-          });
+          })
 
           inputElement.focus()
         }

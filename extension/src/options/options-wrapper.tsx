@@ -24,6 +24,7 @@ import { Button } from '../components/ui/button'
 import { Form } from '../components/ui/form'
 import TooltipThi from '../components/ui/tooltip-thi'
 import { defaultSettings, FormSettingsSchema, services } from '../config'
+import { TalkToBackgroundFunc } from '../content-script/rewrite-ctx'
 import { cn, generateAPIKeyPlaceholder, validateApiKey } from '../helpers/helpers'
 import { FormMenuOptions, FormSettings, Service, ServiceObject } from '../type'
 import MenuOptions from './menu-options'
@@ -36,6 +37,7 @@ export type OptionsWrapperProps = {
   setSettings: (settings: FormSettings) => void
   menuOptions: FormMenuOptions
   setMenuOptions: (menuOptions: FormMenuOptions) => void
+  talkToBackground?: TalkToBackgroundFunc
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
@@ -96,6 +98,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
       form.reset(form.getValues())
       props.setSettings(form.getValues())
       setIsValidKey(null)
+      props.talkToBackground?.({ message: { type: 'reload' } })
     }
   }
 
@@ -178,7 +181,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         control={form.control}
                         name="stream"
                         label="Streaming response"
-                        description='Enable streaming response for the AI service. The response will be displayed as it comes, word by word.'
+                        description="Enable streaming response for the AI service. The response will be displayed as it comes, word by word."
                         labelClassName="gap-4"
                         size="smaller"
                         controlComesFirst={false}
@@ -195,15 +198,17 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                       />
 
                       <div className="flex flex-col items-start gap-0">
-                        <div className='flex flex-row items-center gap-4 text-base'>
+                        <div className="flex flex-row items-center gap-4 text-base">
                           Menu options
                           <MenuOptions
+                            talkToBackground={props.talkToBackground}
                             menuOptions={props.menuOptions}
                             setMenuOptions={props.setMenuOptions}
                           />
                         </div>
-                        <div className='text-sm text-muted-foreground'>
-                          Customize the options in the context menu. You can enable or disable the options, change the display name, and the prompt message.
+                        <div className="text-sm text-muted-foreground">
+                          Customize the options in the context menu. You can enable or disable the
+                          options, change the display name, and the prompt message.
                         </div>
                       </div>
 

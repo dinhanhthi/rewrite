@@ -27,7 +27,7 @@ export async function talkToBackground(props: TalkToBackgroundProps): Promise<an
       port.postMessage(props.message)
       port.onMessage.addListener(function (response) {
         if (response.finished) port.disconnect()
-        else props.callback(response.data)
+        else props.callback?.(response.data)
       })
     } catch (error) {
       reject(error)

@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { FormMenuOptionsSchema, FormSettingsSchema, MenuOptionSchema, menuOptionsSchema } from './config'
+import {
+  FormMenuOptionsSchema,
+  FormSettingsSchema,
+  MenuOptionSchema,
+  menuOptionsSchema
+} from './config'
 
 export type Mode = 'browser' | 'playground'
 

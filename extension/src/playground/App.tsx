@@ -12,6 +12,7 @@ import '../styles/playground.scss'
 import '../styles/popup.scss'
 import '../styles/tailwind.scss'
 import CancelDialogPlayground from './components/cancel-dialog-playground'
+import CustomPromptEditorPlayground from './components/custom-prompt-editor-playground'
 import Logo from './components/logo'
 import MenuOptionsModalPlayground from './components/menu-options-form-playground'
 import NotionMenuBar from './components/notion-menu-bar'
@@ -19,7 +20,6 @@ import NotionPopoverMenu from './components/notion-popover-menu'
 import OptionsPlayground from './components/options-playground'
 import PopupPlayground from './components/popup-playground'
 import RewriteEditorPlayground from './components/rewrite-editor-playground'
-import CustomPromptEditorPlayground from './components/custom-prompt-editor-playground'
 
 export default function App() {
   const location = useLocation()

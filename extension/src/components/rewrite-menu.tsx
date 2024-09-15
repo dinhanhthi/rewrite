@@ -48,7 +48,7 @@ export default function RewriteMenu(props: RewriteMenuProps) {
         talkToBackground: ctx.talkToBackground,
         settings: ctx.settings,
         endContainer: ctx.endContainer,
-        range: ctx.range,
+        range: ctx.range
       })
     }
   }

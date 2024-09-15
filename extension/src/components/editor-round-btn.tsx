@@ -1,6 +1,6 @@
 import React from 'react'
-import TooltipThi from './ui/tooltip-thi'
 import { cn } from '../helpers/helpers'
+import TooltipThi from './ui/tooltip-thi'
 
 type EditorRoundBtnProps = {
   className?: string
@@ -19,9 +19,7 @@ export default function EditorRoundBtn(props: EditorRoundBtnProps) {
           props.className
         )}
       >
-        <div className='transition-transform group-active:scale-[0.85]'>
-        {props.children}
-        </div>
+        <div className="transition-transform group-active:scale-[0.85]">{props.children}</div>
       </button>
     </TooltipThi>
   )

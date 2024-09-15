@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { defaultMenuOptionsForm, defaultSettings } from '../config'
+import { talkToBackground } from '../helpers/helpers-browser'
 import useChromeStorageLocal from '../helpers/hooks/use-browser-storage'
 import { FormMenuOptions, FormSettings } from '../type'
 import OptionsWrapper from './options-wrapper'
@@ -18,6 +19,7 @@ export default function Options() {
         setSettings={setSettings}
         menuOptions={menuOptions}
         setMenuOptions={setMenuOptions}
+        talkToBackground={talkToBackground}
       />
     </div>
   )

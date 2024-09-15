@@ -14,10 +14,10 @@ export default function NotionPopoverMenu() {
   const handleOnCheckedChange = (val: boolean) => setShowMenu(val)
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       <div className="z-20 flex items-center gap-2">
         <Switch
-          size='smaller'
+          size="smaller"
           className="bg-green-700"
           defaultChecked={defaultShowMenu}
           onCheckedChange={handleOnCheckedChange}
