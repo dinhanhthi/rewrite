@@ -67,7 +67,7 @@ try {
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
               const completion = await handlePrompt(settings, message.prompt)
               try {
-                if (!settings.stream) {
+                if (!settings.stream || ['o1-preview', 'o1-mini'].includes(settings.model)) {
                   let response = ''
                   switch (settings.service) {
                     case 'openai':
@@ -121,6 +121,7 @@ try {
                   finished: true
                 })
               } catch (err) {
+                /* ###Thi */ console.log(err)
                 port.postMessage({
                   type: message.type,
                   error: true,

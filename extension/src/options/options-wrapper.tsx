@@ -41,6 +41,7 @@ export type OptionsWrapperProps = {
 }
 
 export default function OptionsWrapper(props: OptionsWrapperProps) {
+  const [streamDisabled, setStreamDisabled] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [models, setModels] = useState<ServiceObject['models']>(
     services.find(e => e.value === props.settings.service)!.models
@@ -108,6 +109,10 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
     setIsValidKey(null)
   }
 
+  function onModelChange(model: string) {
+    setStreamDisabled(model === 'o1-preview' || model === 'o1-mini')
+  }
+
   return (
     <ErrorBoundary>
       <Form {...form}>
@@ -143,6 +148,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         label={'AI model'}
                         labelClassName="font-medium"
                         triggerClassName="w-fit px-4"
+                        onValueChange={onModelChange}
                       />
 
                       <div className="flex flex-row items-center w-full gap-4">
@@ -170,6 +176,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                           onClick={e => verifyAPIKey(e)}
                           className="flex flex-row items-center h-8 gap-2 px-3"
                           variant="default"
+                          disabled={isVerifyingKey}
                         >
                           {!isVerifyingKey && <Search className="w-4 h-4" />}
                           {isVerifyingKey && <LoaderCircle className="w-4 h-4 animate-spin" />}
@@ -185,6 +192,7 @@ export default function OptionsWrapper(props: OptionsWrapperProps) {
                         labelClassName="gap-4"
                         size="smaller"
                         controlComesFirst={false}
+                        disabled={streamDisabled}
                       />
 
                       <FormSwitch

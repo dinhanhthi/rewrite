@@ -20,7 +20,9 @@ export const services: ServiceObject[] = [
       { value: 'gpt-4o-mini', name: 'GPT-4o Mini' },
       { value: 'gpt-4', name: 'GPT-4' },
       { value: 'gpt-4-turbo', name: 'GPT-4 Turbo' },
-      { value: 'gpt-4o', name: 'GPT-4o' }
+      { value: 'gpt-4o', name: 'GPT-4o' },
+      { value: 'o1-preview', name: 'o1-preview' },
+      { value: 'o1-mini', name: 'o1-mini' }
     ]
   },
   {
@@ -55,7 +57,7 @@ export const services: ServiceObject[] = [
     ],
     disabled: true,
     note: "Mistral doesn't support browser-like clients yet."
-  },
+  }
   // { name: 'Llama', value: 'llama', available: false }
 ]
 

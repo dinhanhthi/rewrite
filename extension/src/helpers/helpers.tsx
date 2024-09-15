@@ -289,7 +289,8 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
           },
           { role: 'user', content: prompt }
         ],
-        stream: settings.stream
+        stream:
+          settings.model === 'o1-preview' || settings.model === 'o1-mini' ? false : settings.stream
       })
       return completion
     }

@@ -1,4 +1,4 @@
-import { Info } from 'lucide-react'
+import { OctagonAlert } from 'lucide-react'
 import React from 'react'
 import { Control } from 'react-hook-form'
 import { cn } from '../helpers/helpers'
@@ -52,7 +52,7 @@ export default function FormSingleChoice(props: FormSingleChoiceProps) {
                     <span className={e.disabled ? 'opacity-60' : ''}>{e.name}</span>
                     {e.disabled && (
                       <TooltipThi content={e.note ?? 'not supported yet'}>
-                        <Info size={16} className="text-slate-500" />
+                        <OctagonAlert size={16} className="text-slate-500" />
                       </TooltipThi>
                     )}
                   </FormLabel>

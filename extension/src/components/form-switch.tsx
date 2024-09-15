@@ -1,3 +1,4 @@
+import { OctagonAlert } from 'lucide-react'
 import React from 'react'
 import { Control } from 'react-hook-form'
 import { cn } from '../helpers/helpers'
@@ -15,6 +16,7 @@ type FormSwitchProps = {
   size?: SwitchSize
   tooltip?: string
   controlComesFirst?: boolean
+  disabled?: boolean
 }
 
 export default function FormSwitch(props: FormSwitchProps) {
@@ -36,12 +38,22 @@ export default function FormSwitch(props: FormSwitchProps) {
                 </FormLabel>
               )}
               <FormControl>
-                <Switch
-                  {...field}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  size={props.size ?? 'default'}
-                />
+                <>
+                  <Switch
+                    {...field}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    size={props.size ?? 'default'}
+                    disabled={props.disabled}
+                  />
+                  {props.disabled && (
+                    <TooltipThi
+                      content={"This feature isn't supported yet with the selected model!"}
+                    >
+                      <OctagonAlert size={16} className="text-slate-500" />
+                    </TooltipThi>
+                  )}
+                </>
               </FormControl>
             </div>
           </TooltipThi>

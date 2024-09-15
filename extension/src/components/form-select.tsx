@@ -21,6 +21,7 @@ type FormSelectProps = {
   wrap?: boolean
   description?: string
   triggerClassName?: string
+  onValueChange?: (value: string) => void
 }
 
 export default function FormSelect(props: FormSelectProps) {
@@ -39,7 +40,13 @@ export default function FormSelect(props: FormSelectProps) {
           <FormLabel className={cn('text-base whitespace-nowrap', props.labelClassName)}>
             {props.label}
           </FormLabel>
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select
+            onValueChange={val => {
+              field.onChange(val)
+              props.onValueChange?.(val)
+            }}
+            value={field.value}
+          >
             <FormControl>
               <SelectTrigger {...field} value={field.value} className={props.triggerClassName}>
                 <SelectValue placeholder={props.placeholder ?? 'Select a value'} />
