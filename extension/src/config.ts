@@ -33,6 +33,17 @@ export const services: ServiceObject[] = [
     ]
   },
   {
+    name: 'Claude',
+    value: 'claude',
+    available: true,
+    models: [
+      { value: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' },
+      { value: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' },
+      { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
+      { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
+    ]
+  },
+  {
     name: 'Mistral',
     value: 'mistral',
     available: true,
@@ -45,17 +56,6 @@ export const services: ServiceObject[] = [
     disabled: true,
     note: "Mistral doesn't support browser-like clients yet."
   },
-  {
-    name: 'Claude',
-    value: 'claude',
-    available: true,
-    models: [
-      { value: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku' },
-      { value: 'claude-3-sonnet-20240229', name: 'Claude 3 Sonnet' },
-      { value: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
-      { value: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet' }
-    ]
-  }
   // { name: 'Llama', value: 'llama', available: false }
 ]
 

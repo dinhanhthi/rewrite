@@ -3,6 +3,7 @@
  * DON'T include any browser only code here, use helpersBrowser.ts for that
  */
 
+import Anthropic from '@anthropic-ai/sdk'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { clsx, type ClassValue } from 'clsx'
 import OpenAI from 'openai'
@@ -240,6 +241,12 @@ export async function validateApiKey(service: Service, apiKey: string, model: st
       }
 
       case 'claude': {
+        const claudeApi = new Anthropic({ apiKey, dangerouslyAllowBrowser: true })
+        await claudeApi.messages.create({
+          model,
+          max_tokens: 1024,
+          messages: [{ role: 'user', content: 'Hello?' }]
+        })
         return true
       }
 
@@ -297,10 +304,21 @@ export async function handlePrompt(settings: FormSettings, prompt: string) {
       }
       if (!settings.stream) {
         completion = (await model.generateContent(request)).response
-        /* ###Thi */ console.log(`👉👉👉 completion: `, completion);
       } else {
         completion = (await model.generateContentStream(request)).stream
       }
+      return completion
+    }
+
+    case 'claude': {
+      const claudeApi = new Anthropic({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true })
+      const completion = await claudeApi.messages.create({
+        model: settings.model,
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: prompt }],
+        stream: settings.stream
+      })
       return completion
     }
   }

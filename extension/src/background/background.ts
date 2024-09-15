@@ -1,3 +1,4 @@
+import { ContentBlock, TextBlock } from '@anthropic-ai/sdk/resources'
 import OpenAI from 'openai'
 import browser from 'webextension-polyfill'
 import { defaultSettings } from '../config'
@@ -79,6 +80,13 @@ try {
                     case 'gemini':
                       response = (completion as any).text() || ''
                       break
+
+                    case 'claude':
+                      const content = completion?.content?.find(
+                        (c: ContentBlock) => c.type === 'text'
+                      ) as TextBlock
+                      response = content?.text || ''
+                      break
                   }
                   port.postMessage({
                     type: message.type,
@@ -96,6 +104,10 @@ try {
 
                       case 'gemini':
                         response += chunk.text() || ''
+                        break
+
+                      case 'claude':
+                        response += chunk?.delta?.text || ''
                         break
                     }
                     port.postMessage({
