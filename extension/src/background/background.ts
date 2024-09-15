@@ -11,17 +11,12 @@ const fakeTimeout = 500 // default: 500
 // 👆 Despite this, "yarn build" always ignores this
 // ------------------ DEV ONLY -----------------------------------------------------------
 
-// Update the extension if a new version is available
 browser.runtime.onUpdateAvailable.addListener(() => {
   browser.runtime.reload()
 })
 
-// After installing the extension
 browser.runtime.onInstalled.addListener(async _obj => {
-  // Reload all Notion tabs to apply the content script
-  reloadAllNotionTabs().catch(e => {
-    console.error(`>>>>An error occurred while reloading tabs: ${e.message}`)
-  })
+  reloadAllNotionTabs()
 })
 
 async function reloadAllNotionTabs() {
@@ -67,8 +62,6 @@ try {
           isProcessing = true
           try {
             console.log('Text to be sent: ', JSON.stringify(message.text))
-            // const [settings] = useChromeStorageLocal<FormSettings>('settings', defaultSettings)
-            // const { settings } = await browser.storage.local.get(['settings'])
             const settings = await getLocal<FormSettings>('settings', defaultSettings)
             console.log('settings: ', settings)
             if (!fakeResponse || process.env.NODE_ENV === 'production') {
@@ -83,24 +76,28 @@ try {
                     error: false,
                     data: response
                   })
+                  port.postMessage({
+                    finished: true
+                  })
                 } else {
                   let response = ''
                   for await (const chunk of completion as any) {
                     response += chunk.choices?.[0]?.delta?.content || ''
-                    /* ###Thi */ console.log(`👉👉👉 response: `, response);
                     port.postMessage({
                       type: message.type,
                       error: false,
                       data: response
                     })
                   }
+                  port.postMessage({
+                    finished: true
+                  })
                 }
               } catch (err) {
-                /* ###Thi */ console.log(`👉👉👉 err---> `, err);
                 port.postMessage({
                   type: message.type,
                   error: true,
-                  data: err
+                  data: 'An error occurred while processing the request to AI service.',
                 })
               }
             } else {

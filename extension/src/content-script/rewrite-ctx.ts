@@ -6,7 +6,8 @@ export type TalkToBackgroundProps = {
   message: {
     type: string
     prompt: string
-  }
+  },
+  callback: (response: any) => void
 }
 
 export type TalkToBackgroundFunc = (props: TalkToBackgroundProps) => Promise<any>

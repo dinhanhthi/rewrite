@@ -21,15 +21,13 @@ export const optionsUrl = browser.runtime.getURL('options.html')
 
 export async function talkToBackground(props: TalkToBackgroundProps): Promise<any> {
   if (!props.portName) return browser.runtime.sendMessage(props.message)
-  return new Promise((resolve, reject) => {
+  return new Promise((_resolve, reject) => {
     try {
       const port = browser.runtime.connect({ name: props.portName })
       port.postMessage(props.message)
       port.onMessage.addListener(function (response) {
-        // /* ###Thi */ console.log(`👉👉👉 response.data: `, response.data);
-        if (response.error) reject({ message: response?.data, code: response?.code })
-        else resolve(response.data)
-        // port.disconnect()
+        if (response.finished) port.disconnect()
+        else props.callback(response.data)
       })
     } catch (error) {
       reject(error)
